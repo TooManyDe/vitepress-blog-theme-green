@@ -183,7 +183,7 @@
 
 .is-home-page .vp-doc p,
 .is-home-page .vp-doc li {
-  margin-top: 0px !important;
+  margin-top: -1px !important;
   margin-bottom: 0px !important;
 }
 
