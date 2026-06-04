@@ -18,8 +18,6 @@ lastUpdated: false
         class="post-excerpt"
       ></div>
     </div>
-    
-    <!-- 只在最后一条后不加分割线，其余用优雅细线 -->
     <hr v-if="index !== posts.length - 1" class="post-divider" />
   </div>
 </div>
