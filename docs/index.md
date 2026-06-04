@@ -1,150 +1,125 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
 layout: doc
 pageClass: is-home-page
 editLink: false
 lastUpdated: false
-isNoBackBtn: true
 ---
 
-<!-- 之所以将代码写在 md 里面，而非单独封装为 Vue 组件，因为 aside 不会动态刷新，参考 https://github.com/vuejs/vitepress/issues/2686 -->
-<template v-for="post in curPosts" :key="post.url">
-  <h2 :id="post.title" class="post-title">
-    <a :href="post.url">{{ post.title }}</a>
-    <a
-      class="header-anchor"
-      :href="`#${post.title}`"
-      :aria-label="`Permalink to &quot;${post.title}&quot;`"
-      ></a
-    >
-    <div class="post-date hollow-text source-han-serif">{{ post.date.string }}</div>
-  </h2>
-  <div v-if="post.excerpt" v-html="post.excerpt"></div>
-</template>
-
-<!-- <Pagination /> -->
-<div class="pagination-container">
-  <t-pagination
-    v-model="current"
-    v-model:pageSize="pageSize"
-    :total="total"
-    size="small"
-    :showPageSize="false"
-    :showPageNumber="!isMobile()"
-    :showJumper="isMobile()"
-    @current-change="onCurrentChange"
-  />
+<div class="posts-list">
+  <div v-for="(post, index) in posts" :key="post.url" class="post-container">
+    <div class="post-item">
+      <h2 :id="post.title" class="post-title">
+        <a :href="post.url">{{ post.title }}</a>
+      </h2>
+      <div class="post-date">{{ post.date.string }}</div>
+      <div
+        v-if="post.excerpt"
+        v-html="post.excerpt"
+        class="post-excerpt"
+      ></div>
+    </div>
+    
+    <!-- 只在最后一条后不加分割线，其余用优雅细线 -->
+    <hr v-if="index !== posts.length - 1" class="post-divider" />
+  </div>
 </div>
 
 <script lang="ts" setup>
-import { ref, computed } from "vue";
-import { useRoute, useRouter } from "vitepress";
-// 非 Vue 组件需要手动引入
-import {
-        MessagePlugin,
-        PaginationProps,
-        Pagination as TPagination,
-} from "tdesign-vue-next";
-
 import { data as posts } from "./.vitepress/theme/posts.data.mts";
-import { isMobile } from "./.vitepress/theme/utils/mobile.ts";
-
-const route = useRoute();
-
-const getPage = () => {
-  const search = route.query
-  const searchParams = new URLSearchParams(search);
-
-  return Number(searchParams.get("page") || "1");
-}
-
-const current = ref(getPage())
-const pageSize = ref(10);
-const total = ref(posts.length);
-
-// 在首页有page参数时，从NAV跳转到当前页，清空了参数，但没有刷新页面内容的问题，需要手动更新current
-const router = useRouter();
-router.onAfterRouteChange = (to) => {
-  current.value = getPage();
-}
-
-const curPosts = computed(() => {
-        return posts.slice(
-                (current.value - 1) * pageSize.value,
-                current.value * pageSize.value
-        );
-});
-
-const onCurrentChange: PaginationProps["onCurrentChange"] = (
-        index,
-        pageInfo
-) => {
-        // MessagePlugin.success(`转到第${index}页`);
-
-        const url = new URL(window.location as any);
-        url.searchParams.set("page", index.toString());
-        window.history.replaceState({}, "", url);
-
-        window.scrollTo({
-                top: 0,
-        });
-};
 </script>
-<style lang="scss" scoped>
-/* 去掉.vp-doc li + li 的 margin-top */
-.pagination-container {
-        margin-top: 0px;
 
-        :deep(li) {
-                margin-top: 0px;
-        }
+<style lang="scss" scoped>
+.posts-list {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 6rem;
 }
 
-.mr-2 {
-        margin-right: 2px;
+.post-container {
+  &:first-child {
+    padding-top: 1rem;
+  }
+}
+
+.post-item {
+  padding: 2.8rem 0 2.2rem;
 }
 
 .post-title {
-        margin-bottom: 0px;
-        margin-top: 60px;
-        border-top: 0px;
-        position: relative;
-        top: 0;
-        left: 0;
+  margin: 0 0 0.6rem 0;
+  font-size: 1.75rem;
+  line-height: 1.35;
+  font-weight: 600;
+  letter-spacing: -0.025em;
 
-        > a {
-font-family: "AI" !important;
-text-decoration: none !important;
-        }
+  > a {
+    text-decoration: none;
+    color: var(--vp-c-text-1);
+    transition: color 0.3s ease;
 
-        .post-date {
-                position: absolute;
-                top: 15px;
-                left: -10px;
-                z-index: -1;
-                opacity: .16;
-                font-family: "mvboli";
-                font-size: 40px;
-                font-weight: 400;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        @media (max-width: 425px) {
-                .post-date {
-                        font-size: 40px !important;
-                }
-        }
-
-        &:first-child {
-                margin-top: 10px;
-        }
+    &:hover {
+      color: var(--vp-c-text-1);
+      opacity: 0.85;
+    }
+  }
 }
 
-.hollow-text {
+.post-date {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--vp-c-text-3);
+  letter-spacing: -0.01em;
+  margin-bottom: 1.4rem;
+}
 
-  /* 设置文本颜色为透明 */
-  color: var(--vp-c-bg);
+.post-excerpt {
+  margin-top: 0.4rem;
 
-        -webkit-text-stroke: 1px var(--vp-c-text-1);
+  :deep(p) {
+    margin: 0;
+    line-height: 1.75;
+    color: var(--vp-c-text-2);
+    font-size: 1.02rem;
+  }
+
+  :deep(p + p) {
+    margin-top: 1.1em;
+  }
+}
+
+.post-divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--vp-c-divider),
+    transparent
+  );
+  margin: 0;
+  opacity: 0.6;
+}
+
+/* 响应式优化 */
+@media (max-width: 640px) {
+  .posts-list {
+    padding: 2.5rem 1.25rem 4rem;
+  }
+  
+  .post-item {
+    padding: 2.2rem 0 1.8rem;
+  }
+  
+  .post-title {
+    font-size: 1.55rem;
+  }
+}
+
+/* 可选：增加极轻微的悬停提升感 */
+.post-item:hover {
+  .post-title > a {
+    color: var(--vp-c-text-1);
+  }
 }
 </style>
