@@ -79,7 +79,6 @@ import { data as posts } from "./.vitepress/theme/posts.data.mts";
     font-weight: 500 !important;
     letter-spacing: -0.01em;
     display: inline-block;
-    color: var(--vp-c-text-1);
   }
 }
 
