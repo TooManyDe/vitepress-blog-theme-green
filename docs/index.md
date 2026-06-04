@@ -9,33 +9,26 @@ isNoBackBtn: true
 
 <div class="posts-list">
   <div v-for="(post, index) in posts" :key="post.url" class="post-container">
-
     <hr v-if="index !== 0" class="post-divider" />
-
     <div class="post-item">
       <h2 :id="post.title" class="post-title">
         <a :href="post.url">{{ post.title }}</a>
       </h2>
-
       <div class="post-date source-han-serif">
         {{ post.date.string }}
       </div>
-
       <div
         v-if="post.excerpt"
         v-html="post.excerpt"
         class="post-excerpt"
       ></div>
     </div>
-
     <hr
       v-if="index === posts.length - 1"
       class="post-divider post-divider-last"
     />
-
   </div>
 </div>
-
 <script lang="ts" setup>
 import { data as posts } from "./.vitepress/theme/posts.data.mts";
 </script>
