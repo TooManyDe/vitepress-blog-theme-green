@@ -33,6 +33,7 @@
 }
 
 :root {
+  --vp-c-text-1: #121212;
   --vp-nav-height: 50px;
   --vp-c-green: #41b349;
   --vp-c-green-soft: rgba(65, 179, 73, 0.14);
@@ -105,7 +106,7 @@
 
 /* Footer */
 .VPFooter a {
-  color: var(--vp-c-brand-1) !important;
+  color: var(--vp-c-text-1) !important;
   font-family: "ChillRoundF", var(--vp-font-family-serif), sans-serif !important;
   text-decoration: none !important;
 }
@@ -117,7 +118,7 @@
 
 .VPFooter a:hover {
   text-decoration: underline !important;
-  color: #1A6840;
+  color: var(--vp-c-green) !important;
 }
 
 .VPFooter::before,
@@ -198,20 +199,24 @@ h3 {
 }
 
 
-
 .vp-doc a {
-  text-decoration: none !important;
-  color: var(--vp-c-brand-1);
+  color: var(--vp-c-text-1) !important; 
+  font-weight: normal !important; 
+  text-decoration: underline !important; 
+  text-decoration-color: var(--vp-c-divider) !important; 
+  text-underline-offset: 4px; 
+  text-decoration-thickness: 0.5px !important;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease; 
 }
 
 .vp-doc a:hover {
   text-decoration: underline !important;
-  color: #1A6840; 
+  color: var(--vp-c-green) !important;
 }
 
 .vp-doc a::after {
   content: none !important;
-  color: #1A6840;
+  color: var(--vp-c-green) !important;
 }
 
 .VPDoc img {
