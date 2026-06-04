@@ -3,22 +3,36 @@ layout: doc
 pageClass: is-home-page
 editLink: false
 lastUpdated: false
+isNoComment: true
+isNoBackBtn: true
 ---
 
 <div class="posts-list">
   <div v-for="(post, index) in posts" :key="post.url" class="post-container">
+
+    <hr v-if="index !== 0" class="post-divider" />
+
     <div class="post-item">
       <h2 :id="post.title" class="post-title">
         <a :href="post.url">{{ post.title }}</a>
       </h2>
-      <div class="post-date">{{ post.date.string }}</div>
+
+      <div class="post-date source-han-serif">
+        {{ post.date.string }}
+      </div>
+
       <div
         v-if="post.excerpt"
         v-html="post.excerpt"
         class="post-excerpt"
       ></div>
     </div>
-    <hr v-if="index !== posts.length - 1" class="post-divider" />
+
+    <hr
+      v-if="index === posts.length - 1"
+      class="post-divider post-divider-last"
+    />
+
   </div>
 </div>
 
@@ -27,97 +41,93 @@ import { data as posts } from "./.vitepress/theme/posts.data.mts";
 </script>
 
 <style lang="scss" scoped>
-.posts-list {
-  max-width: 680px;
-  margin: 0 auto;
-  padding: 4rem 1.5rem 6rem;
+
+/* =========================
+   🍎 Apple Typography System
+   ========================= */
+
+.post-divider {
+  border: none !important;
+  height: 1px !important;
+  background-color: var(--vp-c-divider) !important;
+  opacity: 0.5 !important;
+  margin: 2rem 0 !important;
+  padding: 0 !important;
+  width: 100%;
 }
 
-.post-container {
-  &:first-child {
-    padding-top: 1rem;
-  }
+.post-divider-last {
+  margin-bottom: 0 !important;
 }
+
+/* =========================
+   Layout
+   ========================= */
 
 .post-item {
-  padding: 2.8rem 0 2.2rem;
+  display: block;
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
+/* =========================
+   Typography rhythm (Apple-like)
+   ========================= */
+
 .post-title {
-  margin: 0 0 0.6rem 0;
-  font-size: 1.75rem;
-  line-height: 1.35;
-  font-weight: 600;
-  letter-spacing: -0.025em;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.7 !important;
 
   > a {
-    text-decoration: none;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+    letter-spacing: -0.01em;
+    display: inline-block;
     color: var(--vp-c-text-1);
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: var(--vp-c-text-1);
-      opacity: 0.85;
-    }
   }
 }
 
+/* 日期（关键：不再用 12px margin） */
 .post-date {
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  display: block;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  line-height: 1.7;
+  margin-top: 0.25em;   /* Apple 微间距 */
+
+  font-family: "Inter", system-ui, sans-serif;
   font-size: 0.9rem;
-  font-weight: 400;
-  color: var(--vp-c-text-3);
-  letter-spacing: -0.01em;
-  margin-bottom: 1.4rem;
+  color: var(--vp-c-text-2);
 }
 
+/* =========================
+   Excerpt
+   ========================= */
+
 .post-excerpt {
-  margin-top: 0.4rem;
+  margin-top: 0.6em;
 
   :deep(p) {
-    margin: 0;
-    line-height: 1.75;
-    color: var(--vp-c-text-2);
-    font-size: 1.02rem;
+    margin: 0 !important;
+    line-height: 1.7;
+    color: var(--vp-c-text-1);
   }
 
   :deep(p + p) {
-    margin-top: 1.1em;
+    margin-top: 1em !important;
   }
 }
 
-.post-divider {
-  border: none;
-  height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent,
-    var(--vp-c-divider),
-    transparent
-  );
-  margin: 0;
-  opacity: 0.6;
+/* =========================
+   Optional style
+   ========================= */
+
+.hollow-text {
+  color: var(--vp-c-bg);
+  -webkit-text-stroke: 1px var(--vp-c-text-1);
 }
 
-/* 响应式优化 */
-@media (max-width: 640px) {
-  .posts-list {
-    padding: 2.5rem 1.25rem 4rem;
-  }
-  
-  .post-item {
-    padding: 2.2rem 0 1.8rem;
-  }
-  
-  .post-title {
-    font-size: 1.55rem;
-  }
-}
-
-/* 可选：增加极轻微的悬停提升感 */
-.post-item:hover {
-  .post-title > a {
-    color: var(--vp-c-text-1);
-  }
-}
 </style>
