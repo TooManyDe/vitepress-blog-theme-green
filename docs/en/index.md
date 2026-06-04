@@ -4,7 +4,6 @@ layout: doc
 pageClass: is-home-page
 editLink: false
 lastUpdated: false
-isNoComment: true
 isNoBackBtn: true
 ---
 
