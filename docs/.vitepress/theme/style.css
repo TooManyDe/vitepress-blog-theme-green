@@ -230,6 +230,17 @@ h3 {
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
+.VPDoc .content-container img {
+  max-width: 640px;
+  display: block;
+}
+
+@media (max-width: 959px) {
+  .VPDoc .content-container img {
+    max-width: 100%;
+  }
+}
+
 .vp-doc .table-scroll td,
 .vp-doc .table-scroll th {
   white-space: nowrap;     
