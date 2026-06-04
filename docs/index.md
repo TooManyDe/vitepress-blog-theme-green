@@ -102,7 +102,7 @@ import { data as posts } from "./.vitepress/theme/posts.data.mts";
    ========================= */
 
 .post-excerpt {
-  margin-top: 0.6em;
+  margin-top: 0.3em;
 
   :deep(p) {
     margin: 0 !important;
