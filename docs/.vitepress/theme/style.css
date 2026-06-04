@@ -13,14 +13,6 @@
 }
 
 @font-face {
-  font-family: "Noto Serif SC";
-  font-display: swap;
-  src: url("/assets/fonts/NotoSerifSC-VariableFont_wght.ttf") format("truetype");
-  font-weight: 200 900;
-}
-
-
-@font-face {
   font-family: "Noto Sans SC";
   font-display: swap;
   src: url("/assets/fonts/NotoSansSC-VariableFont_wght.ttf") format("truetype");

@@ -133,6 +133,9 @@ dist
 docs/.vitepress/dist
 cache
 
+# Claude Code
+.claude/
+
 .obsidian
 # Obsidian cache
 .obsidian/cache
