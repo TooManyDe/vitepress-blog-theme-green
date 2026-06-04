@@ -66,8 +66,8 @@ export const search: DefaultTheme.AlgoliaSearchOptions['locales'] = {
 const themeConfig: DefaultTheme.Config = {
   nav: navConfig,
   
-  footer: {
-    message: '© 2026 <a href="https://ddbx.org">的的不休</a>',
+footer: {
+  message: '© 2026 <a href="https://ddbx.org" target="_blank" rel="noopener noreferrer">的的不休</a>  Powered by <a href="https://vitepress.dev/" target="_blank" rel="noopener noreferrer">VitePress</a>',
 },
 
   
