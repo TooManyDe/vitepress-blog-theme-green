@@ -23,15 +23,11 @@ isNoBackBtn: true
         class="post-excerpt"
       ></div>
     </div>
-    <hr
-      v-if="index === curPosts.length - 1"
-      class="post-divider post-divider-last"
-    />
   </div>
 </div>
 
 <div class="pagination-container">
-  <t-config-provider :global-config="zhConfig">
+  <t-config-provider :global-config="enConfig">
     <t-pagination
       v-model="current"
       v-model:pageSize="pageSize"
@@ -48,23 +44,18 @@ isNoBackBtn: true
 <script lang="ts" setup>
 import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vitepress";
-// 引入 TDesign 依赖
 import {
   Pagination as TPagination,
   ConfigProvider as TConfigProvider,
   type PaginationProps
 } from "tdesign-vue-next";
-// 引入中文语言包
-import zhConfig from 'tdesign-vue-next/es/locale/zh_CN';
+import enConfig from 'tdesign-vue-next/es/locale/en_US';
 
-// 保持原本的数据源路径
 import { data as posts } from "./.vitepress/theme/posts.data.mts";
-// 引入移动端检测（若你的 utils 下没有这个文件，可手动补充或替换检测方法）
 import { isMobile } from "./.vitepress/theme/utils/mobile.ts";
 
 const route = useRoute();
 
-// 从当前 URL 获取页码参数
 const getPage = () => {
   const search = route.query
   const searchParams = new URLSearchParams(search);
@@ -72,16 +63,14 @@ const getPage = () => {
 }
 
 const current = ref(getPage())
-const pageSize = ref(10); // 每页分 10 篇
+const pageSize = ref(10);
 const total = ref(posts.length);
 
-// 监听路由更新（应对导航栏切换或清空参数时内容不同步的问题）
 const router = useRouter();
 router.onAfterRouteChange = (to) => {
   current.value = getPage();
 }
 
-// 动态截取当前页展示的数据
 const curPosts = computed(() => {
   return posts.slice(
     (current.value - 1) * pageSize.value,
@@ -89,7 +78,6 @@ const curPosts = computed(() => {
   );
 });
 
-// 切页回调：修改 URL 参数并平滑滚动回顶部
 const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) => {
   const url = new URL(window.location as any);
   url.searchParams.set("page", index.toString());
@@ -102,7 +90,6 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
 </script>
 
 <style lang="scss" scoped>
-
 .post-divider {
   border: none !important;
   height: 1px !important;
@@ -113,24 +100,12 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
   width: 100%;
 }
 
-.post-divider-last {
-  margin-bottom: 0 !important;
-}
-
-/* =========================
-   Layout
-   ========================= */
-
 .post-item {
   display: block;
   width: 100%;
   margin: 0 !important;
   padding: 0 !important;
 }
-
-/* =========================
-   Typography rhythm (Apple-like)
-   ========================= */
 
 .post-title {
   margin: 0 !important;
@@ -146,23 +121,16 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
   }
 }
 
-/* 日期 */
 .post-date {
   display: block;
   margin: 0 !important;
   padding: 0 !important;
-
   line-height: 1.7;
-  margin-top: 0.25em;   /* Apple 微间距 */
-
+  margin-top: 0.25em;
   font-family: "Inter", system-ui, sans-serif;
   font-size: 0.9rem;
   color: var(--vp-c-text-2);
 }
-
-/* =========================
-   Excerpt
-   ========================= */
 
 .post-excerpt {
   margin-top: 0.3em;
@@ -178,24 +146,18 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
   }
 }
 
-/* =========================
-   Optional style
-   ========================= */
-
 .hollow-text {
   color: var(--vp-c-bg);
   -webkit-text-stroke: 1px var(--vp-c-text-1);
 }
 
-/* =========================
-   📦 追加：分页组件布局微调
-   ========================= */
 .pagination-container {
-  margin-top: 1rem; 
+  margin-top: 10px; 
 
   :deep(li) {
     margin-top: 0px; 
   }
 }
 </style>
+
 
