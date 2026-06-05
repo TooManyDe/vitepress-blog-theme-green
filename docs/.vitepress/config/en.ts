@@ -6,7 +6,6 @@ const RSS_ICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="512" height
 // 导航配置
 const navConfig: DefaultTheme.NavItem[] = [
   { text: "Archive", link: "/en/archive/", activeMatch: '/en/archive/' },
-  { text: "Category", link: "/en/category/", activeMatch: '/en/category/' },
 ]
 
 // 社交链接配置
