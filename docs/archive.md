@@ -23,6 +23,8 @@ isNoBackBtn: true
   </div> 
 </template>
 
+<hr class="section-divider" />
+
 <template v-for="[category, postGroup] in sortedCategoryGroups" :key="category">
   <h2 :id="category" class="post-title">
     <a
@@ -133,5 +135,16 @@ const sortedCategoryGroups = computed(() => {
   color: var(--vp-c-bg);
   -webkit-text-stroke: 1px var(--vp-c-text-1);
 }
+
+.section-divider {
+  border: none !important;
+  height: 1px !important;
+  background-color: var(--vp-c-divider) !important;
+  opacity: 0.5 !important;
+  margin: 2rem 0 !important;
+  padding: 0 !important;
+  width: 100%;
+}
 </style>
+
 
