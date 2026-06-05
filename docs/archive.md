@@ -108,7 +108,7 @@ const sortedCategoryGroups = computed(() => {
     left: -10px;
     z-index: -1;
     opacity: .16;
-    font-family: "ChillRoundF";
+    font-family: "Inter";
     font-size: 40px;
     font-weight: 600;
   }
@@ -121,13 +121,14 @@ const sortedCategoryGroups = computed(() => {
 
   > a {
     font-weight: 400;
+    font-family: "AI";
     text-decoration: none !important;
     color: var(--vp-c-green) !important;
   }
 
   .post-date {
     opacity: .6;
-    font-family: "mvboli";
+    font-family: "Inter";
   }
 }
 
