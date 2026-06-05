@@ -106,7 +106,7 @@
 
 /* Footer */
 .VPFooter a {
-  color: var(--vp-c-text-1) !important;
+  color: var(--vp-c-green) !important;
   font-family: "ChillRoundF", var(--vp-font-family-serif), sans-serif !important;
   text-decoration: none !important;
 }
@@ -203,7 +203,7 @@ h3 {
   color: var(--vp-c-text-1) !important; 
   font-weight: normal !important; 
   text-decoration: underline !important; 
-  text-decoration-color: var(--vp-c-divider) !important; 
+  text-decoration-color: var(--vp-c-green) !important; 
   text-underline-offset: 4px; 
   text-decoration-thickness: 1px !important;
   transition: color 0.2s ease, text-decoration-color 0.2s ease; 
