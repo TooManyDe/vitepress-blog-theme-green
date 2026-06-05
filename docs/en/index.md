@@ -7,7 +7,6 @@ isNoComment: true
 isNoBackBtn: true
 ---
 
-<!-- 完全采用第一个文件的结构 -->
 <div class="posts-list">
   <div v-for="(post, index) in curPosts" :key="post.url" class="post-container">
     <hr v-if="index !== 0" class="post-divider" />
@@ -31,11 +30,33 @@ isNoBackBtn: true
   </div>
 </div>
 
+<div class="pagination-container">
+  <t-config-provider :global-config="enConfig">
+    <t-pagination
+      v-model="current"
+      v-model:pageSize="pageSize"
+      :total="total"
+      size="small"
+      :showPageSize="false"
+      :showPageNumber="!isMobile()"
+      :showJumper="isMobile()"
+      @current-change="onCurrentChange"
+    />
+  </t-config-provider>
+</div>
+
 <script lang="ts" setup>
 import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vitepress";
-// 引入第二个文件指定的数据源（删除了 TDesign 相关的组件组件和移动端判定工具）
+import {
+  Pagination as TPagination,
+  ConfigProvider as TConfigProvider,
+  type PaginationProps
+} from "tdesign-vue-next";
+import enConfig from 'tdesign-vue-next/es/locale/en_US';
+
 import { data as posts } from "../.vitepress/theme/posts-en.data.mts";
+import { isMobile } from "../.vitepress/theme/utils/mobile.ts";
 
 const route = useRoute();
 
@@ -46,28 +67,33 @@ const getPage = () => {
 }
 
 const current = ref(getPage())
-const pageSize = ref(10); // 每页显示数量
+const pageSize = ref(10);
+const total = ref(posts.length);
 
-// 动态路由监听：当从 NAV 导航切换回首页且带 page 参数时，同步更新
 const router = useRouter();
 router.onAfterRouteChange = (to) => {
   current.value = getPage();
 }
 
-// 核心：动态截取当前页要展示的博文
 const curPosts = computed(() => {
 	return posts.slice(
 		(current.value - 1) * pageSize.value,
 		current.value * pageSize.value
 	);
 });
+
+const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) => {
+	const url = new URL(window.location as any);
+	url.searchParams.set("page", index.toString());
+	window.history.replaceState({}, "", url);
+
+	window.scrollTo({
+		top: 0,
+	});
+};
 </script>
 
 <style lang="scss" scoped>
-/* =========================
-   🍎 完全保留第一个文件的全部样式
-   ========================= */
-
 .post-divider {
   border: none !important;
   height: 1px !important;
@@ -82,20 +108,12 @@ const curPosts = computed(() => {
   margin-bottom: 0 !important;
 }
 
-/* =========================
-   Layout
-   ========================= */
-
 .post-item {
   display: block;
   width: 100%;
   margin: 0 !important;
   padding: 0 !important;
 }
-
-/* =========================
-   Typography rhythm (Apple-like)
-   ========================= */
 
 .post-title {
   margin: 0 !important;
@@ -115,18 +133,12 @@ const curPosts = computed(() => {
   display: block;
   margin: 0 !important;
   padding: 0 !important;
-
   line-height: 1.7;
-  margin-top: 0.25em;   /* Apple 微间距 */
-
+  margin-top: 0.25em;
   font-family: "Inter", system-ui, sans-serif;
   font-size: 0.9rem;
   color: var(--vp-c-text-2);
 }
-
-/* =========================
-   Excerpt
-   ========================= */
 
 .post-excerpt {
   margin-top: 0.3em;
@@ -138,18 +150,23 @@ const curPosts = computed(() => {
   }
 
   :deep(p + p) {
-    margin-top: 1em !important;
+    margin-top: 0.6em !important;
   }
 }
-
-/* =========================
-   Optional style
-   ========================= */
 
 .hollow-text {
   color: var(--vp-c-bg);
   -webkit-text-stroke: 1px var(--vp-c-text-1);
 }
+
+.pagination-container {
+  margin-top: 10px;
+
+  :deep(li) {
+    margin-top: 0px;
+  }
+}
 </style>
+
 
 
