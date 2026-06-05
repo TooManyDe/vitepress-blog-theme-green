@@ -1,5 +1,4 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
 layout: doc
 editLink: false
 lastUpdated: false
@@ -25,6 +24,24 @@ isNoBackBtn: true
   </div> 
 </template>
 
+<hr class="section-divider" />
+
+<template v-for="[category, postGroup] in sortedCategoryGroups" :key="category">
+  <h2 :id="category" class="post-title">
+    <a
+      class="header-anchor"
+      :href="`#${category}`"
+      :aria-label="`Permalink to &quot;${category}&quot;`"
+    >​</a>
+    <div class="post-year hollow-text source-han-serif">{{ category }}</div>
+  </h2>
+  <div class="post-container" v-for="post in postGroup" :key="post.url">
+    <a :href="post.url">{{ post.title }}</a>
+    <span class="post-date">
+      {{ post.date.string }}
+    </span>
+  </div>
+</template>
 
 <script lang="ts" setup>
 import { ref, computed } from "vue";
@@ -50,9 +67,33 @@ const postGroups = computed(() => {
   });
   return groups;
 });
-</script>
-<style lang="scss" scoped>
 
+// 按分类分组并排序
+const sortedCategoryGroups = computed(() => {
+  const map = new Map<string, typeof posts>();
+
+  posts.forEach((post) => {
+    const category = post.category || "Uncategorized";
+    if (!map.has(category)) {
+      map.set(category, []);
+    }
+    map.get(category)?.push(post);
+  });
+
+  // 对每个分类内部按时间倒序排序
+  const sortedEntries = Array.from(map.entries()).map(([category, group]) => {
+    group.sort((a, b) => b.date.time - a.date.time);
+    return [category, group];
+  });
+
+  // 再根据每个分类中最新文章时间，整体排序
+  sortedEntries.sort((a, b) => b[1][0].date.time - a[1][0].date.time);
+
+  return sortedEntries as [string, typeof posts][];
+});
+</script>
+
+<style lang="scss" scoped>
 .mr-2 {
 	margin-right: 2px;
 }
@@ -82,10 +123,10 @@ const postGroups = computed(() => {
   justify-content: space-between;
   margin: 12px 0;
 
-    > a {
+  > a {
 		font-weight: 400;
-text-decoration: none !important;
-color: var(--vp-c-green) !important;
+    text-decoration: none !important;
+    color: var(--vp-c-green) !important;
 	}
 
   .post-date {
@@ -95,10 +136,19 @@ color: var(--vp-c-green) !important;
 }
 
 .hollow-text {
-  
   /* 设置文本颜色为透明 */
   color: var(--vp-c-bg);
-  
 	-webkit-text-stroke: 1px var(--vp-c-text-1);
 }
+
+.section-divider {
+  border: none !important;
+  height: 1px !important;
+  background-color: var(--vp-c-divider) !important;
+  opacity: 0.5 !important;
+  margin: 3rem 0 !important;
+  padding: 0 !important;
+  width: 100%;
+}
 </style>
+
