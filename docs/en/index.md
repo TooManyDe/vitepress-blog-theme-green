@@ -23,10 +23,6 @@ isNoBackBtn: true
         class="post-excerpt"
       ></div>
     </div>
-    <hr
-      v-if="index === curPosts.length - 1"
-      class="post-divider post-divider-last"
-    />
   </div>
 </div>
 
@@ -104,10 +100,6 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
   width: 100%;
 }
 
-.post-divider-last {
-  margin-bottom: 0 !important;
-}
-
 .post-item {
   display: block;
   width: 100%;
@@ -150,7 +142,7 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
   }
 
   :deep(p + p) {
-    margin-top: 0.6em !important;
+    margin-top: 0.55em !important;
   }
 }
 
@@ -167,6 +159,7 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
   }
 }
 </style>
+
 
 
 
