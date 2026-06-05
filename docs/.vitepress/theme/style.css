@@ -33,7 +33,6 @@
 }
 
 :root {
-  --vp-c-bg: #FFFEF8;
   --vp-c-text-1: #1c1c1c;
   --vp-nav-height: 50px;
   --vp-c-green: #1A6840;
@@ -54,7 +53,6 @@
 }
 
 .dark {
-  --vp-c-bg: #15231B;
   --vp-c-green: #41b349;
   --vp-c-text-1: #C9D1D9;
   --vp-c-brand-1: var(--vp-c-green-dark) !important;
