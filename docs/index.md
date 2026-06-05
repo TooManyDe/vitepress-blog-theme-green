@@ -145,7 +145,7 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
   }
 
   :deep(p + p) {
-    margin-top: 0.6em !important;
+    margin-top: 0.55em !important;
   }
 }
 
