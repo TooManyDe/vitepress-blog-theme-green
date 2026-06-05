@@ -103,16 +103,12 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
 
 <style lang="scss" scoped>
 
-/* =========================
-   🍎 Apple Typography System (完全保留并沿用你的配置)
-   ========================= */
-
 .post-divider {
   border: none !important;
   height: 1px !important;
   background-color: var(--vp-c-divider) !important;
   opacity: 0.5 !important;
-  margin: 1rem 0 !important; /* 保持你修改后的 1rem */
+  margin: 1rem 0 !important; 
   padding: 0 !important;
   width: 100%;
 }
@@ -178,7 +174,7 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
   }
 
   :deep(p + p) {
-    margin-top: 0.75em !important;
+    margin-top: 0.6em !important;
   }
 }
 
@@ -195,7 +191,7 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
    📦 追加：分页组件布局微调
    ========================= */
 .pagination-container {
-  margin-top: 2rem; 
+  margin-top: 1rem; 
 
   :deep(li) {
     margin-top: 0px; 
