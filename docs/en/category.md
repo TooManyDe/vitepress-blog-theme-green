@@ -78,6 +78,7 @@ const sortedCategoryGroups = computed(() => {
   > a {
     font-weight: 400;
 text-decoration: none !important;
+color: var(--vp-c-green) !important;
   }
 
   .post-date {
