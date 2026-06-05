@@ -8,7 +8,6 @@ isNoBackBtn: true
 ---
 
 <div class="posts-list">
-  <!-- 注意：这里将循环源从 posts 改为了分页切片后的 curPosts -->
   <div v-for="(post, index) in curPosts" :key="post.url" class="post-container">
     <hr v-if="index !== 0" class="post-divider" />
     <div class="post-item">
@@ -31,7 +30,6 @@ isNoBackBtn: true
   </div>
 </div>
 
-<!-- 新增：分页组件层（使用 zhConfig 配置为中文环境） -->
 <div class="pagination-container">
   <t-config-provider :global-config="zhConfig">
     <t-pagination
@@ -148,7 +146,7 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
     font-weight: 500 !important;
     letter-spacing: -0.01em;
     display: inline-block;
-    color: var(--vp-c-green) !important; /* 保持你配置的绿色 */
+    color: var(--vp-c-green) !important; 
   }
 }
 
@@ -180,7 +178,7 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
   }
 
   :deep(p + p) {
-    margin-top: 1em !important;
+    margin-top: 0.75em !important;
   }
 }
 
@@ -197,10 +195,10 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
    📦 追加：分页组件布局微调
    ========================= */
 .pagination-container {
-  margin-top: 4rem; /* 留出合适的优雅留白 */
+  margin-top: 2rem; 
 
   :deep(li) {
-    margin-top: 0px; /* 防止 VitePress 基础样式污染 TDesign 的分页按钮间距 */
+    margin-top: 0px; 
   }
 }
 </style>
