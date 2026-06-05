@@ -7,8 +7,8 @@ isNoComment: true
 isNoBackBtn: true
 ---
 
-<!-- 1. 列表层：完全保持第一个文件的 Apple 风格结构 -->
 <div class="posts-list">
+  <!-- 注意：这里将循环源从 posts 改为了分页切片后的 curPosts -->
   <div v-for="(post, index) in curPosts" :key="post.url" class="post-container">
     <hr v-if="index !== 0" class="post-divider" />
     <div class="post-item">
@@ -31,9 +31,9 @@ isNoBackBtn: true
   </div>
 </div>
 
-<!-- 2. 分页层：追加 TDesign 分页组件 -->
+<!-- 新增：分页组件层（使用 zhConfig 配置为中文环境） -->
 <div class="pagination-container">
-  <t-config-provider :global-config="enConfig">
+  <t-config-provider :global-config="zhConfig">
     <t-pagination
       v-model="current"
       v-model:pageSize="pageSize"
@@ -52,20 +52,21 @@ import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vitepress";
 // 引入 TDesign 依赖
 import {
-	Pagination as TPagination,
+  Pagination as TPagination,
   ConfigProvider as TConfigProvider,
   type PaginationProps
 } from "tdesign-vue-next";
-import enConfig from 'tdesign-vue-next/es/locale/en_US';
+// 引入中文语言包
+import zhConfig from 'tdesign-vue-next/es/locale/zh_CN';
 
-// 数据源指向第一个文件原本的 posts
+// 保持原本的数据源路径
 import { data as posts } from "./.vitepress/theme/posts.data.mts";
-// 引入移动端检测逻辑（配合分页组件显隐规律）
+// 引入移动端检测（若你的 utils 下没有这个文件，可手动补充或替换检测方法）
 import { isMobile } from "./.vitepress/theme/utils/mobile.ts";
 
 const route = useRoute();
 
-// 从当前 URL 参数中获取页码，默认为第 1 页
+// 从当前 URL 获取页码参数
 const getPage = () => {
   const search = route.query
   const searchParams = new URLSearchParams(search);
@@ -73,39 +74,39 @@ const getPage = () => {
 }
 
 const current = ref(getPage())
-const pageSize = ref(10); // 严格限制：每页分 10 篇
+const pageSize = ref(10); // 每页分 10 篇
 const total = ref(posts.length);
 
-// 路由改变时（例如从导航栏重新点进首页），同步校准页码状态
+// 监听路由更新（应对导航栏切换或清空参数时内容不同步的问题）
 const router = useRouter();
 router.onAfterRouteChange = (to) => {
   current.value = getPage();
 }
 
-// 核心：将原本的一股脑循环 posts 改为通过 computed 切片出来的 curPosts
+// 动态截取当前页展示的数据
 const curPosts = computed(() => {
-	return posts.slice(
-		(current.value - 1) * pageSize.value,
-		current.value * pageSize.value
-	);
+  return posts.slice(
+    (current.value - 1) * pageSize.value,
+    current.value * pageSize.value
+  );
 });
 
-// 页码改变时的回调：无刷新修改浏览器 URL，并平滑置顶
+// 切页回调：修改 URL 参数并平滑滚动回顶部
 const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) => {
-	const url = new URL(window.location as any);
-	url.searchParams.set("page", index.toString());
-	window.history.replaceState({}, "", url);
+  const url = new URL(window.location as any);
+  url.searchParams.set("page", index.toString());
+  window.history.replaceState({}, "", url);
 
-	window.scrollTo({
-		top: 0,
-	});
+  window.scrollTo({
+    top: 0,
+  });
 };
 </script>
 
 <style lang="scss" scoped>
 
 /* =========================
-   🍎 Apple Typography System (原封不动)
+   🍎 Apple Typography System (完全保留并沿用你的配置)
    ========================= */
 
 .post-divider {
@@ -113,7 +114,7 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
   height: 1px !important;
   background-color: var(--vp-c-divider) !important;
   opacity: 0.5 !important;
-  margin: 2rem 0 !important;
+  margin: 1rem 0 !important; /* 保持你修改后的 1rem */
   padding: 0 !important;
   width: 100%;
 }
@@ -147,6 +148,7 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
     font-weight: 500 !important;
     letter-spacing: -0.01em;
     display: inline-block;
+    color: var(--vp-c-green) !important; /* 保持你配置的绿色 */
   }
 }
 
@@ -192,13 +194,14 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
 }
 
 /* =========================
-   📦 追加：分页组件专用基础样式
+   📦 追加：分页组件布局微调
    ========================= */
 .pagination-container {
-	margin-top: 60px; /* 让分页器和最底下一篇博文拉开恰当的距离 */
+  margin-top: 4rem; /* 留出合适的优雅留白 */
 
-	:deep(li) {
-		margin-top: 0px; /* 防止 VitePress 样式干扰 TDesign 内部的 li 标签间距 */
-	}
+  :deep(li) {
+    margin-top: 0px; /* 防止 VitePress 基础样式污染 TDesign 的分页按钮间距 */
+  }
 }
 </style>
+
