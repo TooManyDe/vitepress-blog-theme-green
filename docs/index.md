@@ -27,7 +27,7 @@ isNoBackBtn: true
 </div>
 
 <div class="pagination-container">
-  <t-config-provider :global-config="enConfig">
+  <t-config-provider :global-config="zhConfig">
     <t-pagination
       v-model="current"
       v-model:pageSize="pageSize"
@@ -49,7 +49,7 @@ import {
   ConfigProvider as TConfigProvider,
   type PaginationProps
 } from "tdesign-vue-next";
-import enConfig from 'tdesign-vue-next/es/locale/en_US';
+import zhConfig from 'tdesign-vue-next/es/locale/zh_CN';
 
 import { data as posts } from "./.vitepress/theme/posts.data.mts";
 import { isMobile } from "./.vitepress/theme/utils/mobile.ts";
@@ -63,7 +63,7 @@ const getPage = () => {
 }
 
 const current = ref(getPage())
-const pageSize = ref(10);
+const pageSize = ref(10); 
 const total = ref(posts.length);
 
 const router = useRouter();
@@ -90,6 +90,7 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
 </script>
 
 <style lang="scss" scoped>
+
 .post-divider {
   border: none !important;
   height: 1px !important;
@@ -125,8 +126,10 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
   display: block;
   margin: 0 !important;
   padding: 0 !important;
+
   line-height: 1.7;
-  margin-top: 0.25em;
+  margin-top: 0.25em;   
+
   font-family: "Inter", system-ui, sans-serif;
   font-size: 0.9rem;
   color: var(--vp-c-text-2);
@@ -152,12 +155,13 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
 }
 
 .pagination-container {
-  margin-top: 10px; 
+  margin-top: 1rem; 
 
   :deep(li) {
     margin-top: 0px; 
   }
 }
 </style>
+
 
 
