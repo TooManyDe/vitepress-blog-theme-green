@@ -25,7 +25,6 @@
        url("/assets/fonts/AI-Regular.woff") format("woff");
 }
 
-
 @font-face {
   font-family: "mvboli";
   font-display: swap;
@@ -61,7 +60,22 @@
   --vp-c-brand-soft: var(--vp-c-green-dark-soft) !important;
 }
 
+/* ========================================================
+   布局与对齐逻辑 (移动端 & 桌面端)
+   ======================================================== */
+
+/* 1. 移动端 (小于 767px): 统一样式，左右边距 24px 对齐 */
+@media (max-width: 767px) {
+  .VPDoc {
+    padding: 20px 24px !important; /* 左右间距设为 24px，对齐导航栏默认值 */
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* 2. 桌面端 (大于 768px): 统一限制 55rem 宽度并水平居中 */
 @media (min-width: 768px) {
+  /* 导航栏对齐设置 */
   .VPNavBar {
     width: 100%;
     justify-content: center;
@@ -73,18 +87,47 @@
   }
 
   .VPNavBar .container {
-    max-width: 55rem; 
+    max-width: 55rem !important; 
     width: 100%;
     margin: 0 auto;
-    padding: 0 32px; 
+    padding: 0 32px !important; /* 导航栏左右缩进 32px */
+  }
+
+  /* 文章主体对齐设置 */
+  .VPDoc {
+    max-width: 55rem !important; /* 宽度与导航栏完全一致 */
+    margin: 0 auto !important;   /* 居中 */
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: 20px !important;
+  }
+
+  .VPDoc .container {
+    max-width: 100% !important;
+  }
+
+  .VPDoc .content {
+    padding: 0 32px !important; /* 文章内容左右缩进 32px，达成绝对对齐 */
   }
 }
 
+/* 3. 宽屏补丁 (大于 960px): 覆盖原先可能引发错位的最大宽度限制 */
 @media (min-width: 960px) {
-  .VPNavBar .container {
-    max-width: 55rem;
+  .VPNavBar .container,
+  .VPDoc {
+    max-width: 55rem !important;
+  }
+  .VPDoc:not(.has-sidebar) .content {
+    max-width: 100% !important;
+  }
+  .VPDoc.has-aside .content-container {
+    max-width: 100% !important;
   }
 }
+
+/* ========================================================
+   基础组件与细节样式 (保持原样)
+   ======================================================== */
 
 .VPNavBarTitle .title {
   font-family: "ChillRoundF", sans-serif;
@@ -133,33 +176,6 @@
   box-shadow: none !important;
 }
 
-.VPDoc {
-  padding-top: 20px !important;
-}
-
-
-
-@media (max-width: 959px) {
-  .VPDoc {
-    padding: 24px !important;
-    width: 100%;
-  }
-}
-
-.VPDoc.has-aside .content-container {
-  max-width: 50rem !important;
-}
-
-@media (min-width: 960px) {
-  .VPDoc:not(.has-sidebar) .content {
-    max-width: inherit !important;
-  }
-
-  .VPDoc .content {
-    padding: 0 !important; 
-  }
-}
-
 .VPDocFooter {
   margin-top: 10px !important;
 }
@@ -196,7 +212,6 @@ h2 {
 h3 {
   font-size: 18px !important;
 }
-
 
 .vp-doc a {
   color: var(--vp-c-text-1) !important; 
@@ -249,7 +264,7 @@ h3 {
   -webkit-overflow-scrolling: touch; 
 }
 
-
+/* 隐藏侧边栏与不必要元素 */
 .VPSidebar,
 .VPDocAside,
 .aside,
