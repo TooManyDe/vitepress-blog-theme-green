@@ -25,6 +25,7 @@
        url("/assets/fonts/AI-Regular.woff") format("woff");
 }
 
+
 @font-face {
   font-family: "mvboli";
   font-display: swap;
@@ -60,85 +61,30 @@
   --vp-c-brand-soft: var(--vp-c-green-dark-soft) !important;
 }
 
-/* ========================================================
-   【最新修正】全局布局与对齐逻辑 (移动端 & 桌面端首页/正文)
-   ======================================================== */
-
-/* 1. 移动端 (小于 767px): 统一样式，左右边距 24px 对齐 */
-@media (max-width: 767px) {
-  .VPDoc,
-  .VPContent,
-  .vp-doc {
-    padding: 20px 24px !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-  }
-}
-
-/* 2. 桌面端 (大于 768px): 限制导航栏与首页/正文主体全部在 55rem 区域内绝对对齐 */
 @media (min-width: 768px) {
-  /* 导航栏区域对齐 */
   .VPNavBar {
-    width: 100% !important;
-    justify-content: center !important;
+    width: 100%;
+    justify-content: center;
     background-color: var(--vp-c-bg);
   }
-  
+
   .VPNav[data-v-e4ae072f] {
     position: absolute;
   }
 
   .VPNavBar .container {
-    max-width: 55rem !important; 
-    width: 100% !important;
-    margin: 0 auto !important;
-    padding: 0 32px !important; /* 导航栏左右缩进 32px */
-  }
-
-  /* 主体内容外壳 (彻底解决首页、列表页及文章页的不对齐问题) */
-  .VPContent,
-  .VPDoc,
-  .VPDoc .container {
-    max-width: 55rem !important;        /* 强制与导航栏宽度对齐 */
-    width: 100% !important;
-    margin: 0 auto !important;          /* 强行水平居中 */
-    box-sizing: border-box !important;
-  }
-
-  .VPDoc .content {
-  padding: 0 32px !important;
-}
-
-  .vp-doc {
-  padding: 0 !important;
-}
-  
-  /* 放开默认主题对首页或无侧边栏布局的额外边距干扰 */
-  .VPContent:not(.has-sidebar) {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    max-width: 55rem; 
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 32px; 
   }
 }
 
-/* 3. 宽屏补丁 (大于 960px): 彻底干掉 VitePress 自带的响应式宽度拉伸 */
 @media (min-width: 960px) {
-  .VPNavBar .container,
-  .VPContent,
-  .VPDoc,
-  .VPDoc .content-container {
-    max-width: 55rem !important;
-  }
-  .VPDoc:not(.has-sidebar) .content {
-    max-width: 100% !important;
-  }
-  .VPDoc.has-aside .content-container {
-    max-width: 100% !important;
+  .VPNavBar .container {
+    max-width: 55rem;
   }
 }
-
-/* ========================================================
-   基础组件与细节样式 (保持原样)
-   ======================================================== */
 
 .VPNavBarTitle .title {
   font-family: "ChillRoundF", sans-serif;
@@ -187,6 +133,33 @@
   box-shadow: none !important;
 }
 
+.VPDoc {
+  padding-top: 20px !important;
+}
+
+
+
+@media (max-width: 959px) {
+  .VPDoc {
+    padding: 24px !important;
+    width: 100%;
+  }
+}
+
+.VPDoc.has-aside .content-container {
+  max-width: 50rem !important;
+}
+
+@media (min-width: 960px) {
+  .VPDoc:not(.has-sidebar) .content {
+    max-width: inherit !important;
+  }
+
+  .VPDoc .content {
+    padding: 0 !important; 
+  }
+}
+
 .VPDocFooter {
   margin-top: 10px !important;
 }
@@ -223,6 +196,7 @@ h2 {
 h3 {
   font-size: 18px !important;
 }
+
 
 .vp-doc a {
   color: var(--vp-c-text-1) !important; 
@@ -275,7 +249,7 @@ h3 {
   -webkit-overflow-scrolling: touch; 
 }
 
-/* 隐藏侧边栏与不必要元素 */
+
 .VPSidebar,
 .VPDocAside,
 .aside,
@@ -317,4 +291,3 @@ main > div > div > pre > code {
 #app {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
-
