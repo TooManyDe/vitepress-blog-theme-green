@@ -60,8 +60,7 @@
   --vp-c-brand-soft: var(--vp-c-green-dark-soft) !important;
 }
 
-/* ===== 其他设备（≥768px，平板和电脑） ===== */
-@media (min-width: 768px) {
+@media (min-width: 576px) {
   .VPNavBar {
     width: 100%;
     justify-content: center;
@@ -93,8 +92,7 @@
   }
 }
 
-/* ===== 手机端（≤767px） ===== */
-@media (max-width: 767px) {
+@media (max-width: 576px) {
   .VPDoc {
     padding: 24px !important;
     width: 100%;
