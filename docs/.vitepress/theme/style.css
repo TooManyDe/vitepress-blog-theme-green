@@ -61,7 +61,7 @@
   --vp-c-brand-soft: var(--vp-c-green-dark-soft) !important;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 577px) {
   .VPNavBar {
     width: 100%;
     justify-content: center;
@@ -133,7 +133,7 @@
 
 
 
-@media (max-width: 959px) {
+@media (max-width: 576px) {
   .VPDoc {
     padding: 24px !important;
     width: 100%;
@@ -144,7 +144,7 @@
   max-width: 50rem !important;
 }
 
-@media (min-width: 960px) {
+@media (min-width: 577px) {
   .VPDoc:not(.has-sidebar) .content {
     max-width: inherit !important;
   }
@@ -224,7 +224,7 @@ h3 {
   display: block;
 }
 
-@media (max-width: 959px) {
+@media (max-width: 577px) {
   .VPDoc .content-container img {
     max-width: 100%;
   }
