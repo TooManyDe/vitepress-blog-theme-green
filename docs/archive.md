@@ -123,7 +123,6 @@ const sortedCategoryGroups = computed(() => {
     font-weight: 400;
     font-family: "AI";
     text-decoration: none !important;
-    color: var(--vp-c-green) !important;
   }
 
   .post-date {
