@@ -146,17 +146,26 @@
   }
 }
 
-.VPDoc.has-aside .content-container {
-  max-width: 50rem !important;
+@media (min-width: 768px) {
+  /* 文章容器:与导航栏用完全相同的 max-width + padding,保证起始线对齐 */
+  .VPDoc .container {
+    max-width: 55rem;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .VPDoc .content,
+  .VPDoc .content-container,
+  .VPDoc.has-aside .content-container {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
 }
 
 @media (min-width: 960px) {
-  .VPDoc:not(.has-sidebar) .content {
-    max-width: inherit !important;
-  }
-
-  .VPDoc .content {
-    padding: 0 !important; 
+  .VPDoc .container {
+    max-width: 55rem;
   }
 }
 
