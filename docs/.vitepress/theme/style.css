@@ -80,12 +80,6 @@
   }
 }
 
-@media (min-width: 960px) {
-  .VPNavBar .container {
-    max-width: 55rem;
-  }
-}
-
 .VPNavBarTitle .title {
   font-family: "ChillRoundF", sans-serif;
   font-size: 22px !important;
@@ -147,7 +141,6 @@
 }
 
 @media (min-width: 768px) {
-  /* 文章容器:与导航栏用完全相同的 max-width + padding,保证起始线对齐 */
   .VPDoc .container {
     max-width: 55rem;
     width: 100%;
@@ -160,12 +153,6 @@
   .VPDoc.has-aside .content-container {
     max-width: 100% !important;
     padding: 0 !important;
-  }
-}
-
-@media (min-width: 960px) {
-  .VPDoc .container {
-    max-width: 55rem;
   }
 }
 
