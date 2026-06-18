@@ -24,6 +24,7 @@ isNoBackBtn: true
       ></div>
     </div>
   </div>
+ <hr class="post-divider" />
 </div>
 
 <script lang="ts" setup>
