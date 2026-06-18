@@ -8,7 +8,7 @@ isNoBackBtn: true
 ---
 
 <div class="posts-list">
-  <div v-for="(post, index) in curPosts" :key="post.url" class="post-container">
+  <div v-for="(post, index) in posts" :key="post.url" class="post-container">
     <hr v-if="index !== 0" class="post-divider" />
     <div class="post-item">
       <h2 :id="post.title" class="post-title">
@@ -26,67 +26,8 @@ isNoBackBtn: true
   </div>
 </div>
 
-<div class="pagination-container">
-  <t-config-provider :global-config="enConfig">
-    <t-pagination
-      v-model="current"
-      v-model:pageSize="pageSize"
-      :total="total"
-      size="small"
-      :showPageSize="false"
-      :showPageNumber="!isMobile()"
-      :showJumper="isMobile()"
-      @current-change="onCurrentChange"
-    />
-  </t-config-provider>
-</div>
-
 <script lang="ts" setup>
-import { ref, computed } from "vue";
-import { useRoute, useRouter } from "vitepress";
-import {
-  Pagination as TPagination,
-  ConfigProvider as TConfigProvider,
-  type PaginationProps
-} from "tdesign-vue-next";
-import enConfig from 'tdesign-vue-next/es/locale/en_US';
-
 import { data as posts } from "../.vitepress/theme/posts-en.data.mts";
-import { isMobile } from "../.vitepress/theme/utils/mobile.ts";
-
-const route = useRoute();
-
-const getPage = () => {
-  const search = route.query
-  const searchParams = new URLSearchParams(search);
-  return Number(searchParams.get("page") || "1");
-}
-
-const current = ref(getPage())
-const pageSize = ref(10);
-const total = ref(posts.length);
-
-const router = useRouter();
-router.onAfterRouteChange = (to) => {
-  current.value = getPage();
-}
-
-const curPosts = computed(() => {
-	return posts.slice(
-		(current.value - 1) * pageSize.value,
-		current.value * pageSize.value
-	);
-});
-
-const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) => {
-	const url = new URL(window.location as any);
-	url.searchParams.set("page", index.toString());
-	window.history.replaceState({}, "", url);
-
-	window.scrollTo({
-		top: 0,
-	});
-};
 </script>
 
 <style lang="scss" scoped>
@@ -145,20 +86,4 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
     margin-top: 0.55em !important;
   }
 }
-
-.hollow-text {
-  color: var(--vp-c-bg);
-  -webkit-text-stroke: 1px var(--vp-c-text-1);
-}
-
-.pagination-container {
-  margin-top: 10px;
-  :deep(li) {
-    margin-top: 0px;
-  }
-}
 </style>
-
-
-
-
