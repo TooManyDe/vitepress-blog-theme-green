@@ -153,16 +153,6 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
 
 .pagination-container {
   margin-top: 10px;
-    --td-bg-color-container: var(--vp-c-bg-soft);
-  --td-bg-color-secondarycontainer: var(--vp-c-bg-soft);
-  --td-text-color-primary: var(--vp-c-text-1);
-  --td-text-color-secondary: var(--vp-c-text-2);
-  --td-text-color-placeholder: var(--vp-c-text-3);
-  --td-border-level-1-color: var(--vp-c-divider);
-  --td-border-level-2-color: var(--vp-c-divider);
-  --td-component-border: var(--vp-c-divider);
-  --td-component-stroke: var(--vp-c-divider);
-
   :deep(li) {
     margin-top: 0px;
   }
