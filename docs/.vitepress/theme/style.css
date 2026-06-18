@@ -76,7 +76,13 @@
     max-width: 55rem; 
     width: 100%;
     margin: 0 auto;
-    padding: 0; 
+    padding: 0 32px; 
+  }
+}
+
+@media (min-width: 960px) {
+  .VPNavBar .container {
+    max-width: 55rem;
   }
 }
 
@@ -140,19 +146,17 @@
   }
 }
 
-@media (min-width: 768px) {
-  .VPDoc .container {
-    max-width: 55rem;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 32px;
+.VPDoc.has-aside .content-container {
+  max-width: 50rem !important;
+}
+
+@media (min-width: 960px) {
+  .VPDoc:not(.has-sidebar) .content {
+    max-width: inherit !important;
   }
 
-  .VPDoc .content,
-  .VPDoc .content-container,
-  .VPDoc.has-aside .content-container {
-    max-width: 100% !important;
-    padding: 0 !important;
+  .VPDoc .content {
+    padding: 0 !important; 
   }
 }
 
