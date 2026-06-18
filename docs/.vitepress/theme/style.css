@@ -80,12 +80,6 @@
   }
 }
 
-@media (min-width: 960px) {
-  .VPNavBar .container {
-    max-width: 55rem;
-  }
-}
-
 .VPNavBarTitle .title {
   font-family: "ChillRoundF", sans-serif;
   font-size: 22px !important;
