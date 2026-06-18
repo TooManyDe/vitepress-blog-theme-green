@@ -118,7 +118,6 @@ const onCurrentChange: PaginationProps["onCurrentChange"] = (index, pageInfo) =>
     font-weight: 500 !important;
     letter-spacing: -0.01em;
     display: inline-block;
-    color: var(--vp-c-green) !important; 
   }
 }
 
