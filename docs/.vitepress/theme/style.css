@@ -25,7 +25,6 @@
        url("/assets/fonts/AI-Regular.woff") format("woff");
 }
 
-
 @font-face {
   font-family: "mvboli";
   font-display: swap;
@@ -61,7 +60,8 @@
   --vp-c-brand-soft: var(--vp-c-green-dark-soft) !important;
 }
 
-@media (min-width: 577px) {
+/* ===== 其他设备（≥768px，平板和电脑） ===== */
+@media (min-width: 768px) {
   .VPNavBar {
     width: 100%;
     justify-content: center;
@@ -77,6 +77,35 @@
     width: 100%;
     margin: 0 auto;
     padding: 0 38px; 
+  }
+
+  .VPDoc:not(.has-sidebar) .content {
+    max-width: inherit !important;
+  }
+
+  .VPDoc .content {
+    padding: 0 !important; 
+  }
+
+  .VPDoc .content-container img {
+    max-width: 480px;
+    display: block;
+  }
+}
+
+/* ===== 手机端（≤767px） ===== */
+@media (max-width: 767px) {
+  .VPDoc {
+    padding: 24px !important;
+    width: 100%;
+  }
+
+  .VPDoc .content-container img {
+    max-width: 100%;
+  }
+
+  .VPNavBar .container {
+    padding: 0 16px;
   }
 }
 
@@ -131,27 +160,8 @@
   padding-top: 20px !important;
 }
 
-
-
-@media (max-width: 576px) {
-  .VPDoc {
-    padding: 24px !important;
-    width: 100%;
-  }
-}
-
 .VPDoc.has-aside .content-container {
   max-width: 50rem !important;
-}
-
-@media (min-width: 577px) {
-  .VPDoc:not(.has-sidebar) .content {
-    max-width: inherit !important;
-  }
-
-  .VPDoc .content {
-    padding: 0 !important; 
-  }
 }
 
 .VPDocFooter {
@@ -191,7 +201,6 @@ h3 {
   font-size: 18px !important;
 }
 
-
 .vp-doc a {
   color: var(--vp-c-text-1) !important; 
   font-weight: normal !important; 
@@ -219,17 +228,6 @@ h3 {
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-.VPDoc .content-container img {
-  max-width: 480px;
-  display: block;
-}
-
-@media (max-width: 577px) {
-  .VPDoc .content-container img {
-    max-width: 100%;
-  }
-}
-
 .vp-doc .table-scroll td,
 .vp-doc .table-scroll th {
   white-space: nowrap;     
@@ -242,7 +240,6 @@ h3 {
   width: 100%;
   -webkit-overflow-scrolling: touch; 
 }
-
 
 .VPSidebar,
 .VPDocAside,
