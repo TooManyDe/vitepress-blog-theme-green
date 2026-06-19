@@ -24,7 +24,7 @@ isNoBackBtn: true
       ></div>
     </div>
   </div>
- <hr class="post-divider last-divider" />
+ <hr class="post-divider" />
 </div>
 
 <script lang="ts" setup>
@@ -87,10 +87,5 @@ import { data as posts } from "./.vitepress/theme/posts.data.mts";
   :deep(p + p) {
     margin-top: 0.55em !important;
   }
-}
-
-.last-divider {
-  margin-top: 1rem;
-  margin-bottom: 0;
 }
 </style>
