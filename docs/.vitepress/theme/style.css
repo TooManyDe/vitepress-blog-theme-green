@@ -64,30 +64,11 @@
   --vp-c-brand-soft: var(--vp-c-green-dark-soft) !important;
 }
 
-/* ==========================================================================
-   噪声背景层配置 (移至最顶层覆盖，同时穿透点击)
-   ========================================================================== */
-body {
-  position: relative;
+html {
+  background: url('/noise.png') repeat, linear-gradient(var(--vp-c-bg), var(--vp-c-bg)) !important;
+  background-blend-mode: overlay !important;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 9999; /* 移到最顶层，确保盖住系统及卡片底色 */
-  background: url('/noise.png') repeat;
-  background-blend-mode: overlay;
-  background-size: auto;
-  pointer-events: none; /* 极其关键：使点击、选择文本事件直接穿透，绝不干扰任何交互 */
-}
-
-/* ==========================================================================
-   组件与结构布局样式
-   ========================================================================== */
 @media (min-width: 576px) {
   .VPNavBar {
     width: 100%;
@@ -124,7 +105,6 @@ body::before {
   display: none !important;
 }
 
-/* Footer */
 .VPFooter a {
   color: var(--vp-c-green) !important;
   font-family: "ChillRoundF", var(--vp-font-family-serif), sans-serif !important;
