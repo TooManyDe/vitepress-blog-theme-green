@@ -1,6 +1,3 @@
-/* ==========================================================================
-   1. 字体声明 (@font-face)
-   ========================================================================== */
 @font-face {
   font-family: "GoogleSansCode";
   font-display: swap; 
@@ -28,17 +25,15 @@
        url("/assets/fonts/AI-Regular.woff") format("woff");
 }
 
+
 @font-face {
   font-family: "mvboli";
   font-display: swap;
   src: url("/assets/fonts/mvboli.ttf");
 }
 
-/* ==========================================================================
-   2. 变量定义 (:root & .dark)
-   ========================================================================== */
 :root {
-  --vp-c-text-1: #241c13;
+  --vp-c-text-1: #080808;
   --vp-c-bg: #f5f5f3;
   --vp-nav-height: 50px;
   --vp-c-green: #1a6840;
@@ -70,104 +65,11 @@
   --vp-c-brand-soft: var(--vp-c-green-dark-soft) !important;
 }
 
-/* ==========================================================================
-   3. 核心标准滚动与容器修复 (全平台安全适配)
-   ========================================================================== */
-html {
-  background: var(--vp-c-bg) !important;
-  min-height: 100% !important; /* 放弃 100vh 锁死 */
-  overflow-x: hidden !important; /* 防止水平溢出抖动 */
-}
-
-body {
-  background: var(--vp-c-bg) !important;
-  min-height: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  position: relative !important;
-  overflow-x: hidden !important;
-}
-
-/* 使用标准的 fixed 遮罩层实现全站噪声背景，
-   替代 Android 兼容性极差的 background-attachment: fixed 
-*/
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1; /* 至于最底层 */
-  background: url('/noise.png') repeat;
-  background-blend-mode: overlay;
-  background-size: auto; /* 噪声纹理通常保持原图尺寸平铺更细腻 */
-  pointer-events: none; /* 穿透点击事件，不干扰日常操作 */
-}
-
-/* 让 VitePress 的默认滚动交还给系统管理，不再强行干扰溢出 */
-#app,
-.VPContent,
-.VPPage {
-  background: transparent !important;
-}
-
-/* ==========================================================================
-   4. 精准状态分流锁定 (菜单锁死、搜索放行)
-   ========================================================================== */
-
-/* 点击菜单激活时 (.screen-open)，只在此处冻结底层，防止滑动导致布局崩溃 */
-html.screen-open,
-html.screen-open body {
-  overflow: hidden !important;
-  height: 100vh !important;
-}
-
-/* 确保移动端全屏菜单的弹窗容器滚动在内部独立，不污染外层坐标系 */
-.VPNavScreen {
-  position: fixed !important;
-  top: var(--vp-nav-height) !important;
-  left: 0;
-  width: 100vw !important;
-  height: calc(100vh - var(--vp-nav-height)) !important;
-  overflow-y: auto !important; 
-}
-
-/* 点击搜索按钮时 (.local-search-open)：禁止底层主站滚动，但开辟专属滚动通道给结果页 */
-html.local-search-open {
-  overflow: hidden !important;
-}
-
-.VPLocalSearchBox,
-.VPLocalSearchBox .shell,
-.VPLocalSearchBox .results {
-  overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch; /* 强化 iOS 滑动的平滑阻尼感 */
-}
-
-/* ==========================================================================
-   5. 导航栏 & 结构样式 (毛玻璃效果)
-   ========================================================================== */
-.VPNavBar {
-  background: rgba(245, 245, 243, 0.85) !important;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px); /* 兼容部分旧版 iOS Safari */
-  border-bottom: none !important;      
-  box-shadow: none !important;         
-}
-
-.dark .VPNavBar {
-  background: rgba(18, 18, 18, 0.85) !important;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: none !important;
-  box-shadow: none !important;
-}
-
 @media (min-width: 576px) {
   .VPNavBar {
     width: 100%;
     justify-content: center;
+    background-color: var(--vp-c-bg);
   }
 
   .VPNav[data-v-e4ae072f] {
@@ -180,19 +82,6 @@ html.local-search-open {
     margin: 0 auto;
     padding: 0 38px; 
   }
-}
-
-/* 去掉固定的 min-height 计算，让文档正常流式伸展 */
-.VPDoc {
-  background: rgba(245, 245, 243, 0.75) !important;
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  border-radius: 12px;
-  padding-top: 20px !important;
-}
-
-.dark .VPDoc {
-  background: rgba(18, 18, 18, 0.75) !important;
 }
 
 .VPNavBarTitle .title {
@@ -212,9 +101,7 @@ html.local-search-open {
   display: none !important;
 }
 
-/* ==========================================================================
-   6. 页脚与文本排版样式
-   ========================================================================== */
+/* Footer */
 .VPFooter a {
   color: var(--vp-c-green) !important;
   font-family: "ChillRoundF", var(--vp-font-family-serif), sans-serif !important;
@@ -243,6 +130,12 @@ html.local-search-open {
   border-top: none !important;
   box-shadow: none !important;
 }
+
+.VPDoc {
+  padding-top: 20px !important;
+}
+
+
 
 @media (max-width: 576px) {
   .VPDoc {
@@ -302,6 +195,7 @@ h3 {
   font-size: 18px !important;
 }
 
+
 .vp-doc a {
   color: var(--vp-c-green) !important; 
   text-decoration: none !important; 
@@ -348,9 +242,7 @@ h3 {
   -webkit-overflow-scrolling: touch; 
 }
 
-/* ==========================================================================
-   7. 隐藏不需要的全局组件与兜底小细节
-   ========================================================================== */
+
 .VPSidebar,
 .VPDocAside,
 .aside,
@@ -392,4 +284,3 @@ main > div > div > pre > code {
 #app {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
-
