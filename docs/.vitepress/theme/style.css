@@ -91,6 +91,7 @@ body {
 .VPPage {
   background: transparent !important;
   min-height: 100vh !important;
+  overflow: visible !important; /* 确保不产生滚动 */
 }
 
 .VPNavBar {
@@ -131,7 +132,7 @@ body {
   border-radius: 12px;
   padding-top: 20px !important;
   min-height: calc(100vh - var(--vp-nav-height) - 40px);
-  overflow: visible !important;
+  overflow: visible !important; /* 确保不产生滚动 */
 }
 
 .dark .VPDoc {
@@ -189,7 +190,7 @@ body {
     padding: 24px !important;
     width: 100%;
     min-height: calc(100vh - var(--vp-nav-height) - 48px);
-    overflow: visible !important;
+    overflow: visible !important; /* 确保不产生滚动 */
   }
 }
 
