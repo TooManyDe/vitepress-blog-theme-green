@@ -65,6 +65,10 @@
 }
 
 html {
+  background: var(--vp-c-bg) !important;
+}
+
+body {
   background: url('/noise.png') repeat, linear-gradient(var(--vp-c-bg), var(--vp-c-bg)) !important;
   background-blend-mode: overlay !important;
 }
