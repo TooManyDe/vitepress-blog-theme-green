@@ -65,14 +65,19 @@
 }
 
 html {
-  background: var(--vp-c-bg) url('/noise.png') repeat;
-  background-blend-mode: overlay;
-  min-height: 100%;
+  background: var(--vp-c-bg) url('/noise.png') repeat !important;
+  background-blend-mode: overlay !important;
+  background-attachment: fixed !important;
+  height: 100% !important;
+  max-height: 100% !important;
 }
 
 body {
   background: transparent !important;
-  min-height: 100vh;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 #app,
