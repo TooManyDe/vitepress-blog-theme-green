@@ -34,7 +34,6 @@
 
 :root {
   --vp-c-text-1: #080808;
-  --vp-c-bg: #f5f5f3;
   --vp-nav-height: 50px;
   --vp-c-green: #1a6840;
   --vp-c-hover: #41b349;
@@ -55,7 +54,6 @@
 }
 
 .dark {
-  --vp-c-bg: #121212;
   --vp-c-green: #41b349;
   --vp-c-hover: #1a6840;
   --vp-c-text-1: #C9D1D9;
