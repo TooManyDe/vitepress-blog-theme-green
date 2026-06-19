@@ -68,8 +68,7 @@ html {
   background: var(--vp-c-bg) url('/noise.png') repeat !important;
   background-blend-mode: overlay !important;
   background-attachment: fixed !important;
-  height: 100% !important;
-  max-height: 100% !important;
+  min-height: 100% !important;
 }
 
 body {
