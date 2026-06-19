@@ -65,37 +65,20 @@
 }
 
 html {
-  background: var(--vp-c-bg) !important;
-  min-height: 100vh !important; /* 使用视口高度单位 */
-  height: 100vh !important;
-  overflow: hidden; /* 防止滚动条影响布局 */
+  background: var(--vp-c-bg) url('/noise.png') repeat;
+  background-blend-mode: overlay;
+  min-height: 100%;
 }
 
 body {
   background: transparent !important;
-  min-height: 100vh !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  position: relative !important;
-  height: 100vh !important;
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0; /* 确保覆盖整个视口 */
-  background: var(--vp-c-bg) url('/noise.png') repeat;
-  background-blend-mode: overlay;
-  z-index: -1;
-  pointer-events: none;
-  background-size: cover; /* 确保背景铺满视口 */
+  min-height: 100vh;
 }
 
 #app,
 .VPContent,
 .VPPage {
   background: transparent !important;
-  min-height: 100vh !important; /* 继承视口高度 */
 }
 
 .VPNavBar {
@@ -135,7 +118,6 @@ body::before {
   backdrop-filter: blur(2px);
   border-radius: 12px;
   padding-top: 20px !important;
-  min-height: calc(100vh - var(--vp-nav-height) - 40px); /* 动态计算剩余高度 */
 }
 
 .dark .VPDoc {
@@ -192,7 +174,6 @@ body::before {
   .VPDoc {
     padding: 24px !important;
     width: 100%;
-    min-height: calc(100vh - var(--vp-nav-height) - 48px); /* 移动端调整 */
   }
 }
 
