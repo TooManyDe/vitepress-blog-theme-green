@@ -65,9 +65,7 @@
 }
 
 html {
-  background: var(--vp-c-bg) url('/noise.png') repeat !important;
-  background-blend-mode: overlay !important;
-  background-attachment: fixed !important;
+  background: var(--vp-c-bg) !important;
   min-height: 100% !important;
 }
 
@@ -77,6 +75,17 @@ body {
   min-height: 100dvh !important;
   margin: 0 !important;
   padding: 0 !important;
+  position: relative !important;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: var(--vp-c-bg) url('/noise.png') repeat;
+  background-blend-mode: overlay;
+  z-index: -1;
+  pointer-events: none;
 }
 
 #app,
