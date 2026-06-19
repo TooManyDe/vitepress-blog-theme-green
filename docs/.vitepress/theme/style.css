@@ -64,26 +64,28 @@
   --vp-c-brand-soft: var(--vp-c-green-dark-soft) !important;
 }
 
-/* ===== 背景纹理（支持深色模式） ===== */
-body {
+html {
   background: var(--vp-c-bg) url('/noise.png') repeat;
   background-blend-mode: overlay;
+  min-height: 100%;
+}
+
+body {
+  background: transparent !important;
   min-height: 100vh;
 }
 
-/* 让 VitePress 核心容器透明，露出 body 背景 */
 #app,
 .VPContent,
 .VPPage {
   background: transparent !important;
 }
 
-/* ===== 导航栏：半透明毛玻璃，无分割线 ===== */
 .VPNavBar {
   background: rgba(245, 245, 243, 0.85) !important;
   backdrop-filter: blur(10px);
-  border-bottom: none !important;      /* 移除分割线 */
-  box-shadow: none !important;         /* 移除阴影，避免视觉分割 */
+  border-bottom: none !important;      
+  box-shadow: none !important;         
 }
 
 .dark .VPNavBar {
@@ -93,7 +95,6 @@ body {
   box-shadow: none !important;
 }
 
-/* 保留你原有的导航栏居中样式 */
 @media (min-width: 576px) {
   .VPNavBar {
     width: 100%;
@@ -112,7 +113,6 @@ body {
   }
 }
 
-/* ===== 文档正文区域：半透明白底 + 轻微模糊 ===== */
 .VPDoc {
   background: rgba(245, 245, 243, 0.75) !important;
   backdrop-filter: blur(2px);
@@ -123,8 +123,6 @@ body {
 .dark .VPDoc {
   background: rgba(18, 18, 18, 0.75) !important;
 }
-
-/* ===== 以下全部保留你的原有样式 ===== */
 
 .VPNavBarTitle .title {
   font-family: "ChillRoundF", sans-serif;
@@ -143,7 +141,6 @@ body {
   display: none !important;
 }
 
-/* Footer */
 .VPFooter a {
   color: var(--vp-c-green) !important;
   font-family: "ChillRoundF", var(--vp-font-family-serif), sans-serif !important;
