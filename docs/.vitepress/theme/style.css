@@ -66,9 +66,9 @@
 
 html {
   background: var(--vp-c-bg) !important;
-  min-height: 100vh !important; /* 使用最小高度 */
-  height: auto !important; /* 允许自动高度 */
-  overflow: visible !important; /* 恢复滚动 */
+  min-height: 100vh !important;
+  height: 100vh !important;
+  overflow: visible !important;
 }
 
 body {
@@ -77,26 +77,20 @@ body {
   margin: 0 !important;
   padding: 0 !important;
   position: relative !important;
-  height: auto !important; /* 允许自动高度 */
-  overflow: visible !important; /* 恢复滚动 */
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0; /* 覆盖整个视口 */
+  height: 100vh !important;
+  overflow: visible !important;
+  /* 直接设置背景，替代伪元素 */
   background: var(--vp-c-bg) url('/noise.png') repeat;
   background-blend-mode: overlay;
-  z-index: -1;
-  pointer-events: none;
-  background-size: cover; /* 确保背景铺满 */
+  background-size: cover;
+  background-attachment: fixed; /* 固定背景，滚动时不移动 */
 }
 
 #app,
 .VPContent,
 .VPPage {
   background: transparent !important;
-  min-height: 100vh !important; /* 继承视口高度 */
+  min-height: 100vh !important;
 }
 
 .VPNavBar {
@@ -136,8 +130,8 @@ body::before {
   backdrop-filter: blur(2px);
   border-radius: 12px;
   padding-top: 20px !important;
-  min-height: calc(100vh - var(--vp-nav-height) - 40px); /* 动态计算高度 */
-  overflow: visible !important; /* 允许内容滚动 */
+  min-height: calc(100vh - var(--vp-nav-height) - 40px);
+  overflow: visible !important;
 }
 
 .dark .VPDoc {
@@ -194,8 +188,8 @@ body::before {
   .VPDoc {
     padding: 24px !important;
     width: 100%;
-    min-height: calc(100vh - var(--vp-nav-height) - 48px); /* 移动端调整 */
-    overflow: visible !important; /* 允许滚动 */
+    min-height: calc(100vh - var(--vp-nav-height) - 48px);
+    overflow: visible !important;
   }
 }
 
