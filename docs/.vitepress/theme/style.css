@@ -25,6 +25,7 @@
        url("/assets/fonts/AI-Regular.woff") format("woff");
 }
 
+
 @font-face {
   font-family: "mvboli";
   font-display: swap;
@@ -64,39 +65,11 @@
   --vp-c-brand-soft: var(--vp-c-green-dark-soft) !important;
 }
 
-/* ===== 新增：背景纹理（支持深色模式） ===== */
-body {
-  background: var(--vp-c-bg) url('/noise.png') repeat;
-  background-blend-mode: overlay;  /* 柔和融合，可改为 multiply / normal */
-  min-height: 100vh;
-}
-
-/* 让 VitePress 核心容器透明，露出 body 背景 */
-#app,
-.VPContent,
-.VPPage {
-  background: transparent !important;
-}
-
-/* ===== 导航栏：半透明毛玻璃（保留你的居中布局） ===== */
-.VPNavBar {
-  background: rgba(245, 245, 243, 0.85) !important;  /* 亮色模式半透明 */
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.dark .VPNavBar {
-  background: rgba(18, 18, 18, 0.85) !important;     /* 深色模式半透明 */
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* 保留你原有的导航栏居中样式（但不覆盖上面的背景） */
 @media (min-width: 576px) {
   .VPNavBar {
     width: 100%;
     justify-content: center;
-    /* 注意：原有 background-color: var(--vp-c-bg) 已被上面的 !important 覆盖 */
+    background-color: var(--vp-c-bg);
   }
 
   .VPNav[data-v-e4ae072f] {
@@ -110,20 +83,6 @@ body {
     padding: 0 38px; 
   }
 }
-
-/* ===== 文档正文区域：半透明白底 + 轻微模糊，提高文字可读性 ===== */
-.VPDoc {
-  background: rgba(245, 245, 243, 0.75) !important;
-  backdrop-filter: blur(2px);
-  border-radius: 12px;
-  padding-top: 20px !important;  /* 保留你原有的 padding-top */
-}
-
-.dark .VPDoc {
-  background: rgba(18, 18, 18, 0.75) !important;
-}
-
-/* ===== 以下全部保留你的原有样式 ===== */
 
 .VPNavBarTitle .title {
   font-family: "ChillRoundF", sans-serif;
@@ -172,7 +131,12 @@ body {
   box-shadow: none !important;
 }
 
-/* 原有 VPDoc 样式已合并，并添加了背景模糊，此处保留你额外的 padding 调整 */
+.VPDoc {
+  padding-top: 20px !important;
+}
+
+
+
 @media (max-width: 576px) {
   .VPDoc {
     padding: 24px !important;
@@ -231,6 +195,7 @@ h3 {
   font-size: 18px !important;
 }
 
+
 .vp-doc a {
   color: var(--vp-c-green) !important; 
   text-decoration: none !important; 
@@ -276,6 +241,7 @@ h3 {
   width: 100%;
   -webkit-overflow-scrolling: touch; 
 }
+
 
 .VPSidebar,
 .VPDocAside,
