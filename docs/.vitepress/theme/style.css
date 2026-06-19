@@ -25,7 +25,6 @@
        url("/assets/fonts/AI-Regular.woff") format("woff");
 }
 
-
 @font-face {
   font-family: "mvboli";
   font-display: swap;
@@ -63,6 +62,27 @@
   --vp-c-brand-2: var(--vp-c-green-dark) !important;
   --vp-c-brand-3: var(--vp-c-green-dark) !important;
   --vp-c-brand-soft: var(--vp-c-green-dark-soft) !important;
+}
+
+/* ==========================================================================
+   添加噪声背景纹理 (安全不移位方案)
+   ========================================================================== */
+body {
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1; /* 置于所有内容的底层 */
+  background: url('/noise.png') repeat;
+  background-blend-mode: overlay;
+  background-size: auto;
+  pointer-events: none; /* 穿透点击事件，不影响页面任何正常交互 */
 }
 
 @media (min-width: 576px) {
@@ -135,8 +155,6 @@
   padding-top: 20px !important;
 }
 
-
-
 @media (max-width: 576px) {
   .VPDoc {
     padding: 24px !important;
@@ -195,7 +213,6 @@ h3 {
   font-size: 18px !important;
 }
 
-
 .vp-doc a {
   color: var(--vp-c-green) !important; 
   text-decoration: none !important; 
@@ -241,7 +258,6 @@ h3 {
   width: 100%;
   -webkit-overflow-scrolling: touch; 
 }
-
 
 .VPSidebar,
 .VPDocAside,
