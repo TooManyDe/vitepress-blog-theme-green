@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, reactive, watch, computed } from 'vue'
+import { ref, onMounted, reactive, watch, computed, nextTick } from 'vue'
 import { useRoute, useData } from 'vitepress'
 
 const API_BASE = 'https://api.ddbx.org'
@@ -23,8 +23,15 @@ const form = reactive({ nickname: '', content: '' })
 const replyForm = reactive({ nickname: '', content: '' })
 const lastEnforcedVersion = ref('')
 
-const turnstileToken = ref('')
-let turnstileWidgetId = null
+// Turnstile 主表单状态
+const mainTurnstileToken = ref('')
+let mainTurnstileWidgetId = null
+
+// Turnstile 回复表单状态
+const replyTurnstileToken = ref('')
+let replyTurnstileWidgetId = null
+
+let turnstileReady = false
 
 const i18n = computed(() => {
   const map = {
@@ -154,15 +161,53 @@ const fetchMoreReplies = async (rootId) => {
   }
 }
 
+// ============ Turnstile 渲染辅助函数 ============
+const renderMainTurnstile = async () => {
+  await nextTick()
+  if (!window.turnstile || !document.getElementById('turnstile-container-main')) return
+  
+  if (mainTurnstileWidgetId !== null) {
+    try { window.turnstile.remove(mainTurnstileWidgetId) } catch(e) {}
+  }
+  
+  mainTurnstileWidgetId = window.turnstile.render('#turnstile-container-main', {
+    sitekey: TURNSTILE_SITE_KEY,
+    callback: (token) => { mainTurnstileToken.value = token },
+    'expired-callback': () => { mainTurnstileToken.value = '' },
+    'error-callback': () => { mainTurnstileToken.value = '' }
+  })
+}
+
+const renderReplyTurnstile = async () => {
+  await nextTick()
+  if (!window.turnstile || !activeReply.value) return
+  
+  const containerId = `turnstile-container-reply-${activeReply.value.id}`
+  const el = document.getElementById(containerId)
+  if (!el) return
+  
+  if (replyTurnstileWidgetId !== null) {
+    try { window.turnstile.remove(replyTurnstileWidgetId) } catch(e) {}
+  }
+  
+  replyTurnstileWidgetId = window.turnstile.render(`#${containerId}`, {
+    sitekey: TURNSTILE_SITE_KEY,
+    callback: (token) => { replyTurnstileToken.value = token },
+    'expired-callback': () => { replyTurnstileToken.value = '' },
+    'error-callback': () => { replyTurnstileToken.value = '' }
+  })
+}
+
+// ============ 提交逻辑 ============
 const submitComment = async () => {
   if (!form.nickname.trim() || !form.content.trim()) return alert(i18n.value.fieldRequired)
-  if (!turnstileToken.value) return alert(i18n.value.turnstileRequired)
+  if (!mainTurnstileToken.value) return alert(i18n.value.turnstileRequired)
 
   submitting.value = true
   const payload = {
     commentId: crypto.randomUUID(),
     pageKey: normalizedPageKey.value,
-    token: turnstileToken.value,
+    token: mainTurnstileToken.value,
     nickname: form.nickname,
     content: form.content
   }
@@ -181,13 +226,13 @@ const submitComment = async () => {
         localStorage.setItem(`comment_v_${normalizedPageKey.value}`, data.enforcedVersion)
       }
       form.content = ''
-      showMainForm.value = false
-      if (turnstileWidgetId !== null) window.turnstile.reset(turnstileWidgetId)
-      turnstileToken.value = ''
+      if (mainTurnstileWidgetId !== null) window.turnstile.reset(mainTurnstileWidgetId)
+      mainTurnstileToken.value = ''
       await fetchComments()
     } else {
       const errorText = await res.text()
       alert(i18n.value.submitFailed + errorText)
+      if (mainTurnstileWidgetId !== null) window.turnstile.reset(mainTurnstileWidgetId)
     }
   } catch (e) {
     alert(i18n.value.networkError)
@@ -201,6 +246,13 @@ const openReplyForm = (id, rootId, replyToId, replyToName) => {
     activeReply.value = null
     return
   }
+  // 清理旧的回复验证码
+  if (replyTurnstileWidgetId !== null) {
+    try { window.turnstile.remove(replyTurnstileWidgetId) } catch(e) {}
+    replyTurnstileWidgetId = null
+  }
+  replyTurnstileToken.value = ''
+  
   activeReply.value = { id, rootId, replyToId, replyToName }
   replyForm.nickname = form.nickname
   replyForm.content = ''
@@ -209,7 +261,7 @@ const openReplyForm = (id, rootId, replyToId, replyToName) => {
 const submitReply = async () => {
   if (!replyForm.nickname.trim() || !replyForm.content.trim()) return alert(i18n.value.fieldRequired)
   if (!activeReply.value) return
-  if (!turnstileToken.value) return alert(i18n.value.turnstileRequired)
+  if (!replyTurnstileToken.value) return alert(i18n.value.turnstileRequired)
 
   submitting.value = true
   const target = activeReply.value
@@ -220,7 +272,7 @@ const submitReply = async () => {
     rootId: target.rootId,
     replyToId: target.replyToId,
     replyToName: target.replyToName,
-    token: turnstileToken.value,
+    token: replyTurnstileToken.value,
     nickname: replyForm.nickname,
     content: replyForm.content
   }
@@ -236,12 +288,16 @@ const submitReply = async () => {
       form.nickname = replyForm.nickname
       replyForm.content = ''
       activeReply.value = null
-      if (turnstileWidgetId !== null) window.turnstile.reset(turnstileWidgetId)
-      turnstileToken.value = ''
+      if (replyTurnstileWidgetId !== null) {
+        try { window.turnstile.remove(replyTurnstileWidgetId) } catch(e) {}
+        replyTurnstileWidgetId = null
+      }
+      replyTurnstileToken.value = ''
       await fetchComments()
     } else {
       const errorText = await res.text()
       alert(i18n.value.replyFailed + errorText)
+      if (replyTurnstileWidgetId !== null) window.turnstile.reset(replyTurnstileWidgetId)
     }
   } catch (e) {
     alert(i18n.value.networkError)
@@ -254,19 +310,21 @@ onMounted(() => {
   lastEnforcedVersion.value = localStorage.getItem(`comment_v_${normalizedPageKey.value}`) || ''
   fetchComments()
 
-  const script = document.createElement('script')
-  script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
-  script.async = true
-  script.onload = () => {
-    if (window.turnstile) {
-      turnstileWidgetId = window.turnstile.render('#turnstile-container', {
-        sitekey: TURNSTILE_SITE_KEY,
-        callback: (token) => { turnstileToken.value = token },
-        'expired-callback': () => { turnstileToken.value = '' }
-      })
+  // 确保 api.js 只被加载一次
+  if (!window.turnstile) {
+    const script = document.createElement('script')
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
+    script.async = true
+    script.onload = () => {
+      turnstileReady = true
+      // 如果脚本加载完成时，表单已经打开了，补一次渲染
+      if (showMainForm.value) renderMainTurnstile()
+      if (activeReply.value) renderReplyTurnstile()
     }
+    document.head.appendChild(script)
+  } else {
+    turnstileReady = true
   }
-  document.head.appendChild(script)
 })
 
 watch(() => route.path, () => {
@@ -290,7 +348,7 @@ watch(() => route.path, () => {
     </button>
 
     <!-- 主评论表单 -->
-    <transition name="vp-slide">
+    <transition name="vp-slide" @after-enter="renderMainTurnstile">
       <div v-if="showMainForm" class="vp-form-container">
         <input 
           v-model="form.nickname" 
@@ -307,7 +365,7 @@ watch(() => route.path, () => {
           :disabled="submitting"
         ></textarea>
 
-        <div id="turnstile-container" class="vp-turnstile"></div>
+        <div id="turnstile-container-main" class="vp-turnstile"></div>
 
         <div class="vp-action-bar">
           <button 
@@ -337,7 +395,7 @@ watch(() => route.path, () => {
           {{ i18n.reply }}
         </button>
 
-        <transition name="vp-slide">
+        <transition name="vp-slide" @after-enter="renderReplyTurnstile">
           <div v-if="activeReply?.id === root.id" class="vp-inline-form">
             <input 
               v-model="replyForm.nickname" 
@@ -353,6 +411,10 @@ watch(() => route.path, () => {
               class="vp-input vp-textarea"
               :disabled="submitting"
             ></textarea>
+            
+            <!-- 动态 ID 防止冲突 -->
+            <div :id="'turnstile-container-reply-' + root.id" class="vp-turnstile"></div>
+
             <div class="vp-inline-btns">
               <button 
                 @click="submitReply" 
@@ -390,7 +452,7 @@ watch(() => route.path, () => {
               {{ i18n.reply }}
             </button>
 
-            <transition name="vp-slide">
+            <transition name="vp-slide" @after-enter="renderReplyTurnstile">
               <div v-if="activeReply?.id === reply.id" class="vp-inline-form">
                 <input 
                   v-model="replyForm.nickname" 
@@ -406,6 +468,10 @@ watch(() => route.path, () => {
                   class="vp-input vp-textarea"
                   :disabled="submitting"
                 ></textarea>
+                
+                <!-- 动态 ID 防止冲突 -->
+                <div :id="'turnstile-container-reply-' + reply.id" class="vp-turnstile"></div>
+
                 <div class="vp-inline-btns">
                   <button 
                     @click="submitReply" 
@@ -507,6 +573,7 @@ watch(() => route.path, () => {
 
 .vp-turnstile {
   margin-bottom: 0.75rem;
+  min-height: 65px; /* 防止未加载时抖动 */
 }
 
 .vp-action-bar {
@@ -690,6 +757,6 @@ watch(() => route.path, () => {
 .vp-slide-enter-to,
 .vp-slide-leave-from {
   opacity: 1;
-  max-height: 500px; /* 给足高度空间 */
+  max-height: 600px; /* 增大高度空间以适应验证码组件 */
 }
 </style>
