@@ -84,10 +84,10 @@ footer: {
 export default defineConfig({
   // 基本信息
   title: "的的不休",
-  description: "不舍昼夜",
+  description: "每一段旅行都有终点",
   lang: "zh-Hans",
   
-  titleTemplate: ':title - ddbx',
+  titleTemplate: ':title - 每一段旅行都有终点',
   // 主题配置
   themeConfig,
   
