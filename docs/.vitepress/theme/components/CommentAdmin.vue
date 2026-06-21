@@ -2,7 +2,7 @@
 <template>
   <div class="admin-container">
     <div class="admin-header">
-      <h2>评论管理后台</h2>
+      <h2>评论管理</h2>
       <div class="auth-controls">
         <template v-if="!isLoggedIn">
           <input v-model="adminTokenInput" type="password" placeholder="输入管理员密钥" @keyup.enter="login" />
