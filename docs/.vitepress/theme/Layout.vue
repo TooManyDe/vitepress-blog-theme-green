@@ -2,7 +2,6 @@
 import { useData } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import { nextTick, provide, watch } from 'vue'
-import Comment from './components/Comment.vue'
 import ImageViewer from './components/ImageViewer.vue'
 
 const { frontmatter } = useData()
@@ -69,7 +68,6 @@ provide('toggle-appearance', async ({ clientX: x, clientY: y }: MouseEvent) => {
         <ImageViewer />
       </template>
       <template #doc-after>
-       <Comment v-if="frontmatter.isNoComment" />
       </template>
     </DefaultTheme.Layout>
   </div>
