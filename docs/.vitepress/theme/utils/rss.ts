@@ -9,7 +9,7 @@ const hostname = "https://ddbx.org";
 export async function createRssFileZH(config: SiteConfig) {
   const feed = new Feed({
     title: 'DDBX',
-    description: 'Never Resting Day nor Night',
+    description: 'Every trip has an end',
     id: hostname,
     link: hostname,
     language: "zh-Hans",
@@ -60,7 +60,7 @@ export async function createRssFileZH(config: SiteConfig) {
 export async function createRssFileEN(config: SiteConfig) {
   const feed = new Feed({
     title: "DDBX",
-    description: "Never Resting Day nor Night",
+    description: "Every trip has an end",
     id: hostname,
     link: hostname,
     language: "en-US",
