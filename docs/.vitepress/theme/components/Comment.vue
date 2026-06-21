@@ -48,8 +48,8 @@ const i18n = computed(() => {
       fieldRequired: '字段必填', emailRequired: '请填写邮箱', emailInvalid: '邮箱格式不正确',
       submitFailed: '提交失败：', replyFailed: '回复失败：', networkError: '网络错误，请稍后重试',
       turnstileRequired: '请先完成人机验证', replyNicknamePlaceholder: '你的名称 *',
-      replyEmailPlaceholder: '你的邮箱 *（不公开）', replyContentPlaceholder: '输入回应内容...',
-      submitSuccessPending: '✅ 评论已提交，等待管理员审核后将公开显示。'
+      replyEmailPlaceholder: '你的邮箱 *（不公开）', replyContentPlaceholder: '输入回复内容',
+      submitSuccessPending: '评论已提交，等待管理员审核后将公开显示。'
     },
     en: {
       title: 'Comments', triggerComment: 'Comments', triggerCommentHide: 'Collapse',
@@ -60,7 +60,7 @@ const i18n = computed(() => {
       submitFailed: 'Submit failed: ', replyFailed: 'Reply failed: ', networkError: 'Network error, please try again later',
       turnstileRequired: 'Please complete the CAPTCHA', replyNicknamePlaceholder: 'Your Name *',
       replyEmailPlaceholder: 'Your Email * (private)', replyContentPlaceholder: 'Write your reply...',
-      submitSuccessPending: '✅ Comment submitted. It will be public after admin approval.'
+      submitSuccessPending: 'Comment submitted. It will be public after admin approval.'
     }
   }
   return map[lang.value] || map.zh
