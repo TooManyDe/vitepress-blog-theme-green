@@ -55,15 +55,12 @@ isNoBackBtn: true
           <span class="info-value">https://cdn.ddbx.org/02.png</span>
         </div>
       </div>
-      
       <div class="apply-contact">
         <p>申请方式：</p>
         <p>请先添加本站链接，然后在本页面评论区留言。</p>
       </div>
     </div>
   </div>
-
-  <!-- 友链列表 -->
   <div class="links-list">
     <h2 class="links-title">友情链接</h2>
     <div v-for="(link, index) in links" :key="link.url" class="link-container">
