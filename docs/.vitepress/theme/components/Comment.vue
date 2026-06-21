@@ -16,7 +16,7 @@ const normalizedPageKey = computed(() => {
 
 const commentsTree = ref([])
 const submitting = ref(false)
-const showComments = ref(false)
+const showForm = ref(false) // 控制 评论表单 显示
 const activeReply = ref(null)
 
 const form = reactive({ nickname: '', email: '', content: '' })
@@ -74,8 +74,14 @@ const formatDateTime = (timestamp) => {
   return lang.value === 'en' ? `${month}/${date}/${year} ${hours}:${minutes}:${seconds}` : `${year}/${month}/${date} ${hours}:${minutes}:${seconds}`
 }
 
-const toggleComments = () => {
-  showComments.value = !showComments.value
+const toggleForm = () => {
+  showForm.value = !showForm.value
+  // 如果收起表单，销毁 Turnstile 实例以释放资源
+  if (!showForm.value && mainTurnstileWidgetId !== null) {
+    try { window.turnstile.remove(mainTurnstileWidgetId) } catch(e) {}
+    mainTurnstileWidgetId = null
+    mainTurnstileToken.value = ''
+  }
 }
 
 const fetchComments = async () => {
@@ -108,6 +114,7 @@ const fetchMoreReplies = async (rootId) => {
 }
 
 const renderMainTurnstile = async () => {
+  if (!showForm.value) return
   await nextTick()
   if (!window.turnstile || !document.getElementById('turnstile-container-main')) return
   if (mainTurnstileWidgetId !== null) { try { window.turnstile.remove(mainTurnstileWidgetId) } catch(e) {} }
@@ -251,7 +258,7 @@ onMounted(() => {
     script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
     script.async = true
     script.onload = () => {
-      if (showComments.value) renderMainTurnstile()
+      if (showForm.value) renderMainTurnstile()
       if (activeReply.value) renderReplyTurnstile()
     }
     document.head.appendChild(script)
@@ -260,7 +267,7 @@ onMounted(() => {
 
 watch(() => route.path, () => {
   commentsTree.value = []
-  showComments.value = false
+  showForm.value = false
   activeReply.value = null
   lastEnforcedVersion.value = localStorage.getItem(`comment_v_${normalizedPageKey.value}`) || ''
   fetchComments()
@@ -272,46 +279,74 @@ watch(() => route.path, () => {
     <div class="vp-comments">
       <span
         class="comment-toggle"
-        @click="toggleComments"
-        :class="{ 'is-active': showComments }"
+        @click="toggleForm"
+        :class="{ 'is-active': showForm }"
       >
-        {{ showComments ? i18n.triggerCommentHide : i18n.triggerComment }}
+        {{ showForm ? i18n.triggerCommentHide : i18n.triggerComment }}
       </span>
 
       <transition name="vp-slide-big" @after-enter="renderMainTurnstile">
-        <div v-if="showComments" class="vp-comments-box">
-          <div class="vp-form-container">
-            <div class="vp-form-row">
-              <input v-model="form.nickname" type="text" :placeholder="i18n.nicknamePlaceholder" class="vp-input vp-input-name" :disabled="submitting" />
-              <input v-model="form.email" type="email" :placeholder="i18n.emailPlaceholder" class="vp-input" :disabled="submitting" autocomplete="email" />
-            </div>
-            <textarea v-model="form.content" :placeholder="i18n.contentPlaceholder" rows="4" class="vp-input vp-textarea" :disabled="submitting"></textarea>
-            <div id="turnstile-container-main" class="vp-turnstile"></div>
-            <div class="vp-action-bar">
-              <button @click="submitComment" :disabled="submitting" class="vp-btn vp-btn-primary">
-                <span v-if="submitting" class="vp-spinner"></span>
-                {{ submitting ? i18n.sending : i18n.send }}
-              </button>
-            </div>
+        <div v-if="showForm" class="vp-form-container">
+          <div class="vp-form-row">
+            <input v-model="form.nickname" type="text" :placeholder="i18n.nicknamePlaceholder" class="vp-input vp-input-name" :disabled="submitting" />
+            <input v-model="form.email" type="email" :placeholder="i18n.emailPlaceholder" class="vp-input" :disabled="submitting" autocomplete="email" />
           </div>
+          <textarea v-model="form.content" :placeholder="i18n.contentPlaceholder" rows="4" class="vp-input vp-textarea" :disabled="submitting"></textarea>
+          <div id="turnstile-container-main" class="vp-turnstile"></div>
+          <div class="vp-action-bar">
+            <button @click="submitComment" :disabled="submitting" class="vp-btn vp-btn-primary">
+              <span v-if="submitting" class="vp-spinner"></span>
+              {{ submitting ? i18n.sending : i18n.send }}
+            </button>
+          </div>
+        </div>
+      </transition>
 
-          <div class="vp-list-container">
-            <div v-for="root in commentsTree" :key="root.id" class="vp-comment-item">
-              <div class="vp-meta">
-                <span class="vp-name">{{ root.nickname }}</span>
-                <button class="vp-action-btn" @click="openReplyForm(root.id, root.id, root.id, root.nickname)">{{ i18n.reply }}</button>
+      <div class="vp-list-container">
+        <div v-for="root in commentsTree" :key="root.id" class="vp-comment-item">
+          <div class="vp-meta">
+            <span class="vp-name">{{ root.nickname }}</span>
+            <button class="vp-action-btn" @click="openReplyForm(root.id, root.id, root.id, root.nickname)">{{ i18n.reply }}</button>
+          </div>
+          <p class="vp-content">{{ root.content }}</p>
+          <span class="vp-time">{{ formatDateTime(root.created_at) }}</span>
+
+          <transition name="vp-slide" @after-enter="renderReplyTurnstile">
+            <div v-if="activeReply?.id === root.id" class="vp-inline-form">
+              <div class="vp-form-row">
+                <input v-model="replyForm.nickname" type="text" :placeholder="i18n.replyNicknamePlaceholder" class="vp-input vp-input-name" :disabled="submitting" />
+                <input v-model="replyForm.email" type="email" :placeholder="i18n.replyEmailPlaceholder" class="vp-input" :disabled="submitting" autocomplete="email" />
               </div>
-              <p class="vp-content">{{ root.content }}</p>
-              <span class="vp-time">{{ formatDateTime(root.created_at) }}</span>
+              <textarea v-model="replyForm.content" :placeholder="i18n.replyContentPlaceholder" rows="3" class="vp-input vp-textarea" :disabled="submitting"></textarea>
+              <div :id="'turnstile-container-reply-' + root.id" class="vp-turnstile"></div>
+              <div class="vp-inline-btns">
+                <button @click="submitReply" :disabled="submitting" class="vp-btn vp-btn-primary vp-btn-sm">
+                  <span v-if="submitting" class="vp-spinner"></span>
+                  {{ submitting ? i18n.sending : i18n.confirmReply }}
+                </button>
+                <button @click="activeReply = null" class="vp-btn vp-btn-ghost vp-btn-sm">{{ i18n.cancelReply }}</button>
+              </div>
+            </div>
+          </transition>
+
+          <div class="vp-sub-tree" v-if="root.children && root.children.length > 0">
+            <div v-for="reply in root.children" :key="reply.id" class="vp-reply-item">
+              <div class="vp-meta">
+                <span class="vp-name">{{ reply.nickname }}</span>
+                <span class="vp-reply-target" v-if="reply.reply_to_name">@{{ reply.reply_to_name }}</span>
+                <button class="vp-action-btn" @click="openReplyForm(reply.id, root.id, reply.id, reply.nickname)">{{ i18n.reply }}</button>
+              </div>
+              <p class="vp-content">{{ reply.content }}</p>
+              <span class="vp-time">{{ formatDateTime(reply.created_at) }}</span>
 
               <transition name="vp-slide" @after-enter="renderReplyTurnstile">
-                <div v-if="activeReply?.id === root.id" class="vp-inline-form">
+                <div v-if="activeReply?.id === reply.id" class="vp-inline-form">
                   <div class="vp-form-row">
                     <input v-model="replyForm.nickname" type="text" :placeholder="i18n.replyNicknamePlaceholder" class="vp-input vp-input-name" :disabled="submitting" />
                     <input v-model="replyForm.email" type="email" :placeholder="i18n.replyEmailPlaceholder" class="vp-input" :disabled="submitting" autocomplete="email" />
                   </div>
                   <textarea v-model="replyForm.content" :placeholder="i18n.replyContentPlaceholder" rows="3" class="vp-input vp-textarea" :disabled="submitting"></textarea>
-                  <div :id="'turnstile-container-reply-' + root.id" class="vp-turnstile"></div>
+                  <div :id="'turnstile-container-reply-' + reply.id" class="vp-turnstile"></div>
                   <div class="vp-inline-btns">
                     <button @click="submitReply" :disabled="submitting" class="vp-btn vp-btn-primary vp-btn-sm">
                       <span v-if="submitting" class="vp-spinner"></span>
@@ -321,41 +356,11 @@ watch(() => route.path, () => {
                   </div>
                 </div>
               </transition>
-
-              <div class="vp-sub-tree" v-if="root.children && root.children.length > 0">
-                <div v-for="reply in root.children" :key="reply.id" class="vp-reply-item">
-                  <div class="vp-meta">
-                    <span class="vp-name">{{ reply.nickname }}</span>
-                    <span class="vp-reply-target" v-if="reply.reply_to_name">@{{ reply.reply_to_name }}</span>
-                    <button class="vp-action-btn" @click="openReplyForm(reply.id, root.id, reply.id, reply.nickname)">{{ i18n.reply }}</button>
-                  </div>
-                  <p class="vp-content">{{ reply.content }}</p>
-                  <span class="vp-time">{{ formatDateTime(reply.created_at) }}</span>
-
-                  <transition name="vp-slide" @after-enter="renderReplyTurnstile">
-                    <div v-if="activeReply?.id === reply.id" class="vp-inline-form">
-                      <div class="vp-form-row">
-                        <input v-model="replyForm.nickname" type="text" :placeholder="i18n.replyNicknamePlaceholder" class="vp-input vp-input-name" :disabled="submitting" />
-                        <input v-model="replyForm.email" type="email" :placeholder="i18n.replyEmailPlaceholder" class="vp-input" :disabled="submitting" autocomplete="email" />
-                      </div>
-                      <textarea v-model="replyForm.content" :placeholder="i18n.replyContentPlaceholder" rows="3" class="vp-input vp-textarea" :disabled="submitting"></textarea>
-                      <div :id="'turnstile-container-reply-' + reply.id" class="vp-turnstile"></div>
-                      <div class="vp-inline-btns">
-                        <button @click="submitReply" :disabled="submitting" class="vp-btn vp-btn-primary vp-btn-sm">
-                          <span v-if="submitting" class="vp-spinner"></span>
-                          {{ submitting ? i18n.sending : i18n.confirmReply }}
-                        </button>
-                        <button @click="activeReply = null" class="vp-btn vp-btn-ghost vp-btn-sm">{{ i18n.cancelReply }}</button>
-                      </div>
-                    </div>
-                  </transition>
-                </div>
-                <button v-if="root.hasMoreReplies" class="vp-load-more" @click="fetchMoreReplies(root.id)">{{ i18n.loadMoreReplies }}</button>
-              </div>
             </div>
+            <button v-if="root.hasMoreReplies" class="vp-load-more" @click="fetchMoreReplies(root.id)">{{ i18n.loadMoreReplies }}</button>
           </div>
         </div>
-      </transition>
+      </div>
     </div>
   </div>
 </template>
@@ -371,8 +376,7 @@ watch(() => route.path, () => {
 }
 .comment-toggle:hover { opacity: 0.8; color: var(--vp-c-brand-2); }
 .comment-toggle.is-active { color: var(--vp-c-brand-2); }
-.vp-comments-box { margin-top: 1.5rem; }
-.vp-form-container { padding: 1.5rem; border: 1px solid var(--vp-c-divider); border-radius: 8px; }
+.vp-form-container { margin-top: 1.5rem; padding: 1.5rem; border: 1px solid var(--vp-c-divider); border-radius: 8px; }
 .vp-form-row { display: flex; gap: 0.75rem; margin-bottom: 0.5rem; }
 .vp-form-row .vp-input { margin-bottom: 0; flex: 1; }
 @media (max-width: 640px) { .vp-form-row { flex-direction: column; gap: 0.75rem; } }
@@ -402,7 +406,7 @@ watch(() => route.path, () => {
   border-right-color: transparent; border-radius: 50%; animation: vp-spin 0.6s linear infinite;
 }
 @keyframes vp-spin { to { transform: rotate(360deg); } }
-.vp-list-container { margin-top: 1rem; }
+.vp-list-container { margin-top: 2rem; }
 .vp-comment-item { padding: 0.5rem 0; }
 .vp-meta { display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.25rem; }
 .vp-name {
@@ -419,8 +423,6 @@ watch(() => route.path, () => {
 .vp-action-btn:hover { color: var(--vp-c-brand-1); }
 .vp-inline-form { margin-top: 1rem; padding: 1rem; border: 1px solid var(--vp-c-divider); border-radius: 6px; }
 .vp-inline-btns { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.25rem; }
-
-/* 修改这里：统一缩进两格（2rem），并移除竖线 */
 .vp-sub-tree { margin-top: 0.5rem; padding-left: 2rem; border-left: none; }
 .vp-reply-item { padding: 0.5rem 0; }
 .vp-reply-item .vp-content { font-size: 0.875rem; }
