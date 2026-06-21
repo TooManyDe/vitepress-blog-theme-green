@@ -19,8 +19,9 @@ const submitting = ref(false)
 const showMainForm = ref(false)
 const activeReply = ref(null)
 
-const form = reactive({ nickname: '', content: '' })
-const replyForm = reactive({ nickname: '', content: '' })
+// 表单对象加入 email 字段
+const form = reactive({ nickname: '', email: '', content: '' })
+const replyForm = reactive({ nickname: '', email: '', content: '' })
 const lastEnforcedVersion = ref('')
 
 // Turnstile 主表单状态
@@ -33,6 +34,17 @@ let replyTurnstileWidgetId = null
 
 let turnstileReady = false
 
+// 邮箱格式正则（实用型，覆盖主流邮箱）<span data-allow-html class='source-item source-aggregated' data-group-key='source-group-0' data-url='https://m.php.cn/faq/2225296.html' data-id='turn0search20'><span data-allow-html class='source-item-num' data-group-key='source-group-0' data-id='turn0search20' data-url='https://m.php.cn/faq/2225296.html'><span class='source-item-num-name' data-allow-html>php.cn</span><span data-allow-html class='source-item-num-count'>+1</span></span></span>
+const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/
+
+// SHA-256 哈希（浏览器原生 Web Crypto API）<span data-allow-html class='source-item source-aggregated' data-group-key='source-group-1' data-url='https://www.cnblogs.com/jocongmin/p/18589542' data-id='turn0search18'><span data-allow-html class='source-item-num' data-group-key='source-group-1' data-id='turn0search18' data-url='https://www.cnblogs.com/jocongmin/p/18589542'><span class='source-item-num-name' data-allow-html>cnblogs.com</span><span data-allow-html class='source-item-num-count'>+1</span></span></span>
+const sha256 = async (message) => {
+  const msgBuffer = new TextEncoder().encode(message)
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer)
+  const hashArray = Array.from(new Uint8Array(hashBuffer))
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
+}
+
 const i18n = computed(() => {
   const map = {
     zh: {
@@ -40,6 +52,8 @@ const i18n = computed(() => {
       triggerComment: '💬 写评论',
       triggerCommentHide: '收起',
       nicknamePlaceholder: '你的名称 *',
+      emailPlaceholder: '你的邮箱 *（不公开，用于头像与身份识别）',
+      emailPrivacyHint: '🔒 邮箱仅用于生成身份标识，不会公开展示',
       contentPlaceholder: '输入你想表达的内容 (Max 1000字) *',
       send: '发送',
       sending: '发送中...',
@@ -48,11 +62,14 @@ const i18n = computed(() => {
       confirmReply: '回复',
       cancelReply: '取消',
       fieldRequired: '字段必填',
+      emailRequired: '请填写邮箱',
+      emailInvalid: '邮箱格式不正确',
       submitFailed: '提交失败：',
       replyFailed: '回复失败：',
       networkError: '网络错误，请稍后重试',
       turnstileRequired: '请先完成人机验证',
       replyNicknamePlaceholder: '你的名称 *',
+      replyEmailPlaceholder: '你的邮箱 *（不公开）',
       replyContentPlaceholder: '输入回应内容...',
     },
     en: {
@@ -60,6 +77,8 @@ const i18n = computed(() => {
       triggerComment: '💬 Write a comment',
       triggerCommentHide: 'Collapse',
       nicknamePlaceholder: 'Your Name *',
+      emailPlaceholder: 'Your Email * (private, used for avatar & identity)',
+      emailPrivacyHint: '🔒 Email is only used to generate an identity hash, never displayed publicly',
       contentPlaceholder: 'Write your thoughts (Max 1000 characters) *',
       send: 'Send',
       sending: 'Sending...',
@@ -68,11 +87,14 @@ const i18n = computed(() => {
       confirmReply: 'Reply',
       cancelReply: 'Cancel',
       fieldRequired: 'All fields are required',
+      emailRequired: 'Email is required',
+      emailInvalid: 'Invalid email format',
       submitFailed: 'Submit failed: ',
       replyFailed: 'Reply failed: ',
       networkError: 'Network error, please try again later',
       turnstileRequired: 'Please complete the CAPTCHA',
       replyNicknamePlaceholder: 'Your Name *',
+      replyEmailPlaceholder: 'Your Email * (private)',
       replyContentPlaceholder: 'Write your reply...',
     }
   }
@@ -165,11 +187,11 @@ const fetchMoreReplies = async (rootId) => {
 const renderMainTurnstile = async () => {
   await nextTick()
   if (!window.turnstile || !document.getElementById('turnstile-container-main')) return
-  
+
   if (mainTurnstileWidgetId !== null) {
     try { window.turnstile.remove(mainTurnstileWidgetId) } catch(e) {}
   }
-  
+
   mainTurnstileWidgetId = window.turnstile.render('#turnstile-container-main', {
     sitekey: TURNSTILE_SITE_KEY,
     callback: (token) => { mainTurnstileToken.value = token },
@@ -181,15 +203,15 @@ const renderMainTurnstile = async () => {
 const renderReplyTurnstile = async () => {
   await nextTick()
   if (!window.turnstile || !activeReply.value) return
-  
+
   const containerId = `turnstile-container-reply-${activeReply.value.id}`
   const el = document.getElementById(containerId)
   if (!el) return
-  
+
   if (replyTurnstileWidgetId !== null) {
     try { window.turnstile.remove(replyTurnstileWidgetId) } catch(e) {}
   }
-  
+
   replyTurnstileWidgetId = window.turnstile.render(`#${containerId}`, {
     sitekey: TURNSTILE_SITE_KEY,
     callback: (token) => { replyTurnstileToken.value = token },
@@ -201,14 +223,20 @@ const renderReplyTurnstile = async () => {
 // ============ 提交逻辑 ============
 const submitComment = async () => {
   if (!form.nickname.trim() || !form.content.trim()) return alert(i18n.value.fieldRequired)
+  if (!form.email.trim()) return alert(i18n.value.emailRequired)
+  if (!EMAIL_REGEX.test(form.email.trim())) return alert(i18n.value.emailInvalid)
   if (!mainTurnstileToken.value) return alert(i18n.value.turnstileRequired)
 
   submitting.value = true
+  // 邮箱仅在前端哈希，明文不上传
+  const emailHash = await sha256(form.email.trim().toLowerCase())
+
   const payload = {
     commentId: crypto.randomUUID(),
     pageKey: normalizedPageKey.value,
     token: mainTurnstileToken.value,
     nickname: form.nickname,
+    emailHash,
     content: form.content
   }
 
@@ -252,19 +280,23 @@ const openReplyForm = (id, rootId, replyToId, replyToName) => {
     replyTurnstileWidgetId = null
   }
   replyTurnstileToken.value = ''
-  
+
   activeReply.value = { id, rootId, replyToId, replyToName }
   replyForm.nickname = form.nickname
+  replyForm.email = form.email   // 复用主表单邮箱
   replyForm.content = ''
 }
 
 const submitReply = async () => {
   if (!replyForm.nickname.trim() || !replyForm.content.trim()) return alert(i18n.value.fieldRequired)
+  if (!replyForm.email.trim()) return alert(i18n.value.emailRequired)
+  if (!EMAIL_REGEX.test(replyForm.email.trim())) return alert(i18n.value.emailInvalid)
   if (!activeReply.value) return
   if (!replyTurnstileToken.value) return alert(i18n.value.turnstileRequired)
 
   submitting.value = true
   const target = activeReply.value
+  const emailHash = await sha256(replyForm.email.trim().toLowerCase())
 
   const payload = {
     commentId: crypto.randomUUID(),
@@ -274,6 +306,7 @@ const submitReply = async () => {
     replyToName: target.replyToName,
     token: replyTurnstileToken.value,
     nickname: replyForm.nickname,
+    emailHash,
     content: replyForm.content
   }
 
@@ -286,6 +319,7 @@ const submitReply = async () => {
 
     if (res.ok) {
       form.nickname = replyForm.nickname
+      form.email = replyForm.email
       replyForm.content = ''
       activeReply.value = null
       if (replyTurnstileWidgetId !== null) {
@@ -317,7 +351,6 @@ onMounted(() => {
     script.async = true
     script.onload = () => {
       turnstileReady = true
-      // 如果脚本加载完成时，表单已经打开了，补一次渲染
       if (showMainForm.value) renderMainTurnstile()
       if (activeReply.value) renderReplyTurnstile()
     }
@@ -339,7 +372,7 @@ watch(() => route.path, () => {
 <template>
   <div class="vp-comments" v-if="!frontmatter.isNoComment">
     <!-- 触发器 -->
-    <button 
+    <button
       class="vp-comment-trigger"
       @click="showMainForm = !showMainForm"
       :aria-expanded="showMainForm"
@@ -350,16 +383,27 @@ watch(() => route.path, () => {
     <!-- 主评论表单 -->
     <transition name="vp-slide" @after-enter="renderMainTurnstile">
       <div v-if="showMainForm" class="vp-form-container">
-        <input 
-          v-model="form.nickname" 
-          type="text" 
-          :placeholder="i18n.nicknamePlaceholder" 
-          class="vp-input"
-          :disabled="submitting"
-        />
-        <textarea 
-          v-model="form.content" 
-          :placeholder="i18n.contentPlaceholder" 
+        <div class="vp-form-row">
+          <input
+            v-model="form.nickname"
+            type="text"
+            :placeholder="i18n.nicknamePlaceholder"
+            class="vp-input"
+            :disabled="submitting"
+          />
+          <input
+            v-model="form.email"
+            type="email"
+            :placeholder="i18n.emailPlaceholder"
+            class="vp-input"
+            :disabled="submitting"
+            autocomplete="email"
+          />
+        </div>
+        <p class="vp-email-hint">{{ i18n.emailPrivacyHint }}</p>
+        <textarea
+          v-model="form.content"
+          :placeholder="i18n.contentPlaceholder"
           rows="4"
           class="vp-input vp-textarea"
           :disabled="submitting"
@@ -368,9 +412,9 @@ watch(() => route.path, () => {
         <div id="turnstile-container-main" class="vp-turnstile"></div>
 
         <div class="vp-action-bar">
-          <button 
-            @click="submitComment" 
-            :disabled="submitting" 
+          <button
+            @click="submitComment"
+            :disabled="submitting"
             class="vp-btn vp-btn-primary"
           >
             <span v-if="submitting" class="vp-spinner"></span>
@@ -388,7 +432,7 @@ watch(() => route.path, () => {
           <span class="vp-time">{{ formatDateTime(root.created_at) }}</span>
         </div>
         <p class="vp-content">{{ root.content }}</p>
-        <button 
+        <button
           class="vp-action-btn"
           @click="openReplyForm(root.id, root.id, root.id, root.nickname)"
         >
@@ -397,35 +441,45 @@ watch(() => route.path, () => {
 
         <transition name="vp-slide" @after-enter="renderReplyTurnstile">
           <div v-if="activeReply?.id === root.id" class="vp-inline-form">
-            <input 
-              v-model="replyForm.nickname" 
-              type="text" 
-              :placeholder="i18n.replyNicknamePlaceholder" 
-              class="vp-input"
-              :disabled="submitting"
-            />
-            <textarea 
-              v-model="replyForm.content" 
-              :placeholder="i18n.replyContentPlaceholder" 
+            <div class="vp-form-row">
+              <input
+                v-model="replyForm.nickname"
+                type="text"
+                :placeholder="i18n.replyNicknamePlaceholder"
+                class="vp-input"
+                :disabled="submitting"
+              />
+              <input
+                v-model="replyForm.email"
+                type="email"
+                :placeholder="i18n.replyEmailPlaceholder"
+                class="vp-input"
+                :disabled="submitting"
+                autocomplete="email"
+              />
+            </div>
+            <textarea
+              v-model="replyForm.content"
+              :placeholder="i18n.replyContentPlaceholder"
               rows="3"
               class="vp-input vp-textarea"
               :disabled="submitting"
             ></textarea>
-            
+
             <!-- 动态 ID 防止冲突 -->
             <div :id="'turnstile-container-reply-' + root.id" class="vp-turnstile"></div>
 
             <div class="vp-inline-btns">
-              <button 
-                @click="submitReply" 
-                :disabled="submitting" 
+              <button
+                @click="submitReply"
+                :disabled="submitting"
                 class="vp-btn vp-btn-primary vp-btn-sm"
               >
                 <span v-if="submitting" class="vp-spinner"></span>
                 {{ submitting ? i18n.sending : i18n.confirmReply }}
               </button>
-              <button 
-                @click="activeReply = null" 
+              <button
+                @click="activeReply = null"
                 class="vp-btn vp-btn-ghost vp-btn-sm"
               >
                 {{ i18n.cancelReply }}
@@ -445,7 +499,7 @@ watch(() => route.path, () => {
               <span class="vp-time">{{ formatDateTime(reply.created_at) }}</span>
             </div>
             <p class="vp-content">{{ reply.content }}</p>
-            <button 
+            <button
               class="vp-action-btn"
               @click="openReplyForm(reply.id, root.id, reply.id, reply.nickname)"
             >
@@ -454,35 +508,45 @@ watch(() => route.path, () => {
 
             <transition name="vp-slide" @after-enter="renderReplyTurnstile">
               <div v-if="activeReply?.id === reply.id" class="vp-inline-form">
-                <input 
-                  v-model="replyForm.nickname" 
-                  type="text" 
-                  :placeholder="i18n.replyNicknamePlaceholder" 
-                  class="vp-input"
-                  :disabled="submitting"
-                />
-                <textarea 
-                  v-model="replyForm.content" 
-                  :placeholder="i18n.replyContentPlaceholder" 
+                <div class="vp-form-row">
+                  <input
+                    v-model="replyForm.nickname"
+                    type="text"
+                    :placeholder="i18n.replyNicknamePlaceholder"
+                    class="vp-input"
+                    :disabled="submitting"
+                  />
+                  <input
+                    v-model="replyForm.email"
+                    type="email"
+                    :placeholder="i18n.replyEmailPlaceholder"
+                    class="vp-input"
+                    :disabled="submitting"
+                    autocomplete="email"
+                  />
+                </div>
+                <textarea
+                  v-model="replyForm.content"
+                  :placeholder="i18n.replyContentPlaceholder"
                   rows="3"
                   class="vp-input vp-textarea"
                   :disabled="submitting"
                 ></textarea>
-                
+
                 <!-- 动态 ID 防止冲突 -->
                 <div :id="'turnstile-container-reply-' + reply.id" class="vp-turnstile"></div>
 
                 <div class="vp-inline-btns">
-                  <button 
-                    @click="submitReply" 
-                    :disabled="submitting" 
+                  <button
+                    @click="submitReply"
+                    :disabled="submitting"
                     class="vp-btn vp-btn-primary vp-btn-sm"
                   >
                     <span v-if="submitting" class="vp-spinner"></span>
                     {{ submitting ? i18n.sending : i18n.confirmReply }}
                   </button>
-                  <button 
-                    @click="activeReply = null" 
+                  <button
+                    @click="activeReply = null"
                     class="vp-btn vp-btn-ghost vp-btn-sm"
                   >
                     {{ i18n.cancelReply }}
@@ -491,8 +555,8 @@ watch(() => route.path, () => {
               </div>
             </transition>
           </div>
-          <button 
-            v-if="root.hasMoreReplies" 
+          <button
+            v-if="root.hasMoreReplies"
             class="vp-load-more"
             @click="fetchMoreReplies(root.id)"
           >
@@ -545,6 +609,31 @@ watch(() => route.path, () => {
   border-radius: 8px;
 }
 
+/* 名称与邮箱同行排列 */
+.vp-form-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+.vp-form-row .vp-input {
+  margin-bottom: 0;
+  flex: 1;
+}
+@media (max-width: 640px) {
+  .vp-form-row {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+/* 邮箱隐私提示 */
+.vp-email-hint {
+  font-size: 0.75rem;
+  color: var(--vp-c-text-3);
+  margin: 0 0 0.75rem 0;
+  line-height: 1.4;
+}
+
 /* 输入框 */
 .vp-input {
   width: 100%;
@@ -557,6 +646,7 @@ watch(() => route.path, () => {
   font-family: inherit;
   margin-bottom: 0.75rem;
   transition: border-color 0.25s;
+  box-sizing: border-box;
 }
 .vp-input::placeholder {
   color: var(--vp-c-text-3);
@@ -564,7 +654,7 @@ watch(() => route.path, () => {
 .vp-input:focus {
   outline: none;
   border-color: var(--vp-c-brand-1);
-  box-shadow: 0 0 0 2px rgba(var(--vp-c-brand-1-rgb, 0), 0.12); /* 兼容性处理 */
+  box-shadow: 0 0 0 2px rgba(var(--vp-c-brand-1-rgb, 0), 0.12);
 }
 .vp-textarea {
   resize: vertical;
@@ -573,7 +663,7 @@ watch(() => route.path, () => {
 
 .vp-turnstile {
   margin-bottom: 0.75rem;
-  min-height: 65px; /* 防止未加载时抖动 */
+  min-height: 65px;
 }
 
 .vp-action-bar {
@@ -757,6 +847,6 @@ watch(() => route.path, () => {
 .vp-slide-enter-to,
 .vp-slide-leave-from {
   opacity: 1;
-  max-height: 600px; /* 增大高度空间以适应验证码组件 */
+  max-height: 600px;
 }
 </style>
