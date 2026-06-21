@@ -8,14 +8,7 @@ isNoBackBtn: true
 ---
 
 <div class="links-page">
-  <!-- 申请说明区域 -->
-  <div class="apply-section">
-    <div class="site-info">
-      <img src="https://cdn.ddbx.org/02.png" alt="网站头像" class="site-avatar" />
-      <div class="site-details">
-        <h1 class="site-name">的的不休</h1>
-        <p class="site-desc">每一段旅行都有终点</p></div>
-    </div> 
+  <!-- 友链列表 -->
   <div class="links-list">
     <h2 class="links-title">友情链接</h2>
     <div v-for="(link, index) in links" :key="link.url" class="link-container">
@@ -31,6 +24,24 @@ isNoBackBtn: true
           <div class="link-desc source-han-serif">
             {{ link.desc }}
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 本站信息 -->
+  <div class="site-info-section">
+    <h2 class="site-info-title">本站信息</h2>
+    <div class="site-info-container">
+      <img src="https://cdn.ddbx.org/02.png" alt="网站头像" class="site-avatar" />
+      <div class="site-details">
+        <h3 class="site-name">的的不休</h3>
+        <p class="site-desc">每一段旅行都有终点</p>
+        <div class="site-links">
+          <a href="https://ddbx.org" target="_blank" rel="noopener noreferrer" class="site-link">
+            <span class="link-icon">🔗</span>
+            <span class="link-text">https://ddbx.org</span>
+          </a>
         </div>
       </div>
     </div>
@@ -70,139 +81,6 @@ const links = ref([
   margin: 0 auto;
 }
 
-/* 申请说明区域样式 */
-.apply-section {
-  background-color: var(--vp-c-bg-soft);
-  border-radius: 8px;
-  padding: 2rem;
-  margin-bottom: 3rem;
-  border: 1px solid var(--vp-c-divider);
-}
-
-.site-info {
-  display: flex;
-  align-items: center;
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--vp-c-divider);
-}
-
-.site-avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 1.5rem;
-  border: 2px solid var(--vp-c-brand-1);
-}
-
-.site-details {
-  flex: 1;
-}
-
-.site-name {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--vp-c-text-1);
-}
-
-.site-desc {
-  margin: 0;
-  font-size: 1rem;
-  color: var(--vp-c-text-2);
-  line-height: 1.6;
-}
-
-.apply-rules {
-  margin-top: 1.5rem;
-}
-
-.apply-rules h2 {
-  margin: 0 0 1.5rem 0;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--vp-c-text-1);
-}
-
-.rules-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.rule-item {
-  display: flex;
-  align-items: flex-start;
-  padding: 1rem;
-  background-color: var(--vp-c-bg);
-  border-radius: 6px;
-  border: 1px solid var(--vp-c-divider);
-}
-
-.rule-icon {
-  color: var(--vp-c-brand-1);
-  font-weight: bold;
-  margin-right: 0.75rem;
-  font-size: 1.2rem;
-}
-
-.rule-text {
-  flex: 1;
-  color: var(--vp-c-text-1);
-  line-height: 1.6;
-}
-
-.apply-info {
-  background-color: var(--vp-c-bg);
-  padding: 1.5rem;
-  border-radius: 6px;
-  border: 1px solid var(--vp-c-divider);
-  margin-bottom: 1.5rem;
-}
-
-.apply-info p {
-  margin: 0 0 1rem 0;
-  font-weight: 600;
-  color: var(--vp-c-text-1);
-}
-
-.info-item {
-  display: flex;
-  margin-bottom: 0.5rem;
-}
-
-.info-label {
-  min-width: 80px;
-  font-weight: 500;
-  color: var(--vp-c-text-2);
-}
-
-.info-value {
-  flex: 1;
-  color: var(--vp-c-text-1);
-  word-break: break-all;
-}
-
-.apply-contact {
-  background-color: var(--vp-c-bg);
-  padding: 1.5rem;
-  border-radius: 6px;
-  border: 1px solid var(--vp-c-divider);
-}
-
-.apply-contact p {
-  margin: 0 0 0.5rem 0;
-  color: var(--vp-c-text-1);
-  line-height: 1.6;
-}
-
-.apply-contact p:first-child {
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
 /* 友链列表样式 */
 .links-title {
   margin: 0 0 2rem 0;
@@ -229,7 +107,7 @@ const links = ref([
   width: 100%;
   margin: 0 !important;
   padding: 0 !important;
-  gap: 1rem; /* 头像和文字之间的间距 */
+  gap: 1rem;
   transition: transform 0.3s ease;
 }
 
@@ -258,7 +136,7 @@ const links = ref([
 
 .link-content {
   flex-grow: 1;
-  min-width: 0; /* 防止 flex 项内容溢出 */
+  min-width: 0;
 }
 
 .link-title {
@@ -283,37 +161,91 @@ const links = ref([
 .link-desc {
   margin: 0 !important;
   padding: 0 !important;
-
   line-height: 1.6;
   font-size: 0.95rem;
   color: var(--vp-c-text-2);
-  
-  /* 文本超出省略号（单行） */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+/* 本站信息样式 */
+.site-info-section {
+  margin-top: 3rem;
+  background-color: var(--vp-c-bg-soft);
+  border-radius: 8px;
+  padding: 2rem;
+  border: 1px solid var(--vp-c-divider);
+}
+
+.site-info-title {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+  text-align: center;
+}
+
+.site-info-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.site-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--vp-c-brand-1);
+}
+
+.site-details {
+  flex: 1;
+  max-width: 400px;
+}
+
+.site-name {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
+.site-desc {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  color: var(--vp-c-text-2);
+  line-height: 1.6;
+}
+
+.site-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.site-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--vp-c-brand-1);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+  
+  &:hover {
+    color: var(--vp-c-brand-2);
+  }
+}
+
+.link-icon {
+  font-size: 1rem;
+}
+
 /* 响应式调整 */
 @media (max-width: 640px) {
-  .apply-section {
-    padding: 1.5rem;
-  }
-  
-  .site-info {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .site-avatar {
-    margin-right: 0;
-    margin-bottom: 1rem;
-  }
-  
-  .rules-content {
-    grid-template-columns: 1fr;
-  }
-  
   .link-item {
     gap: 0.75rem;
   }
@@ -321,6 +253,19 @@ const links = ref([
   .link-avatar img {
     width: 48px;
     height: 48px;
+  }
+  
+  .site-info-container {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .site-avatar {
+    margin-bottom: 1rem;
+  }
+  
+  .site-details {
+    max-width: 100%;
   }
 }
 </style>
