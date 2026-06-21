@@ -429,12 +429,12 @@ watch(() => route.path, () => {
 .vp-action-btn { font-size: 0.75rem; color: var(--vp-c-text-3); background: none; border: none; cursor: pointer; padding: 0; transition: color 0.2s; }
 .vp-action-btn:hover { color: var(--vp-c-brand-1); }
 .vp-inline-form { margin-top: 1rem; padding: 1rem; border: 1px solid var(--vp-c-divider); border-radius: 6px; }
-.vp-inline-btns { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.25rem; }
-.vp-sub-tree { margin-top: 0.5rem; padding-left: 2rem; border-left: none; }
+.vp-inline-btns { display: flex; justify-content: flex-end; gap: 0.25rem; margin-top: 0.25rem; }
+.vp-sub-tree { margin-top: 0.25rem; padding-left: 2rem; border-left: none; }
 .vp-reply-item { padding: 0.5rem 0; }
 .vp-reply-item .vp-content { font-size: 0.875rem; }
 .vp-load-more {
-  display: flex; align-items: center; justify-content: center; width: 100%; margin-top: 0.5rem; padding: 0.5rem;
+  display: flex; align-items: center; justify-content: center; width: 100%; margin-top: 0.25rem; padding: 0.25rem;
   background: transparent; border: 1px dashed var(--vp-c-divider); border-radius: 6px; color: var(--vp-c-text-2);
   font-size: 0.75rem; cursor: pointer; transition: all 0.2s;
 }
