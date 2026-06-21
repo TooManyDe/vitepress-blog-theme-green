@@ -66,10 +66,10 @@ const friendLinks = ref([
     avatar: 'https://citydatum.cn/favicon.ico'
   },
   {
-    name: '另一个朋友',
-    desc: '专注后端开发与架构设计，偶尔写写随笔。',
-    url: 'https://example3.com',
-    avatar: 'https://www.gravatar.com/avatar/?d=retro'
+    name: '轻风blog',
+    desc: '茫茫人海，多么幸运才能遇见你！',
+    url: 'https://www.qingfengnb.cn',
+    avatar: 'https://img.qingfengnb.cn/LightPicture/2025/07/bec6eb9625656d60.jpg'
   }
   // 继续添加更多友链...
 ])
