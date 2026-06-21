@@ -89,10 +89,10 @@ footer: {
 export default defineConfig({
   // 基本信息
   title: "的的不休",
-  description: "Never Resting Day nor Night",
+  description: "Every trip has an end",
   lang: "en-US",
   
-  titleTemplate: ':title - ddbx',
+  titleTemplate: ':title - Every trip has an end',
   // 主题配置
   themeConfig,
   
