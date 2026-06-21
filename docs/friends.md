@@ -54,7 +54,7 @@ import { ref } from 'vue'
 // 在这里维护你的友链数据
 const friendLinks = ref([
   {
-    name: 'Yunyi's Blog',
+    name: "Yunyi's Blog", // 修复了引号问题
     desc: '得闲饮茶～～～',
     url: 'https://www.yunyitang.me/',
     avatar: 'https://www.yunyitang.me/img/favicon.png' 
