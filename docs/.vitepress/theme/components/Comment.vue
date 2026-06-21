@@ -91,6 +91,11 @@ const fetchComments = async () => {
     const res = await fetch(url)
     const { roots, replies } = await res.json()
     if (!roots || roots.length === 0) { commentsTree.value = []; return }
+    
+    // 修改排列逻辑：最早评论的在最上面（按创建时间升序排序）
+    roots.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+    replies.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+
     const nodeMap = new Map()
     roots.forEach(r => { r.children = []; r.hasMoreReplies = false; nodeMap.set(r.id, r) })
     replies.forEach(r => { r.children = []; nodeMap.set(r.id, r); if (r.root_id && nodeMap.has(r.root_id)) nodeMap.get(r.root_id).children.push(r) })
@@ -108,6 +113,8 @@ const fetchMoreReplies = async (rootId) => {
     const res = await fetch(`${API_BASE}/api/comments/replies?root_id=${rootId}&cursor=${encodeURIComponent(cursor)}`)
     const { replies } = await res.json()
     if (replies.length === 0) { targetRoot.hasMoreReplies = false; return }
+    // 对新加载的回复也进行升序排序
+    replies.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
     targetRoot.children = [...targetRoot.children, ...replies]
     if (replies.length < 10) targetRoot.hasMoreReplies = false
   } catch (e) { console.error('加载更多回复失败', e) }
