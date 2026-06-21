@@ -79,7 +79,7 @@ const siteInfo = ref({
   name: '的的不休',
   desc: '每一段旅行都有终点',
   url: 'https://ddbx.org',
-  avatar: 'https://cdn.ddbx.org/02.png'
+  avatar: 'https://cdn.ddbx.org/12.png'
 })
 </script>
 
