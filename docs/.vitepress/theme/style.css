@@ -1,4 +1,3 @@
-/* ==================== 字体定义 ==================== */
 @font-face {
   font-family: "GoogleSansCode";
   font-display: swap; 
@@ -26,13 +25,13 @@
        url("/assets/fonts/AI-Regular.woff") format("woff");
 }
 
+
 @font-face {
   font-family: "mvboli";
   font-display: swap;
   src: url("/assets/fonts/mvboli.ttf");
 }
 
-/* ==================== VitePress 变量与主题 ==================== */
 :root {
   --vp-c-text-1: #080808;
   --vp-nav-height: 50px;
@@ -52,11 +51,6 @@
   --td-brand-color-light: var(--vp-c-brand-soft) !important;
   --td-brand-color-hover: var(--vp-c-brand-1) !important;
   --td-brand-color-active: var(--vp-c-brand-2) !important;
-
-  /* 玻璃效果基础变量 */
-  --glass-bg: rgba(255, 255, 255, 0.55);
-  --glass-blur: 20px;
-  --glass-border: rgba(255, 255, 255, 0.3);
 }
 
 .dark {
@@ -67,55 +61,13 @@
   --vp-c-brand-2: var(--vp-c-green-dark) !important;
   --vp-c-brand-3: var(--vp-c-green-dark) !important;
   --vp-c-brand-soft: var(--vp-c-green-dark-soft) !important;
-
-  /* 深色模式玻璃变量 */
-  --glass-bg: rgba(30, 30, 30, 0.5);
-  --glass-border: rgba(255, 255, 255, 0.08);
 }
 
-/* ==================== 全局背景 (微弱渐变以衬托玻璃) ==================== */
-body {
-  background-color: #f4f6f8;
-  background-image: linear-gradient(180deg, #eef1f5 0%, #e6e9ef 100%);
-  background-attachment: fixed;
-  margin: 0;
-}
-
-.dark body {
-  background-color: #0f0f0f;
-  background-image: linear-gradient(180deg, #131313 0%, #0a0a0a 100%);
-}
-
-/* ==================== 布局结构：统一玻璃容器 ==================== */
-/* 将 Nav, Doc, Footer 背景统一并去掉边框，使其视觉上连成一块玻璃 */
-.VPNavBar,
-.VPDoc,
-.VPFooter {
-  background-color: var(--glass-bg) !important;
-  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-}
-
-.VPNavBar {
-  border-bottom: 1px solid var(--glass-border) !important;
-}
-
-.VPFooter {
-  border-top: 1px solid var(--glass-border) !important;
-  border-bottom: none !important;
-  box-shadow: none !important;
-}
-
-/* 移除内容区底部多余间距，使其与 Footer 紧密贴合 */
-.VPcontent {
-  margin-bottom: 0px !important;
-}
-
-/* ==================== 导航栏 ==================== */
 @media (min-width: 576px) {
   .VPNavBar {
     width: 100%;
     justify-content: center;
+    background-color: var(--vp-c-bg);
   }
 
   .VPNav[data-v-e4ae072f] {
@@ -147,7 +99,7 @@ body {
   display: none !important;
 }
 
-/* ==================== Footer ==================== */
+/* Footer */
 .VPFooter a {
   color: var(--vp-c-green) !important;
   font-family: "ChillRoundF", var(--vp-font-family-serif), sans-serif !important;
@@ -172,10 +124,16 @@ body {
   box-shadow: none !important;
 }
 
-/* ==================== 文档主内容 ==================== */
+.VPFooter {
+  border-top: none !important;
+  box-shadow: none !important;
+}
+
 .VPDoc {
   padding-top: 20px !important;
 }
+
+
 
 @media (max-width: 576px) {
   .VPDoc {
@@ -200,6 +158,10 @@ body {
 
 .VPDocFooter {
   margin-top: 10px !important;
+}
+
+.VPcontent {
+  margin-bottom: 10px !important;
 }
 
 .vp-doc p {
@@ -231,6 +193,7 @@ h3 {
   font-size: 18px !important;
 }
 
+
 .vp-doc a {
   color: var(--vp-c-green) !important; 
   text-decoration: none !important; 
@@ -246,7 +209,6 @@ h3 {
   color: var(--vp-c-hover) !important;
 }
 
-/* ==================== 图片与表格 ==================== */
 .VPDoc img {
   border-radius: 16px;
   cursor: zoom-in;
@@ -278,24 +240,7 @@ h3 {
   -webkit-overflow-scrolling: touch; 
 }
 
-/* ==================== 代码块适配 ==================== */
-.vp-doc div[class*='language-'] {
-  background: rgba(0, 0, 0, 0.03) !important;
-  backdrop-filter: blur(8px);
-  border: 1px solid var(--glass-border);
-  border-radius: 8px;
-}
 
-.dark .vp-doc div[class*='language-'] {
-  background: rgba(255, 255, 255, 0.03) !important;
-}
-
-main > div > div > pre > code {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-
-/* ==================== 隐藏多余组件 ==================== */
 .VPSidebar,
 .VPDocAside,
 .aside,
@@ -311,7 +256,6 @@ main > div > div > pre > code {
   display: none;
 }
 
-/* ==================== 杂项 ==================== */
 .VPSwitchAppearance {
   width: 22px !important;
 }
@@ -330,15 +274,11 @@ main > div > div > pre > code {
   scrollbar-width: thin;
 }
 
-#app {
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+main > div > div > pre > code {
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
-/* ==================== 降级方案 ==================== */
-@supports not (backdrop-filter: blur(var(--glass-blur))) {
-  .VPNavBar,
-  .VPDoc,
-  .VPFooter {
-    background: var(--vp-c-bg) !important;
-  }
+#app {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
