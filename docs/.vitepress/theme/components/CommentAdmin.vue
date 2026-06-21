@@ -11,9 +11,10 @@
             placeholder="输入管理员密钥"
             @keyup.enter="login"
             :disabled="loading"
+            class="vp-input"
           />
           <button
-            class="btn btn-primary"
+            class="vp-btn vp-btn-primary"
             @click="login"
             :disabled="loading"
           >
@@ -22,9 +23,9 @@
           </button>
         </template>
         <template v-else>
-          <span class="badge">已登录</span>
+          <span class="vp-badge">已登录</span>
           <button
-            class="btn btn-outline"
+            class="vp-btn vp-btn-outline"
             @click="logout"
             :disabled="loading"
           >
@@ -82,7 +83,7 @@
           <div class="card-actions">
             <button
               v-if="item.status !== 1"
-              class="btn btn-sm btn-primary"
+              class="vp-btn vp-btn-sm vp-btn-primary"
               @click="updateStatus(item.id, 1)"
               :disabled="item.loading"
             >
@@ -91,7 +92,7 @@
             </button>
             <button
               v-if="item.status === 1"
-              class="btn btn-sm btn-outline"
+              class="vp-btn vp-btn-sm vp-btn-outline"
               @click="updateStatus(item.id, 2)"
               :disabled="item.loading"
             >
@@ -100,7 +101,7 @@
             </button>
             <button
               v-if="item.status !== 2"
-              class="btn btn-sm btn-danger"
+              class="vp-btn vp-btn-sm vp-btn-danger"
               @click="updateStatus(item.id, 2)"
               :disabled="item.loading"
             >
@@ -249,43 +250,51 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/*
-  Geist (Vercel) 设计令牌映射：
-  - 间距遵循 4px 基准刻度：4 / 8 / 12 / 16 / 24 / 32 / 40px
-  - 圆角：控件 6px，卡片 12px，徽标/胶囊 9999px
-  - 主操作使用「纯色反转」黑白按钮（而非品牌色），强调色仅用于状态与选中态
-  - 阴影克制，层级主要靠边框与色阶表达
-  - 动效统一 150ms + Geist 缓动曲线
-  仍然使用 VitePress 的 --vp-c-* 变量取色，以便自动适配亮/暗主题。
+/* 
+  VitePress 设计令牌系统
+  基于 VitePress 默认主题 CSS 变量，扩展设计令牌
+  参考官方变量定义: https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css
 */
 .admin-container {
-  --gd-space-1: 4px;
-  --gd-space-2: 8px;
-  --gd-space-3: 12px;
-  --gd-space-4: 16px;
-  --gd-space-6: 24px;
-  --gd-space-8: 32px;
-  --gd-space-10: 40px;
-  --gd-radius-sm: 6px;
-  --gd-radius-md: 12px;
-  --gd-radius-full: 9999px;
-  --gd-duration: 150ms;
-  --gd-ease: cubic-bezier(0.175, 0.885, 0.32, 1.1);
-  --gd-shadow-raised: 0 2px 2px rgba(0, 0, 0, 0.04);
-
+  /* 间距系统 - 遵循 4px 基准刻度 */
+  --vp-space-1: 4px;
+  --vp-space-2: 8px;
+  --vp-space-3: 12px;
+  --vp-space-4: 16px;
+  --vp-space-6: 24px;
+  --vp-space-8: 32px;
+  --vp-space-10: 40px;
+  --vp-space-12: 48px;
+  
+  /* 圆角系统 */
+  --vp-radius-sm: 6px;
+  --vp-radius-md: 12px;
+  --vp-radius-full: 9999px;
+  
+  /* 动效系统 */
+  --vp-duration: 150ms;
+  --vp-ease: cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  
+  /* 阴影系统 */
+  --vp-shadow-raised: 0 2px 2px rgba(0, 0, 0, 0.04);
+  --vp-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.08);
+  
   max-width: 800px;
-  margin: var(--gd-space-8) auto;
+  margin: var(--vp-space-8) auto;
   font-family: var(--vp-font-family-base);
   color: var(--vp-c-text-1);
+  background-color: var(--vp-c-bg);
+  border-radius: var(--vp-radius-md);
+  transition: background-color var(--vp-duration) var(--vp-ease);
 }
 
 .admin-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: var(--gd-space-4);
-  margin-bottom: var(--gd-space-6);
-  padding-bottom: var(--gd-space-4);
+  gap: var(--vp-space-4);
+  margin-bottom: var(--vp-space-6);
+  padding-bottom: var(--vp-space-4);
   border-bottom: 1px solid var(--vp-c-divider);
 }
 
@@ -295,48 +304,49 @@ onMounted(() => {
   line-height: 26px;
   font-weight: 600;
   letter-spacing: -0.4px;
+  color: var(--vp-c-text-1);
 }
 
 .auth-controls {
   display: flex;
-  gap: var(--gd-space-2);
+  gap: var(--vp-space-2);
   align-items: center;
 }
 
-/* 输入框：6px 圆角，弱化边框，双层焦点环 */
-.auth-controls input {
-  height: var(--gd-space-10);
-  padding: 0 var(--gd-space-3);
+/* VitePress 输入框样式 */
+.vp-input {
+  height: var(--vp-space-10);
+  padding: 0 var(--vp-space-3);
   font-size: 14px;
   line-height: 20px;
   border: 1px solid var(--vp-c-divider);
-  border-radius: var(--gd-radius-sm);
+  border-radius: var(--vp-radius-sm);
   background: var(--vp-c-bg);
   color: var(--vp-c-text-1);
-  transition: border-color var(--gd-duration) var(--gd-ease),
-              box-shadow var(--gd-duration) var(--gd-ease);
+  transition: border-color var(--vp-duration) var(--vp-ease),
+              box-shadow var(--vp-duration) var(--vp-ease);
 }
 
-.auth-controls input::placeholder {
+.vp-input::placeholder {
   color: var(--vp-c-text-3);
 }
 
-.auth-controls input:hover:not(:disabled) {
+.vp-input:hover:not(:disabled) {
   border-color: var(--vp-c-text-3);
 }
 
-.auth-controls input:focus-visible {
+.vp-input:focus-visible {
   outline: none;
   border-color: var(--vp-c-brand-1);
   box-shadow: 0 0 0 2px var(--vp-c-bg), 0 0 0 4px var(--vp-c-brand-1);
 }
 
-/* 按钮基础样式：统一高度、字重与圆角 */
-.btn {
-  height: var(--gd-space-10);
-  padding: 0 var(--gd-space-4);
+/* VitePress 按钮系统 */
+.vp-btn {
+  height: var(--vp-space-10);
+  padding: 0 var(--vp-space-4);
   border: 1px solid transparent;
-  border-radius: var(--gd-radius-sm);
+  border-radius: var(--vp-radius-sm);
   cursor: pointer;
   font-size: 14px;
   line-height: 20px;
@@ -345,105 +355,108 @@ onMounted(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--gd-space-1);
-  transition: background-color var(--gd-duration) var(--gd-ease),
-              border-color var(--gd-duration) var(--gd-ease),
-              opacity var(--gd-duration) var(--gd-ease);
+  gap: var(--vp-space-1);
+  transition: background-color var(--vp-duration) var(--vp-ease),
+              border-color var(--vp-duration) var(--vp-ease),
+              opacity var(--vp-duration) var(--vp-ease);
 }
 
-.btn:disabled {
+.vp-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.btn:focus-visible {
+.vp-btn:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--vp-c-bg), 0 0 0 4px var(--vp-c-brand-1);
 }
 
-/* 主按钮：黑/白反转填充（Geist 主按钮规范），不依赖品牌色，强调最高优先级动作 */
-.btn-primary {
+/* 主按钮 - 黑/白反转填充（VitePress 主按钮规范） */
+.vp-btn-primary {
   background: var(--vp-c-text-1);
   color: var(--vp-c-bg);
 }
 
-.btn-primary:hover:not(:disabled) {
+.vp-btn-primary:hover:not(:disabled) {
   opacity: 0.86;
 }
 
-.btn-primary:active:not(:disabled) {
+.vp-btn-primary:active:not(:disabled) {
   opacity: 0.74;
 }
 
-/* 次级按钮：描边样式，用于次要或撤销类操作 */
-.btn-outline {
+/* 次级按钮 - 描边样式 */
+.vp-btn-outline {
   background: var(--vp-c-bg);
   color: var(--vp-c-text-1);
   border-color: var(--vp-c-divider);
 }
 
-.btn-outline:hover:not(:disabled) {
+.vp-btn-outline:hover:not(:disabled) {
   background: var(--vp-c-bg-soft);
   border-color: var(--vp-c-text-3);
 }
 
-.btn-outline:active:not(:disabled) {
+.vp-btn-outline:active:not(:disabled) {
   background: var(--vp-c-bg-soft);
   opacity: 0.85;
 }
 
-/* 危险按钮：实心红底白字，对应 Geist 的 error button 规范，用于不可逆操作 */
-.btn-danger {
+/* 危险按钮 - 实心红底白字 */
+.vp-btn-danger {
   background: var(--vp-c-danger-1);
   color: #fff;
 }
 
-.btn-danger:hover:not(:disabled) {
+.vp-btn-danger:hover:not(:disabled) {
   filter: brightness(0.92);
 }
 
-.btn-danger:active:not(:disabled) {
+.vp-btn-danger:active:not(:disabled) {
   filter: brightness(0.84);
 }
 
 /* 小尺寸按钮 */
-.btn-sm {
+.vp-btn-sm {
   height: 32px;
-  padding: 0 var(--gd-space-3);
+  padding: 0 var(--vp-space-3);
   font-size: 13px;
 }
 
-/* 登录徽章：胶囊形态，用于状态展示 */
-.badge {
+/* VitePress 徽标样式 */
+.vp-badge {
   background: var(--vp-c-brand-soft);
   color: var(--vp-c-brand-1);
-  padding: var(--gd-space-1) var(--gd-space-3);
-  border-radius: var(--gd-radius-full);
+  padding: var(--vp-space-1) var(--vp-space-3);
+  border-radius: var(--vp-radius-full);
   font-size: 12px;
   font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vp-space-1);
 }
 
-/* 过滤栏：选中态使用强调色表达「状态」，未选中为低强度文字按钮 */
+/* 过滤栏 */
 .filter-bar {
   display: flex;
-  gap: var(--gd-space-2);
-  margin-bottom: var(--gd-space-6);
+  gap: var(--vp-space-2);
+  margin-bottom: var(--vp-space-6);
   flex-wrap: wrap;
 }
 
 .filter-btn {
   height: 32px;
-  padding: 0 var(--gd-space-3);
+  padding: 0 var(--vp-space-3);
   background: transparent;
   border: 1px solid var(--vp-c-divider);
-  border-radius: var(--gd-radius-sm);
+  border-radius: var(--vp-radius-sm);
   color: var(--vp-c-text-2);
   cursor: pointer;
   font-size: 13px;
   font-weight: 500;
-  transition: background-color var(--gd-duration) var(--gd-ease),
-              border-color var(--gd-duration) var(--gd-ease),
-              color var(--gd-duration) var(--gd-ease);
+  transition: background-color var(--vp-duration) var(--vp-ease),
+              border-color var(--vp-duration) var(--vp-ease),
+              color var(--vp-duration) var(--vp-ease);
 }
 
 .filter-btn:hover {
@@ -465,7 +478,7 @@ onMounted(() => {
 /* 状态提示 */
 .status-text {
   text-align: center;
-  padding: var(--gd-space-10) var(--gd-space-6);
+  padding: var(--vp-space-10) var(--vp-space-6);
   color: var(--vp-c-text-3);
   font-size: 13px;
 }
@@ -474,35 +487,36 @@ onMounted(() => {
 .comment-list {
   display: flex;
   flex-direction: column;
-  gap: var(--gd-space-3);
+  gap: var(--vp-space-3);
 }
 
 .comment-card {
   border: 1px solid var(--vp-c-divider);
-  border-radius: var(--gd-radius-md);
-  padding: var(--gd-space-6);
+  border-radius: var(--vp-radius-md);
+  padding: var(--vp-space-6);
   background: var(--vp-c-bg);
-  transition: border-color var(--gd-duration) var(--gd-ease),
-              box-shadow var(--gd-duration) var(--gd-ease);
+  transition: border-color var(--vp-duration) var(--vp-ease),
+              box-shadow var(--vp-duration) var(--vp-ease),
+              background-color var(--vp-duration) var(--vp-ease);
 }
 
 .comment-card:hover {
   border-color: var(--vp-c-text-3);
-  box-shadow: var(--gd-shadow-raised);
+  box-shadow: var(--vp-shadow-hover);
 }
 
 .comment-card.is-reply {
-  margin-left: var(--gd-space-6);
+  margin-left: var(--vp-space-6);
   border-left: 2px solid var(--vp-c-brand-1);
   background: var(--vp-c-bg-soft);
 }
 
 .card-meta {
   display: flex;
-  gap: var(--gd-space-4);
+  gap: var(--vp-space-4);
   font-size: 13px;
   color: var(--vp-c-text-2);
-  margin-bottom: var(--gd-space-2);
+  margin-bottom: var(--vp-space-2);
   flex-wrap: wrap;
   align-items: center;
 }
@@ -516,8 +530,8 @@ onMounted(() => {
   font-family: var(--vp-font-family-mono);
   color: var(--vp-c-text-3);
   background: var(--vp-c-bg-soft);
-  padding: var(--gd-space-1) var(--gd-space-2);
-  border-radius: var(--gd-radius-sm);
+  padding: var(--vp-space-1) var(--vp-space-2);
+  border-radius: var(--vp-radius-sm);
   font-size: 12px;
 }
 
@@ -526,12 +540,14 @@ onMounted(() => {
   color: var(--vp-c-text-3);
 }
 
-/* 状态标签：6px 圆角的弱填充标签，颜色仅承载语义，不替代文字 */
+/* 状态标签 */
 .status-tag {
-  padding: var(--gd-space-1) var(--gd-space-2);
-  border-radius: var(--gd-radius-sm);
+  padding: var(--vp-space-1) var(--vp-space-2);
+  border-radius: var(--vp-radius-sm);
   font-size: 12px;
   font-weight: 500;
+  display: inline-flex;
+  align-items: center;
 }
 
 .status-0 {
@@ -543,13 +559,14 @@ onMounted(() => {
   background: var(--vp-c-brand-soft);
   color: var(--vp-c-brand-1);
 }
+
 .status-2 {
   background: var(--vp-c-danger-soft);
   color: var(--vp-c-danger-1);
 }
 
 .card-content {
-  margin: var(--gd-space-2) 0 var(--gd-space-4);
+  margin: var(--vp-space-2) 0 var(--vp-space-4);
   font-size: 14px;
   line-height: 20px;
   color: var(--vp-c-text-1);
@@ -558,12 +575,12 @@ onMounted(() => {
 .reply-prefix {
   color: var(--vp-c-brand-1);
   font-weight: 500;
-  margin-right: var(--gd-space-1);
+  margin-right: var(--vp-space-1);
 }
 
 .card-actions {
   display: flex;
-  gap: var(--gd-space-2);
+  gap: var(--vp-space-2);
   flex-wrap: wrap;
 }
 
@@ -574,7 +591,7 @@ onMounted(() => {
   height: 14px;
   border: 2px solid currentColor;
   border-right-color: transparent;
-  border-radius: var(--gd-radius-full);
+  border-radius: var(--vp-radius-full);
   animation: spin 0.6s linear infinite;
 }
 
@@ -582,20 +599,21 @@ onMounted(() => {
   width: 24px;
   height: 24px;
   border-width: 3px;
-  margin: 0 auto var(--gd-space-2);
+  margin: 0 auto var(--vp-space-2);
 }
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-/* 响应式调整：sm/md 断点附近收紧间距，按钮转为全宽堆叠 */
+/* 响应式调整 */
 @media (max-width: 600px) {
   .admin-header {
     flex-direction: column;
     align-items: stretch;
-    gap: var(--gd-space-3);
+    gap: var(--vp-space-3);
   }
 
   .auth-controls {
@@ -607,15 +625,15 @@ onMounted(() => {
   }
 
   .comment-card {
-    padding: var(--gd-space-4);
+    padding: var(--vp-space-4);
   }
 
   .comment-card.is-reply {
-    margin-left: var(--gd-space-4);
+    margin-left: var(--vp-space-4);
   }
 
   .card-meta {
-    gap: var(--gd-space-2);
+    gap: var(--vp-space-2);
     font-size: 12px;
   }
 
@@ -628,12 +646,33 @@ onMounted(() => {
   }
 }
 
-/* 遵循 prefers-reduced-motion：去除非必要动效 */
+/* 遵循 prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
   .admin-container *,
   .admin-container *::before,
   .admin-container *::after {
     transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
+}
+
+/* 暗色模式调整 */
+.dark .admin-container {
+  --vp-shadow-raised: 0 2px 2px rgba(0, 0, 0, 0.2);
+  --vp-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.dark .comment-card {
+  background: var(--vp-c-bg-soft);
+}
+
+.dark .comment-card:hover {
+  border-color: var(--vp-c-text-3);
+  background: var(--vp-c-bg);
+}
+
+.dark .status-tag {
+  background: var(--vp-c-bg-soft);
 }
 </style>
