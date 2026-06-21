@@ -22,6 +22,7 @@
     "vitepress": "2.0.0-alpha.2"
   },
   "dependencies": {
+    "@wxperia/liquid-glass-vue": "^1.0.9",
     "tdesign-icons-vue-next": "^0.2.2",
     "tdesign-vue-next": "^1.11.1",
     "vue": "^3.5.13"
