@@ -10,8 +10,7 @@ isNoBackBtn: true
 <div class="links-page">
   <!-- 友链列表 -->
   <div class="links-list">
-    <div v-for="(link, index) in friendLinks" :key="link.url" class="link-container">
-      <hr v-if="index !== 0" class="link-divider" />
+    <div v-for="link in friendLinks" :key="link.url" class="link-container">
       <div class="link-item">
         <a :href="link.url" target="_blank" rel="noopener noreferrer" class="link-avatar">
           <img :src="link.avatar" :alt="link.name" />
@@ -28,11 +27,8 @@ isNoBackBtn: true
     </div>
   </div>
 
-  <!-- 分割线 -->
+  <!-- 友链与本站之间的分割线 -->
   <hr class="link-divider" />
-
-  <!-- 说明文字 -->
-  <p class="apply-notice">请先添加本站链接，然后在评论区留言：</p>
 
   <!-- 本站信息 -->
   <div class="link-container">
@@ -90,18 +86,31 @@ const siteInfo = ref({
 <style lang="scss" scoped>
 .links-page {
   max-width: 800px;
-  margin: 0 auto 2rem auto; /* 底部间距 2rem */
+  margin: 0 auto 2rem auto;
 }
 
-/* 友链列表样式 */
+/* 友链列表容器 */
+.links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* 友链之间通过 gap 隔开，不再使用分割线 */
+}
+
+/* 分割线样式（用于友链和本站之间） */
 .link-divider {
   border: none !important;
   height: 1px !important;
   background-color: var(--vp-c-divider) !important;
   opacity: 0.5 !important;
-  margin: 1rem 0 !important; 
+  margin: 2rem 0 !important; 
   padding: 0 !important;
   width: 100%;
+}
+
+/* 单个友链项样式 */
+.link-container {
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .link-item {
@@ -170,16 +179,6 @@ const siteInfo = ref({
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-/* 说明文字样式 */
-.apply-notice {
-  margin: 0 0 3rem 0; /* 下方空 1.5rem */
-  padding: 0;
-  color: var(--vp-c-text-1); /* 使用 text-1 颜色 */
-  font-size: 0.95rem;
-  text-align: left; /* 左对齐 */
-  line-height: 1.6;
 }
 
 /* 响应式调整 */
