@@ -70,7 +70,7 @@ provide('toggle-appearance', async ({ clientX: x, clientY: y }: MouseEvent) => {
         <ImageViewer />
       </template>
       <template #doc-after>
-        <Comment v-if="frontmatter.isNoComment !== true" />
+       <Comment v-if="frontmatter.isNoComment" />
       </template>
     </DefaultTheme.Layout>
   </div>
