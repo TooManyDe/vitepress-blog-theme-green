@@ -425,13 +425,15 @@ watch(() => route.path, () => {
   font-family: "AI", var(--vp-font-family-base), sans-serif;
 }
 .vp-time { display: block; font-size: 0.75rem; color: var(--vp-c-text-3); font-variant-numeric: tabular-nums; margin-top: 0.25rem; }
-vp-content {
+.vp-content {
   font-size: 0.9375rem;
   line-height: 1.6;
   color: var(--vp-c-text-1);
   margin: 0 0 0.25rem 0;
   word-break: break-word;    /* 防止长单词溢出 */
   white-space: pre-wrap;     /* 保留换行符，实现换行 */
+  word-wrap: break-word;     /* 防止长单词溢出，兼容性写法 */
+  overflow-wrap: break-word; /* 防止长单词溢出，CSS3标准属性 */
 }
 .vp-action-btn { font-size: 0.75rem; color: var(--vp-c-text-3); background: none; border: none; cursor: pointer; padding: 0; transition: color 0.2s; }
 .vp-action-btn:hover { color: var(--vp-c-brand-1); }
