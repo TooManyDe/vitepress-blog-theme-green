@@ -31,7 +31,7 @@ export default defineConfig({
       "link",
       {
         rel: "icon",
-        href: "https://cdn.ddbx.org/01.ico",
+        href: "https://cdn.ddbx.org/13.ico",
       },
     ],
   ],
