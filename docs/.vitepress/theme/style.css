@@ -1,3 +1,4 @@
+/* ==================== 字体定义 ==================== */
 @font-face {
   font-family: "GoogleSansCode";
   font-display: swap; 
@@ -25,13 +26,13 @@
        url("/assets/fonts/AI-Regular.woff") format("woff");
 }
 
-
 @font-face {
   font-family: "mvboli";
   font-display: swap;
   src: url("/assets/fonts/mvboli.ttf");
 }
 
+/* ==================== VitePress 变量与主题 ==================== */
 :root {
   --vp-c-text-1: #080808;
   --vp-nav-height: 50px;
@@ -51,6 +52,13 @@
   --td-brand-color-light: var(--vp-c-brand-soft) !important;
   --td-brand-color-hover: var(--vp-c-brand-1) !important;
   --td-brand-color-active: var(--vp-c-brand-2) !important;
+
+  /* 玻璃效果基础变量 */
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-blur: 16px;
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  --glass-radius: 16px;
 }
 
 .dark {
@@ -61,17 +69,41 @@
   --vp-c-brand-2: var(--vp-c-green-dark) !important;
   --vp-c-brand-3: var(--vp-c-green-dark) !important;
   --vp-c-brand-soft: var(--vp-c-green-dark-soft) !important;
+
+  /* 深色模式玻璃变量 */
+  --glass-bg: rgba(30, 30, 30, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
+/* ==================== 全局背景 (玻璃效果的基础) ==================== */
+/* 必须给 body 添加彩色光斑，这样透过玻璃才能看到色彩 */
+body {
+  background-color: var(--vp-c-bg);
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(65, 179, 73, 0.15) 0%, transparent 25%),
+    radial-gradient(circle at 85% 20%, rgba(100, 200, 255, 0.15) 0%, transparent 25%),
+    radial-gradient(circle at 50% 85%, rgba(200, 100, 255, 0.1) 0%, transparent 30%);
+  background-attachment: fixed;
+}
+
+/* ==================== 导航栏 玻璃化 ==================== */
 @media (min-width: 576px) {
   .VPNavBar {
     width: 100%;
     justify-content: center;
-    background-color: var(--vp-c-bg);
+    /* 玻璃质感 */
+    background-color: var(--glass-bg) !important;
+    backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+    border-bottom: 1px solid var(--glass-border) !important;
+    box-shadow: var(--glass-shadow);
   }
 
   .VPNav[data-v-e4ae072f] {
-    position: absolute;
+    position: fixed; /* 改为 fixed 以便背景光斑能从其背后穿过 */
+    width: 100%;
+    z-index: 100;
   }
 
   .VPNavBar .container {
@@ -99,46 +131,32 @@
   display: none !important;
 }
 
-/* Footer */
-.VPFooter a {
-  color: var(--vp-c-green) !important;
-  font-family: "ChillRoundF", var(--vp-font-family-serif), sans-serif !important;
-  text-decoration: none !important;
-}
-
-.VPFooter {
-  padding: 10px !important;
-  padding-bottom: 30px !important;
-}
-
-.VPFooter a:hover {
-  text-decoration: none !important;
-  color: var(--vp-c-hover) !important;
-}
-
-.VPFooter::before,
-.VPFooter::after {
-  display: none !important;
-  background: none !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-.VPFooter {
-  border-top: none !important;
-  box-shadow: none !important;
-}
-
+/* ==================== 文档主内容 玻璃化 ==================== */
+/* 将内容区包裹为一个玻璃卡片 */
 .VPDoc {
-  padding-top: 20px !important;
+  padding-top: 70px !important; /* 为 fixed 导航栏留出空间 */
 }
 
-
+.vp-doc {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius);
+  box-shadow: var(--glass-shadow);
+  padding: 2rem !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 2rem !important;
+}
 
 @media (max-width: 576px) {
   .VPDoc {
-    padding: 24px !important;
+    padding: 24px 10px !important;
     width: 100%;
+  }
+  .vp-doc {
+    padding: 1.2rem !important;
+    border-radius: 12px;
   }
 }
 
@@ -150,7 +168,6 @@
   .VPDoc:not(.has-sidebar) .content {
     max-width: inherit !important;
   }
-
   .VPDoc .content {
     padding: 0 !important; 
   }
@@ -178,25 +195,14 @@ h1, h2, h3, h4, h5, h6 {
   font-family: "AI", var(--vp-font-family-serif), sans-serif !important;
 }
 
-h1 {
-  font-size: 22px !important;
-}
-
-h2 {
-  font-size: 20px !important;
-  margin: inherit !important;
-  border-top: none !important;
-  text-decoration: none !important;
-}
-
-h3 {
-  font-size: 18px !important;
-}
-
+h1 { font-size: 22px !important; }
+h2 { font-size: 20px !important; margin: inherit !important; border-top: none !important; text-decoration: none !important; }
+h3 { font-size: 18px !important; }
 
 .vp-doc a {
   color: var(--vp-c-green) !important; 
   text-decoration: none !important; 
+  transition: color 0.2s;
 }
 
 .vp-doc a:hover {
@@ -209,6 +215,7 @@ h3 {
   color: var(--vp-c-hover) !important;
 }
 
+/* ==================== 图片与表格适配 ==================== */
 .VPDoc img {
   border-radius: 16px;
   cursor: zoom-in;
@@ -240,7 +247,24 @@ h3 {
   -webkit-overflow-scrolling: touch; 
 }
 
+/* ==================== 代码块 玻璃化 ==================== */
+.vp-doc div[class*='language-'] {
+  background: rgba(0, 0, 0, 0.03) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+}
 
+.dark .vp-doc div[class*='language-'] {
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+main > div > div > pre > code {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* ==================== 隐藏多余组件 ==================== */
 .VPSidebar,
 .VPDocAside,
 .aside,
@@ -256,6 +280,36 @@ h3 {
   display: none;
 }
 
+/* ==================== Footer 玻璃化 ==================== */
+.VPFooter {
+  padding: 10px !important;
+  padding-bottom: 30px !important;
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border-top: 1px solid var(--glass-border) !important;
+}
+
+.VPFooter a {
+  color: var(--vp-c-green) !important;
+  font-family: "ChillRoundF", var(--vp-font-family-serif), sans-serif !important;
+  text-decoration: none !important;
+}
+
+.VPFooter a:hover {
+  text-decoration: none !important;
+  color: var(--vp-c-hover) !important;
+}
+
+.VPFooter::before,
+.VPFooter::after {
+  display: none !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* ==================== 杂项与滚动条 ==================== */
 .VPSwitchAppearance {
   width: 22px !important;
 }
@@ -272,13 +326,27 @@ h3 {
 
 * {
   scrollbar-width: thin;
+  scrollbar-color: var(--vp-c-brand-1) transparent;
 }
 
-main > div > div > pre > code {
-  white-space: pre-wrap;
-  word-wrap: break-word;
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--vp-c-brand-1);
+  border-radius: 3px;
 }
 
 #app {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+/* ==================== 降级方案 ==================== */
+/* 针对不支持 backdrop-filter 的浏览器 */
+@supports not (backdrop-filter: blur(var(--glass-blur))) {
+  .VPNavBar, .vp-doc, .VPFooter {
+    background: var(--vp-c-bg) !important;
+  }
 }
