@@ -174,7 +174,7 @@ const siteInfo = ref({
 
 /* 说明文字样式 */
 .apply-notice {
-  margin: 0 0 1.5rem 0; /* 下方空 1.5rem */
+  margin: 0 0 3rem 0; /* 下方空 1.5rem */
   padding: 0;
   color: var(--vp-c-text-1); /* 使用 text-1 颜色 */
   font-size: 0.95rem;
