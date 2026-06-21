@@ -16,51 +16,6 @@ isNoBackBtn: true
         <h1 class="site-name">的的不休</h1>
         <p class="site-desc">每一段旅行都有终点</p></div>
     </div> 
-    <div class="apply-rules">
-      <h2>友链申请说明</h2>
-      <div class="rules-content">
-        <div class="rule-item">
-          <div class="rule-icon">✓</div>
-          <div class="rule-text">建站半年以上，定期更新内容</div>
-        </div>
-        <div class="rule-item">
-          <div class="rule-icon">✓</div>
-          <div class="rule-text">原创内容为主，拒绝采集站</div>
-        </div>
-        <div class="rule-item">
-          <div class="rule-icon">✓</div>
-          <div class="rule-text">网站内容健康，无违法信息</div>
-        </div>
-        <div class="rule-item">
-          <div class="rule-icon">✓</div>
-          <div class="rule-text">先添加本站链接，再申请友链</div>
-        </div>
-      </div>
-      <div class="apply-info">
-        <p>本站信息：</p>
-        <div class="info-item">
-          <span class="info-label">名称：</span>
-          <span class="info-value">的的不休</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">网址：</span>
-          <span class="info-value">https://ddbx.org</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">描述：</span>
-          <span class="info-value">每一段旅行都有终点</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">头像：</span>
-          <span class="info-value">https://cdn.ddbx.org/02.png</span>
-        </div>
-      </div>
-      <div class="apply-contact">
-        <p>申请方式：</p>
-        <p>请先添加本站链接，然后在本页面评论区留言。</p>
-      </div>
-    </div>
-  </div>
   <div class="links-list">
     <h2 class="links-title">友情链接</h2>
     <div v-for="(link, index) in links" :key="link.url" class="link-container">
