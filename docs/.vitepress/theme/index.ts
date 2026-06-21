@@ -25,11 +25,14 @@ const enhanceApp: EnhanceApp = ({ app }) => {
 
 // --- 导出主题配置 ---
 export default {
-  // 继承默认主题的所有配置、逻辑和组件
-  ...DefaultTheme,
-  
-  // 覆盖默认布局，使用自定义的 Layout
-  Layout: CustomLayout, 
+  ...Theme,
+	Layout: () => {
+		return h(Theme.Layout, null, {
+			//https://vitepress.dev/guide/extending-default-theme#layout-slots
+			"doc-after": () => h(Comment),
+			"doc-top": () => h(ImageViewer),
+		});
+	},
 
   enhanceApp,
 
