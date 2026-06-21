@@ -54,16 +54,16 @@ import { ref } from 'vue'
 // 在这里维护你的友链数据
 const friendLinks = ref([
   {
-    name: "Yunyi's Blog", // 修复了引号问题
+    name: "Yunyi's Blog", 
     desc: '得闲饮茶～～～',
     url: 'https://www.yunyitang.me/',
     avatar: 'https://www.yunyitang.me/img/favicon.png' 
   },
   {
-    name: '某位大佬的站点',
-    desc: '热爱生活，记录技术与日常的点滴思考。',
-    url: 'https://example2.com',
-    avatar: 'https://www.gravatar.com/avatar/?d=identicon'
+    name: '橙树志 | citydatum',
+    desc: '过已过，来未来，唯当下',
+    url: 'https://citydatum.cn',
+    avatar: 'https://citydatum.cn/favicon.ico'
   },
   {
     name: '另一个朋友',
