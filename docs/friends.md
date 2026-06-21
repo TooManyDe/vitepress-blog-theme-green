@@ -10,9 +10,7 @@ isNoBackBtn: true
 <div class="links-page">
   <!-- 友链列表 -->
   <div class="links-list">
-    <h2 class="links-title">友情链接</h2>
     <div v-for="(link, index) in links" :key="link.url" class="link-container">
-      <hr v-if="index !== 0" class="link-divider" />
       <div class="link-item">
         <a :href="link.url" target="_blank" rel="noopener noreferrer" class="link-avatar">
           <img :src="link.avatar" :alt="link.name" />
