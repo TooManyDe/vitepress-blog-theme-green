@@ -421,7 +421,7 @@ watch(() => route.path, () => {
   font-family: "AI", var(--vp-font-family-base), sans-serif; letter-spacing: 0.3px;
 }
 .vp-reply-target {
-  color: var(--vp-c-brand-1); font-size: 1.125rem; font-weight: 500;
+  color: var(--vp-c-brand-1); font-size: 0.75rem; font-weight: 500;
   font-family: "AI", var(--vp-font-family-base), sans-serif;
 }
 .vp-time { display: block; font-size: 0.75rem; color: var(--vp-c-text-3); font-variant-numeric: tabular-nums; margin-top: 0.25rem; }
