@@ -361,7 +361,7 @@ watch(() => route.path, () => {
 </template>
 
 <style scoped>
-.vp-comments-wrapper { margin-top: 3rem; }
+.vp-comments-wrapper { margin-top: 0; }
 .vp-comments { color: var(--vp-c-text-1); font-family: var(--vp-font-family-base); }
 .comment-toggle {
   display: inline-block; margin-bottom: 0px; cursor: pointer;
