@@ -3,7 +3,7 @@ layout: doc
 pageClass: is-home-page
 editLink: false
 lastUpdated: false
-isNoComment: true
+isNoComment: false
 isNoBackBtn: true
 ---
 
@@ -14,10 +14,8 @@ isNoBackBtn: true
       <img src="https://cdn.ddbx.org/02.png" alt="网站头像" class="site-avatar" />
       <div class="site-details">
         <h1 class="site-name">的的不休</h1>
-        <p class="site-desc">每一段旅行都有终点</p>
-      </div>
-    </div>
-    
+        <p class="site-desc">每一段旅行都有终点</p></div>
+    </div> 
     <div class="apply-rules">
       <h2>友链申请说明</h2>
       <div class="rules-content">
@@ -38,7 +36,6 @@ isNoBackBtn: true
           <div class="rule-text">先添加本站链接，再申请友链</div>
         </div>
       </div>
-      
       <div class="apply-info">
         <p>本站信息：</p>
         <div class="info-item">
