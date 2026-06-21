@@ -54,10 +54,10 @@ import { ref } from 'vue'
 // 在这里维护你的友链数据
 const friendLinks = ref([
   {
-    name: '艾斯特的博客',
-    desc: '分享前端开发、VitePress 主题开发与折腾记录。',
-    url: 'https://example.com',
-    avatar: 'https://www.gravatar.com/avatar/?d=mp' // 替换为真实头像地址
+    name: 'Yunyi's Blog',
+    desc: '得闲饮茶～～～',
+    url: 'https://www.yunyitang.me/',
+    avatar: 'https://www.yunyitang.me/img/favicon.png' 
   },
   {
     name: '某位大佬的站点',
