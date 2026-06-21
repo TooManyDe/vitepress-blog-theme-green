@@ -41,7 +41,7 @@ const sha256 = async (message) => {
 const i18n = computed(() => {
   const map = {
     zh: {
-      title: '评论', triggerComment: '💬 写评论', triggerCommentHide: '收起',
+      title: '评论', triggerComment: '评论', triggerCommentHide: '收起',
       nicknamePlaceholder: '你的名称 *（必填）', emailPlaceholder: '你的邮箱 *（必填，不公开）',
       contentPlaceholder: '输入你的评论内容 (最多1000字) *', send: '发送', sending: '发送中...',
       reply: '回复', loadMoreReplies: '展开更多回复', confirmReply: '回复', cancelReply: '取消',
@@ -52,7 +52,7 @@ const i18n = computed(() => {
       submitSuccessPending: '✅ 评论已提交，等待管理员审核后将公开显示。'
     },
     en: {
-      title: 'Comments', triggerComment: '💬 Write a comment', triggerCommentHide: 'Collapse',
+      title: 'Comments', triggerComment: 'Comment', triggerCommentHide: 'Collapse',
       nicknamePlaceholder: 'Your Name *', emailPlaceholder: 'Your Email * (private)',
       contentPlaceholder: 'Write your thoughts (Max 1000 characters) *', send: 'Send', sending: 'Sending...',
       reply: 'Reply', loadMoreReplies: 'Load more replies', confirmReply: 'Reply', cancelReply: 'Cancel',
@@ -140,7 +140,6 @@ const submitComment = async () => {
   const trimmedEmail = form.email.trim().toLowerCase()
   const emailHash = await sha256(trimmedEmail)
   
-  // 修复：payload 中加入 email 字段
   const payload = {
     commentId: crypto.randomUUID(), 
     pageKey: normalizedPageKey.value,
@@ -202,7 +201,6 @@ const submitReply = async () => {
   const trimmedEmail = replyForm.email.trim().toLowerCase()
   const emailHash = await sha256(trimmedEmail)
   
-  // 修复：payload 中加入 email 字段
   const payload = {
     commentId: crypto.randomUUID(), 
     pageKey: normalizedPageKey.value, 
@@ -357,13 +355,13 @@ watch(() => route.path, () => {
 .vp-comments-wrapper { margin-top: 3rem; }
 .vp-comments { color: var(--vp-c-text-1); font-family: var(--vp-font-family-base); }
 .vp-comment-trigger {
-  display: inline-flex; align-items: center; padding: 0.4rem 1rem;
-  background: transparent; border: 1px solid var(--vp-c-divider); border-radius: 8px;
-  color: var(--vp-c-text-2); font-size: 0.875rem; font-weight: 500; cursor: pointer;
-  transition: border-color 0.25s, color 0.25s;
+  display: inline-flex; align-items: center; padding: 0;
+  background: transparent; border: none; color: var(--vp-c-brand-1);
+  font-size: 1rem; font-weight: 500; cursor: pointer;
+  transition: color 0.25s; font-family: "AI", var(--vp-font-family-base), sans-serif;
 }
-.vp-comment-trigger:hover { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }
-.vp-comment-trigger[aria-expanded="true"] { background: transparent; }
+.vp-comment-trigger:hover { color: var(--vp-c-brand-2); }
+.vp-comment-trigger[aria-expanded="true"] { color: var(--vp-c-brand-2); }
 .vp-form-container { margin-top: 1.5rem; padding: 1.5rem; border: 1px solid var(--vp-c-divider); border-radius: 8px; }
 .vp-form-row { display: flex; gap: 0.75rem; margin-bottom: 0.5rem; }
 .vp-form-row .vp-input { margin-bottom: 0; flex: 1; }
@@ -411,7 +409,7 @@ watch(() => route.path, () => {
 .vp-action-btn:hover { color: var(--vp-c-brand-1); }
 .vp-inline-form { margin-top: 1rem; padding: 1rem; border: 1px solid var(--vp-c-divider); border-radius: 6px; }
 .vp-inline-btns { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.25rem; }
-.vp-sub-tree { margin-top: 1rem; padding-left: 1.25rem; border-left: 2px solid var(--vp-c-divider); }
+.vp-sub-tree { margin-top: 1rem; padding-left: 0; border-left: none; }
 .vp-reply-item { padding: 0.75rem 0; }
 .vp-reply-item .vp-content { font-size: 0.875rem; }
 .vp-load-more {
