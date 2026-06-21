@@ -28,10 +28,11 @@ isNoBackBtn: true
     </div>
   </div>
 
-  <!-- 申请说明 -->
-  <div class="apply-notice">
-    请先添加本站链接，然后在评论区留言。
-  </div>
+  <!-- 分割线 -->
+  <hr class="link-divider" />
+
+  <!-- 说明文字（无组件包装） -->
+  <p class="apply-notice">请先添加本站链接，然后在评论区留言。</p>
 
   <!-- 本站信息 -->
   <div class="link-container">
@@ -89,10 +90,7 @@ const siteInfo = ref({
 <style lang="scss" scoped>
 .links-page {
   max-width: 800px;
-  margin: 0 auto;
-  /* 增加底部间距，确保与评论区有足够的距离 */
-  padding-bottom: 4rem; 
-  margin-bottom: 2rem;
+  margin: 0 auto 2rem auto; /* 底部间距调整为 2rem */
 }
 
 /* 友链列表样式 */
@@ -174,13 +172,10 @@ const siteInfo = ref({
   text-overflow: ellipsis;
 }
 
-/* 申请说明样式 */
+/* 说明文字样式（无背景和边框） */
 .apply-notice {
-  margin: 2.5rem 0;
-  padding: 1.2rem 1.5rem;
-  background-color: var(--vp-c-bg-soft);
-  border: 1px dashed var(--vp-c-divider);
-  border-radius: 8px;
+  margin: 0 0 1.5rem 0;
+  padding: 0;
   color: var(--vp-c-text-2);
   font-size: 0.95rem;
   text-align: center;
