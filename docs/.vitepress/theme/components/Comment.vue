@@ -2,7 +2,7 @@
 import { ref, onMounted, reactive, watch, computed } from 'vue'
 import { useRoute, useData } from 'vitepress'
 
-const API_BASE = 'https://blog-comments-api.jihaoqi.workers.dev'
+const API_BASE = 'https://api.ddbx.org'
 const TURNSTILE_SITE_KEY = '0x4AAAAAADoeWJeldd1Dgu09'
 
 const route = useRoute()
