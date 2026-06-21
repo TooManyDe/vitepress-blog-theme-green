@@ -4,7 +4,6 @@ import DefaultTheme from 'vitepress/theme'
 import { nextTick, provide, watch } from 'vue'
 import Comment from './components/Comment.vue'
 import ImageViewer from './components/ImageViewer.vue'
-import { useData } from 'vitepress'
 
 const { frontmatter } = useData()
 
