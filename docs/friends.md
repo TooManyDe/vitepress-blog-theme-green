@@ -102,7 +102,7 @@ const siteInfo = ref({
   height: 1px !important;
   background-color: var(--vp-c-divider) !important;
   opacity: 0.5 !important;
-  margin: 2rem 0 !important; 
+  margin: 1rem 0 !important; 
   padding: 0 !important;
   width: 100%;
 }
