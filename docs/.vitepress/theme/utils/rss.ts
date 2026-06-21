@@ -8,14 +8,14 @@ const hostname = "https://ddbx.org";
 // 生成中文 RSS 文件
 export async function createRssFileZH(config: SiteConfig) {
   const feed = new Feed({
-    title: 'DDBX',
-    description: 'Every trip has an end',
+    title: '的的不休',
+    description: '每一段旅行都有终点',
     id: hostname,
     link: hostname,
     language: "zh-Hans",
     image: "https://cdn.ddbx.org/02.png",
     favicon: `https://cdn.ddbx.org/01.ico`,
-    copyright: "Copyright© 2021-present DDBX",
+    copyright: "Copyright© 2021-present 的的不休",
   });
 
   const posts = await createContentLoader("posts/**/*.md", {
@@ -44,7 +44,7 @@ export async function createRssFileZH(config: SiteConfig) {
       content: html,
       author: [
         {
-          name: "DDBX",
+          name: "的的不休",
           link: "https://ddbx.org/",
         },
       ],
@@ -59,7 +59,7 @@ export async function createRssFileZH(config: SiteConfig) {
 // 生成英文 RSS 文件
 export async function createRssFileEN(config: SiteConfig) {
   const feed = new Feed({
-    title: "DDBX",
+    title: "的的不休",
     description: "Every trip has an end",
     id: hostname,
     link: hostname,
@@ -93,7 +93,7 @@ export async function createRssFileEN(config: SiteConfig) {
       content: html,
       author: [
         {
-          name: "DDBX",
+          name: "的的不休",
           link: "https://ddbx.org/",
         },
       ],
