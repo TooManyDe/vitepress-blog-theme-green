@@ -402,15 +402,15 @@ watch(() => route.path, () => {
   border-right-color: transparent; border-radius: 50%; animation: vp-spin 0.6s linear infinite;
 }
 @keyframes vp-spin { to { transform: rotate(360deg); } }
-.vp-list-container { margin-top: 2rem; }
-.vp-comment-item { padding: 1.25rem 0; }
-.vp-meta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem; }
+.vp-list-container { margin-top: 1rem; }
+.vp-comment-item { padding: 0.5rem 0; }
+.vp-meta { display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.25rem; }
 .vp-name {
   font-size: 1.125rem; font-weight: 600; color: var(--vp-c-brand-1);
   font-family: "AI", var(--vp-font-family-base), sans-serif; letter-spacing: 0.3px;
 }
 .vp-reply-target {
-  color: var(--vp-c-brand-1); font-size: 0.8125rem; font-weight: 500;
+  color: var(--vp-c-brand-1); font-size: 1.125rem; font-weight: 500;
   font-family: "AI", var(--vp-font-family-base), sans-serif;
 }
 .vp-time { display: block; font-size: 0.75rem; color: var(--vp-c-text-3); font-variant-numeric: tabular-nums; margin-top: 0.25rem; }
@@ -421,11 +421,11 @@ watch(() => route.path, () => {
 .vp-inline-btns { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.25rem; }
 
 /* 修改这里：统一缩进两格（2rem），并移除竖线 */
-.vp-sub-tree { margin-top: 1rem; padding-left: 2rem; border-left: none; }
-.vp-reply-item { padding: 0.75rem 0; }
+.vp-sub-tree { margin-top: 0.5rem; padding-left: 2rem; border-left: none; }
+.vp-reply-item { padding: 0.5rem 0; }
 .vp-reply-item .vp-content { font-size: 0.875rem; }
 .vp-load-more {
-  display: flex; align-items: center; justify-content: center; width: 100%; margin-top: 0.75rem; padding: 0.5rem;
+  display: flex; align-items: center; justify-content: center; width: 100%; margin-top: 0.5rem; padding: 0.5rem;
   background: transparent; border: 1px dashed var(--vp-c-divider); border-radius: 6px; color: var(--vp-c-text-2);
   font-size: 0.75rem; cursor: pointer; transition: all 0.2s;
 }
