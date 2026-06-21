@@ -253,7 +253,6 @@ onMounted(() => {
 /* 
   VitePress 设计令牌系统
   基于 VitePress 默认主题 CSS 变量，扩展设计令牌
-  参考官方变量定义: https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css
 */
 .admin-container {
   /* 间距系统 - 遵循 4px 基准刻度 */
@@ -371,18 +370,21 @@ onMounted(() => {
   box-shadow: 0 0 0 2px var(--vp-c-bg), 0 0 0 4px var(--vp-c-brand-1);
 }
 
-/* 主按钮 - 黑/白反转填充（VitePress 主按钮规范） */
+/* 主按钮 - 使用 VitePress 主题色 */
 .vp-btn-primary {
-  background: var(--vp-c-text-1);
-  color: var(--vp-c-bg);
+  background-color: var(--vp-c-brand-1);
+  color: var(--vp-c-white);
+  border-color: var(--vp-c-brand-1);
 }
 
 .vp-btn-primary:hover:not(:disabled) {
-  opacity: 0.86;
+  background-color: var(--vp-c-brand-2);
+  border-color: var(--vp-c-brand-2);
 }
 
 .vp-btn-primary:active:not(:disabled) {
-  opacity: 0.74;
+  background-color: var(--vp-c-brand-3);
+  border-color: var(--vp-c-brand-3);
 }
 
 /* 次级按钮 - 描边样式 */
@@ -406,14 +408,17 @@ onMounted(() => {
 .vp-btn-danger {
   background: var(--vp-c-danger-1);
   color: #fff;
+  border-color: var(--vp-c-danger-1);
 }
 
 .vp-btn-danger:hover:not(:disabled) {
-  filter: brightness(0.92);
+  background: var(--vp-c-danger-2);
+  border-color: var(--vp-c-danger-2);
 }
 
 .vp-btn-danger:active:not(:disabled) {
-  filter: brightness(0.84);
+  background: var(--vp-c-danger-3);
+  border-color: var(--vp-c-danger-3);
 }
 
 /* 小尺寸按钮 */
@@ -472,7 +477,7 @@ onMounted(() => {
 .filter-btn.active {
   background: var(--vp-c-brand-1);
   border-color: var(--vp-c-brand-1);
-  color: #fff;
+  color: var(--vp-c-white);
 }
 
 /* 状态提示 */
