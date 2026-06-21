@@ -302,6 +302,7 @@ watch(() => route.path, () => {
 </script>
 
 <template>
+ <div class="comments" v-if="!frontmatter.isNoComment">
   <div class="comment-wrapper">
     <h2 class="title comment-trigger" @click="showMainForm = !showMainForm">
       {{ showMainForm ? i18n.triggerCommentHide : i18n.triggerComment }}
