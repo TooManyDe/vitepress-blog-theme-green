@@ -1,12 +1,13 @@
 <script setup>
 import { ref, onMounted, reactive, watch, computed } from 'vue'
-import { useRoute } from 'vitepress'
+import { useRoute, useData } from 'vitepress'  // 添加 useData 导入
 
 const API_BASE = 'https://blog-comments-api.jihaoqi.workers.dev'
 // ⚠️ 请替换为你从 Cloudflare 获取的真实 Site Key
 const TURNSTILE_SITE_KEY = '0x4AAAAAADoeWJeldd1Dgu09'  
 
 const route = useRoute()
+const { frontmatter } = useData()  // 获取 frontmatter 数据
 
 // 语言判断
 const lang = computed(() => route.path.startsWith('/en') ? 'en' : 'zh')
@@ -302,81 +303,83 @@ watch(() => route.path, () => {
 </script>
 
 <template>
- <div class="comments" v-if="!frontmatter.isNoComment">
-  <div class="comment-wrapper">
-    <h2 class="title comment-trigger" @click="showMainForm = !showMainForm">
-      {{ showMainForm ? i18n.triggerCommentHide : i18n.triggerComment }}
-    </h2>
+  <!-- 使用 frontmatter.isNoComment 控制评论区域显示 -->
+  <div class="comments" v-if="!frontmatter.isNoComment">
+    <div class="comment-wrapper">
+      <h2 class="title comment-trigger" @click="showMainForm = !showMainForm">
+        {{ showMainForm ? i18n.triggerCommentHide : i18n.triggerComment }}
+      </h2>
 
-    <!-- 主评论表单 -->
-    <div v-if="showMainForm" class="form-container">
-      <input v-model="form.nickname" type="text" :placeholder="i18n.nicknamePlaceholder" class="input-field nick" />
-      <textarea v-model="form.content" :placeholder="i18n.contentPlaceholder" rows="3" class="input-field area"></textarea>
+      <!-- 主评论表单 -->
+      <div v-if="showMainForm" class="form-container">
+        <input v-model="form.nickname" type="text" :placeholder="i18n.nicknamePlaceholder" class="input-field nick" />
+        <textarea v-model="form.content" :placeholder="i18n.contentPlaceholder" rows="3" class="input-field area"></textarea>
 
-      <!-- Turnstile 小组件容器 -->
-      <div id="turnstile-container" style="margin: 0.8rem 0;"></div>
+        <!-- Turnstile 小组件容器 -->
+        <div id="turnstile-container" style="margin: 0.8rem 0;"></div>
 
-      <div class="action-bar">
-        <button @click="submitComment" :disabled="submitting" class="btn submit">
-          {{ submitting ? i18n.sending : i18n.send }}
-        </button>
+        <div class="action-bar">
+          <button @click="submitComment" :disabled="submitting" class="btn submit">
+            {{ submitting ? i18n.sending : i18n.send }}
+          </button>
+        </div>
       </div>
-    </div>
 
-    <!-- 评论列表 -->
-    <div class="list-container">
-      <div v-for="root in commentsTree" :key="root.id" class="root-card">
-        <div class="meta-header">
-          <span class="user">{{ root.nickname }}</span>
-          <span class="time">{{ formatDateTime(root.created_at) }}</span>
-        </div>
-        <p class="body-text">{{ root.content }}</p>
-        <span class="action-trigger" @click="openReplyForm(root.id, root.id, root.id, root.nickname)">
-          {{ i18n.reply }}
-        </span>
-
-        <!-- 内联回复表单（针对根评论） -->
-        <div v-if="activeReply?.id === root.id" class="inline-reply-form">
-          <input v-model="replyForm.nickname" type="text" :placeholder="i18n.replyNicknamePlaceholder" class="input-field nick" />
-          <textarea v-model="replyForm.content" :placeholder="i18n.replyContentPlaceholder" rows="2" class="input-field area"></textarea>
-          <div class="inline-reply-btns">
-            <button @click="submitReply" :disabled="submitting" class="btn submit small">
-              {{ submitting ? i18n.sending : i18n.confirmReply }}
-            </button>
-            <button @click="activeReply = null" class="btn cancel small">
-              {{ i18n.cancelReply }}
-            </button>
+      <!-- 评论列表 -->
+      <div class="list-container">
+        <div v-for="root in commentsTree" :key="root.id" class="root-card">
+          <div class="meta-header">
+            <span class="user">{{ root.nickname }}</span>
+            <span class="time">{{ formatDateTime(root.created_at) }}</span>
           </div>
-        </div>
+          <p class="body-text">{{ root.content }}</p>
+          <span class="action-trigger" @click="openReplyForm(root.id, root.id, root.id, root.nickname)">
+            {{ i18n.reply }}
+          </span>
 
-        <!-- 子回复树 -->
-        <div class="sub-tree" v-if="root.children && root.children.length > 0">
-          <div v-for="reply in root.children" :key="reply.id" class="reply-card">
-            <div class="meta-header">
-              <span class="user">{{ reply.nickname }}</span>
-              <span class="prefix" v-if="reply.reply_to_name">@{{ reply.reply_to_name }}</span>
-              <span class="time">{{ formatDateTime(reply.created_at) }}</span>
+          <!-- 内联回复表单（针对根评论） -->
+          <div v-if="activeReply?.id === root.id" class="inline-reply-form">
+            <input v-model="replyForm.nickname" type="text" :placeholder="i18n.replyNicknamePlaceholder" class="input-field nick" />
+            <textarea v-model="replyForm.content" :placeholder="i18n.replyContentPlaceholder" rows="2" class="input-field area"></textarea>
+            <div class="inline-reply-btns">
+              <button @click="submitReply" :disabled="submitting" class="btn submit small">
+                {{ submitting ? i18n.sending : i18n.confirmReply }}
+              </button>
+              <button @click="activeReply = null" class="btn cancel small">
+                {{ i18n.cancelReply }}
+              </button>
             </div>
-            <p class="body-text">{{ reply.content }}</p>
-            <span class="action-trigger" @click="openReplyForm(reply.id, root.id, reply.id, reply.nickname)">
-              {{ i18n.reply }}
-            </span>
+          </div>
 
-            <div v-if="activeReply?.id === reply.id" class="inline-reply-form">
-              <input v-model="replyForm.nickname" type="text" :placeholder="i18n.replyNicknamePlaceholder" class="input-field nick" />
-              <textarea v-model="replyForm.content" :placeholder="i18n.replyContentPlaceholder" rows="2" class="input-field area"></textarea>
-              <div class="inline-reply-btns">
-                <button @click="submitReply" :disabled="submitting" class="btn submit small">
-                  {{ submitting ? i18n.sending : i18n.confirmReply }}
-                </button>
-                <button @click="activeReply = null" class="btn cancel small">
-                  {{ i18n.cancelReply }}
-                </button>
+          <!-- 子回复树 -->
+          <div class="sub-tree" v-if="root.children && root.children.length > 0">
+            <div v-for="reply in root.children" :key="reply.id" class="reply-card">
+              <div class="meta-header">
+                <span class="user">{{ reply.nickname }}</span>
+                <span class="prefix" v-if="reply.reply_to_name">@{{ reply.reply_to_name }}</span>
+                <span class="time">{{ formatDateTime(reply.created_at) }}</span>
+              </div>
+              <p class="body-text">{{ reply.content }}</p>
+              <span class="action-trigger" @click="openReplyForm(reply.id, root.id, reply.id, reply.nickname)">
+                {{ i18n.reply }}
+              </span>
+
+              <div v-if="activeReply?.id === reply.id" class="inline-reply-form">
+                <input v-model="replyForm.nickname" type="text" :placeholder="i18n.replyNicknamePlaceholder" class="input-field nick" />
+                <textarea v-model="replyForm.content" :placeholder="i18n.replyContentPlaceholder" rows="2" class="input-field area"></textarea>
+                <div class="inline-reply-btns">
+                  <button @click="submitReply" :disabled="submitting" class="btn submit small">
+                    {{ submitting ? i18n.sending : i18n.confirmReply }}
+                  </button>
+                  <button @click="activeReply = null" class="btn cancel small">
+                    {{ i18n.cancelReply }}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-          <div v-if="root.hasMoreReplies" class="more-trigger" @click="fetchMoreReplies(root.id)">
-            {{ i18n.loadMoreReplies }}
+            <div v-if="root.hasMoreReplies" class="more-trigger" @click="fetchMoreReplies(root.id)">
+              {{ i18n.loadMoreReplies }}
+            </div>
           </div>
         </div>
       </div>
@@ -385,6 +388,7 @@ watch(() => route.path, () => {
 </template>
 
 <style scoped>
+/* 原有样式保持不变 */
 .comment-wrapper {
   margin-top: 4rem;
   border-top: 1px solid var(--vp-c-divider);
