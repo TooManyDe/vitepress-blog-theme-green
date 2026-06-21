@@ -10,7 +10,7 @@ isNoBackBtn: true
 <div class="links-page">
   <!-- 友链列表 -->
   <div class="links-list">
-    <div v-for="(link, index) in allLinks" :key="link.url" class="link-container">
+    <div v-for="(link, index) in friendLinks" :key="link.url" class="link-container">
       <hr v-if="index !== 0" class="link-divider" />
       <div class="link-item">
         <a :href="link.url" target="_blank" rel="noopener noreferrer" class="link-avatar">
@@ -27,10 +27,32 @@ isNoBackBtn: true
       </div>
     </div>
   </div>
+
+  <!-- 申请说明 -->
+  <div class="apply-notice">
+    请先添加本站链接，然后在评论区留言。
+  </div>
+
+  <!-- 本站信息 -->
+  <div class="link-container">
+    <div class="link-item">
+      <a :href="siteInfo.url" target="_blank" rel="noopener noreferrer" class="link-avatar">
+        <img :src="siteInfo.avatar" :alt="siteInfo.name" />
+      </a>
+      <div class="link-content">
+        <h3 class="link-title">
+          <a :href="siteInfo.url" target="_blank" rel="noopener noreferrer">{{ siteInfo.name }}</a>
+        </h3>
+        <div class="link-desc source-han-serif">
+          {{ siteInfo.desc }}
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
 // 在这里维护你的友链数据
 const friendLinks = ref([
@@ -62,27 +84,18 @@ const siteInfo = ref({
   url: 'https://ddbx.org',
   avatar: 'https://cdn.ddbx.org/02.png'
 })
-
-// 合并友链和本站信息，本站信息放在最后
-const allLinks = computed(() => [...friendLinks.value, siteInfo.value])
 </script>
 
 <style lang="scss" scoped>
 .links-page {
   max-width: 800px;
   margin: 0 auto;
+  /* 增加底部间距，确保与评论区有足够的距离 */
+  padding-bottom: 4rem; 
+  margin-bottom: 2rem;
 }
 
 /* 友链列表样式 */
-.links-title {
-  margin: 0 0 2rem 0;
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--vp-c-text-1);
-  padding-bottom: 1rem;
-  border-bottom: 2px solid var(--vp-c-brand-1);
-}
-
 .link-divider {
   border: none !important;
   height: 1px !important;
@@ -159,6 +172,19 @@ const allLinks = computed(() => [...friendLinks.value, siteInfo.value])
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* 申请说明样式 */
+.apply-notice {
+  margin: 2.5rem 0;
+  padding: 1.2rem 1.5rem;
+  background-color: var(--vp-c-bg-soft);
+  border: 1px dashed var(--vp-c-divider);
+  border-radius: 8px;
+  color: var(--vp-c-text-2);
+  font-size: 0.95rem;
+  text-align: center;
+  line-height: 1.6;
 }
 
 /* 响应式调整 */
