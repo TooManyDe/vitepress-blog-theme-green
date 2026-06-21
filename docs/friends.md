@@ -31,8 +31,8 @@ isNoBackBtn: true
   <!-- 分割线 -->
   <hr class="link-divider" />
 
-  <!-- 说明文字（无组件包装） -->
-  <p class="apply-notice">请先添加本站链接，然后在评论区留言。</p>
+  <!-- 说明文字 -->
+  <p class="apply-notice">请先添加本站链接，然后在评论区留言：</p>
 
   <!-- 本站信息 -->
   <div class="link-container">
@@ -90,7 +90,7 @@ const siteInfo = ref({
 <style lang="scss" scoped>
 .links-page {
   max-width: 800px;
-  margin: 0 auto 2rem auto; /* 底部间距调整为 2rem */
+  margin: 0 auto 2rem auto; /* 底部间距 2rem */
 }
 
 /* 友链列表样式 */
@@ -172,13 +172,13 @@ const siteInfo = ref({
   text-overflow: ellipsis;
 }
 
-/* 说明文字样式（无背景和边框） */
+/* 说明文字样式 */
 .apply-notice {
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 1.5rem 0; /* 下方空 1.5rem */
   padding: 0;
-  color: var(--vp-c-text-2);
+  color: var(--vp-c-text-1); /* 使用 text-1 颜色 */
   font-size: 0.95rem;
-  text-align: center;
+  text-align: left; /* 左对齐 */
   line-height: 1.6;
 }
 
