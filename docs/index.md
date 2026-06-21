@@ -3,7 +3,7 @@ layout: doc
 pageClass: is-home-page
 editLink: false
 lastUpdated: false
-isNoComment: true
+isNoComment: false
 isNoBackBtn: true
 ---
 
