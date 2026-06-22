@@ -6,7 +6,7 @@ isNoComment: true
 isNoBackBtn: true
 ---
 
-<template v-for="[year, postGroup] in postGroups" :key="year">
+<template v-for="[year, postGroup] in sortedPostGroups" :key="year">
   <h2 :id="year" class="post-title">
     <a
       class="header-anchor"
@@ -14,14 +14,14 @@ isNoBackBtn: true
       :aria-label="`Permalink to &quot;${year}&quot;`"
       >​</a
     >
-    <div class="post-year hollow-text source-han-serif">{{ parseInt(year).toString() }}</div>
+    <div class="post-year hollow-text">{{ parseInt(year).toString() }}</div>
   </h2>
   <div class="post-container" v-for="post in postGroup" :key="post.url">
-    <a :href="post.url">{{ post.title }}</a>
-    <span class="post-date">
+    <a :href="post.url" class="post-link">{{ post.title }}</a>
+    <span class="post-date source-han-serif">
       {{ post.date.monthDay }}
     </span>
-  </div> 
+  </div>
 </template>
 
 <hr class="section-divider" />
@@ -36,27 +36,21 @@ isNoBackBtn: true
     <div class="post-year hollow-text source-han-serif">{{ category }}</div>
   </h2>
   <div class="post-container" v-for="post in postGroup" :key="post.url">
-    <a :href="post.url">{{ post.title }}</a>
-    <span class="post-date">
+    <a :href="post.url" class="post-link">{{ post.title }}</a>
+    <span class="post-date source-han-serif">
       {{ post.date.string }}
     </span>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from "vue";
-import {
-	MessagePlugin,
-	PaginationProps,
-	Pagination as TPagination,
-} from "tdesign-vue-next";
-import { TimeIcon } from "tdesign-icons-vue-next";
-
+import { computed } from "vue";
 import { data as posts } from "./.vitepress/theme/posts.data.mts";
-import { isMobile } from "./.vitepress/theme/utils/mobile.ts";
 
-const postGroups = computed(() => {
+// 按年份分组，并显式按年份/年内时间倒序排序
+const sortedPostGroups = computed(() => {
   const groups = new Map<string, typeof posts>();
+
   posts.forEach((post) => {
     const year = post.date.year;
     if (!groups.has(year)) {
@@ -64,9 +58,18 @@ const postGroups = computed(() => {
     }
     groups.get(year)?.push(post);
   });
-  return groups;
+
+  const entries = Array.from(groups.entries()).map(([year, group]) => {
+    group.sort((a, b) => b.date.time - a.date.time);
+    return [year, group] as [string, typeof posts];
+  });
+
+  entries.sort((a, b) => Number(b[0]) - Number(a[0]));
+
+  return entries;
 });
 
+// 按分类分组，分类按其最新文章时间倒序排列
 const sortedCategoryGroups = computed(() => {
   const map = new Map<string, typeof posts>();
 
@@ -80,20 +83,16 @@ const sortedCategoryGroups = computed(() => {
 
   const sortedEntries = Array.from(map.entries()).map(([category, group]) => {
     group.sort((a, b) => b.date.time - a.date.time);
-    return [category, group];
+    return [category, group] as [string, typeof posts];
   });
 
   sortedEntries.sort((a, b) => b[1][0].date.time - a[1][0].date.time);
 
-  return sortedEntries as [string, typeof posts][];
+  return sortedEntries;
 });
 </script>
 
 <style lang="scss" scoped>
-.mr-2 {
-	margin-right: 2px;
-}
-
 .post-title {
   margin-top: 2px;
   margin-bottom: 6px;
@@ -108,27 +107,43 @@ const sortedCategoryGroups = computed(() => {
     top: 25px;
     left: -10px;
     z-index: -1;
-    opacity: .16;
+    opacity: 0.16;
     font-family: "Inter";
     font-size: 40px;
     font-weight: 600;
+    white-space: nowrap;
   }
 }
 
 .post-container {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
   margin: 12px 0;
+  transition: transform 0.25s ease;
+  &:hover {
+    transform: translateX(4px);
+  }
 
-  > a {
+  .post-link {
     font-weight: 400;
     font-family: "AI";
     text-decoration: none !important;
+    color: var(--vp-c-text-1);
+    transition: color 0.25s ease;
+  }
+
+  &:hover .post-link {
+    color: var(--vp-c-brand-1);
   }
 
   .post-date {
-    opacity: .6;
+    flex-shrink: 0;
+    opacity: 0.6;
     font-family: "Inter";
+    font-size: 0.9rem;
   }
 }
 
@@ -146,6 +161,16 @@ const sortedCategoryGroups = computed(() => {
   padding: 0 !important;
   width: 100%;
 }
+
+/* 响应式调整 - 手机端 */
+@media (max-width: 640px) {
+  .post-title .post-year {
+    font-size: 32px;
+    top: 22px;
+  }
+
+  .post-container .post-date {
+    font-size: 0.85rem;
+  }
+}
 </style>
-
-
