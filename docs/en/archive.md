@@ -115,29 +115,16 @@ const sortedCategoryGroups = computed(() => {
   margin-top: 2.2rem;
   margin-bottom: 0.6rem;
   border-top: 0;
-  font-family: "ChillRoundF", "Inter", sans-serif;
-  font-size: 0.95rem;
+  font-family: "Inter", -apple-system, sans-serif;
+  font-size: 0.8rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--vp-c-text-2);
-  opacity: 0.65;
+  opacity: 0.6;
 
   &:first-child {
     margin-top: 0.6rem;
-  }
-
-  /* 装饰性背景文字 */
-  .post-year {
-    position: absolute;
-    top: 25px;
-    left: -10px;
-    z-index: -1;
-    opacity: 0.16;
-    font-family: "Inter", sans-serif;
-    font-size: 40px;
-    font-weight: 600;
-    color: var(--vp-c-text-1);
-    -webkit-text-stroke: 1px var(--vp-c-text-1);
   }
 }
 
@@ -156,7 +143,7 @@ const sortedCategoryGroups = computed(() => {
     text-overflow: ellipsis;
     white-space: nowrap;
     font-weight: 400;
-    font-family: "AI", "Inter", sans-serif;
+    font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
     font-size: 1.04rem;
     text-decoration: none !important;
     color: var(--vp-c-text-1);
@@ -186,8 +173,9 @@ const sortedCategoryGroups = computed(() => {
 
   .post-date {
     flex-shrink: 0;
-    font-family: "AI", "Inter", sans-serif;
+    font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
     font-size: 0.92rem;
+    font-variant-numeric: oldstyle-nums;
     letter-spacing: 0.01em;
     color: var(--vp-c-text-2);
     opacity: 0.65;
@@ -209,7 +197,8 @@ const sortedCategoryGroups = computed(() => {
 @media (max-width: 640px) {
   .group-title {
     margin-top: 1.8rem;
-    font-size: 0.85rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
   }
 
   .post-container {
