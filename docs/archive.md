@@ -14,7 +14,8 @@ isNoBackBtn: true
       :aria-label="`Permalink to &quot;${year}&quot;`"
       >​</a
     >
-    {{ parseInt(year).toString() }}
+    <span class="group-line"></span>
+    <span class="group-label">{{ parseInt(year).toString() }}</span>
   </h2>
   <div class="post-container" v-for="post in postGroup" :key="post.url">
     <a :href="post.url" class="post-link">{{ post.title }}</a>
@@ -34,7 +35,8 @@ isNoBackBtn: true
       :href="`#${category}`"
       :aria-label="`Permalink to &quot;${category}&quot;`"
     >​</a>
-    {{ category }}
+    <span class="group-line"></span>
+    <span class="group-label">{{ category }}</span>
   </h2>
   <div class="post-container" v-for="post in postGroup" :key="post.url">
     <a :href="post.url" class="post-link">{{ post.title }}</a>
@@ -96,16 +98,30 @@ const sortedCategoryGroups = computed(() => {
 
 <style lang="scss" scoped>
 .group-title {
+  display: flex;
+  align-items: baseline;
   margin-top: 2.4rem;
   margin-bottom: 0.6rem;
   border-top: 0;
-  position: relative;
-  font-family: "ChillRoundF";
-  font-size: 0.92rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  color: var(--vp-c-text-2);
-  opacity: 0.6;
+
+  .group-line {
+    flex: 1 1 auto;
+    height: 1px;
+    background-color: var(--vp-c-divider);
+    opacity: 0.5;
+    margin-right: 0.9em;
+  }
+
+  .group-label {
+    flex-shrink: 0;
+    font-family: "ChillRoundF";
+    font-size: 0.92rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--vp-c-text-2);
+    opacity: 0.6;
+    white-space: nowrap;
+  }
 }
 
 .post-container {
@@ -164,6 +180,9 @@ const sortedCategoryGroups = computed(() => {
 @media (max-width: 640px) {
   .group-title {
     margin-top: 2rem;
+  }
+
+  .group-title .group-label {
     font-size: 0.85rem;
   }
 
