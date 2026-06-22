@@ -19,8 +19,9 @@ const submitting = ref(false)
 const showForm = ref(false)
 const activeReply = ref(null)
 
-const form = reactive({ nickname: '', email: '', content: '' })
-const replyForm = reactive({ nickname: '', email: '', content: '' })
+// 增加 rememberInfo 字段
+const form = reactive({ nickname: '', email: '', content: '', rememberInfo: false })
+const replyForm = reactive({ nickname: '', email: '', content: '', rememberInfo: false })
 const lastEnforcedVersion = ref('')
 
 const mainTurnstileToken = ref('')
@@ -30,6 +31,8 @@ const replyTurnstileToken = ref('')
 let replyTurnstileWidgetId = null
 
 let themeObserver = null
+
+const REMEMBER_INFO_KEY = 'comment_remember_info'
 
 const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/
 
@@ -53,7 +56,8 @@ const i18n = computed(() => {
       submitFailed: '提交失败：', replyFailed: '回复失败：', networkError: '网络错误，请稍后重试',
       turnstileRequired: '请先完成人机验证', replyNicknamePlaceholder: '名称 *（必填）',
       replyEmailPlaceholder: '邮箱 *（必填，不公开）', replyContentPlaceholder: '回复内容  *（必填，最多1000字）',
-      submitSuccessPending: '已提交，审核通过后将公开显示。'
+      submitSuccessPending: '已提交，审核通过后将公开显示。',
+      rememberMe: '记住我'
     },
     en: {
       title: 'Comments', triggerComment: 'Comments', triggerCommentHide: 'Collapse',
@@ -64,7 +68,8 @@ const i18n = computed(() => {
       submitFailed: 'Submit failed: ', replyFailed: 'Reply failed: ', networkError: 'Network error, please try again later',
       turnstileRequired: 'Please complete the CAPTCHA', replyNicknamePlaceholder: 'Your Name *',
       replyEmailPlaceholder: 'Your Email * (private)', replyContentPlaceholder: 'Your Reply * (Max 1000 characters)',
-      submitSuccessPending: 'Comment submitted. It will be public after admin approval.'
+      submitSuccessPending: 'Comment submitted. It will be public after admin approval.',
+      rememberMe: 'Remember me'
     }
   }
   return map[lang.value] || map.zh
@@ -188,6 +193,14 @@ const submitComment = async () => {
         lastEnforcedVersion.value = data.enforcedVersion
         localStorage.setItem(`comment_v_${normalizedPageKey.value}`, data.enforcedVersion)
       }
+      
+      // 处理记住信息逻辑
+      if (form.rememberInfo) {
+        localStorage.setItem(REMEMBER_INFO_KEY, JSON.stringify({ nickname: form.nickname, email: form.email }))
+      } else {
+        localStorage.removeItem(REMEMBER_INFO_KEY)
+      }
+
       form.content = ''
       if (mainTurnstileWidgetId !== null) window.turnstile.reset(mainTurnstileWidgetId)
       mainTurnstileToken.value = ''
@@ -212,6 +225,7 @@ const openReplyForm = (id, rootId, replyToId, replyToName) => {
   activeReply.value = { id, rootId, replyToId, replyToName }
   replyForm.nickname = form.nickname
   replyForm.email = form.email
+  replyForm.rememberInfo = form.rememberInfo // 同步主表单的记住状态
   replyForm.content = ''
 }
 
@@ -246,6 +260,15 @@ const submitReply = async () => {
     })
 
     if (res.ok) {
+      // 处理记住信息逻辑
+      if (replyForm.rememberInfo) {
+        form.rememberInfo = true // 同步给主表单
+        localStorage.setItem(REMEMBER_INFO_KEY, JSON.stringify({ nickname: replyForm.nickname, email: replyForm.email }))
+      } else {
+        form.rememberInfo = false // 同步给主表单
+        localStorage.removeItem(REMEMBER_INFO_KEY)
+      }
+
       form.nickname = replyForm.nickname
       form.email = replyForm.email
       replyForm.content = ''
@@ -268,6 +291,19 @@ const submitReply = async () => {
 
 onMounted(() => {
   lastEnforcedVersion.value = localStorage.getItem(`comment_v_${normalizedPageKey.value}`) || ''
+  
+  // 读取记住的信息并填充表单
+  try {
+    const savedInfo = localStorage.getItem(REMEMBER_INFO_KEY)
+    if (savedInfo) {
+      const info = JSON.parse(savedInfo)
+      form.nickname = info.nickname || ''
+      form.email = info.email || ''
+      form.rememberInfo = true
+      replyForm.rememberInfo = true
+    }
+  } catch (e) { console.warn('读取记住信息失败', e) }
+
   fetchComments()
   if (!window.turnstile) {
     const script = document.createElement('script')
@@ -320,6 +356,10 @@ watch(() => route.path, () => {
           </div>
           <div id="turnstile-container-main" class="vp-turnstile"></div>
           <div class="vp-action-bar">
+            <label class="vp-remember-label">
+              <input type="checkbox" v-model="form.rememberInfo" />
+              <span>{{ i18n.rememberMe }}</span>
+            </label>
             <button @click="submitComment" :disabled="submitting" class="vp-btn vp-btn-primary">
               <span v-if="submitting" class="vp-spinner"></span>
               {{ submitting ? i18n.sending : i18n.send }}
@@ -346,6 +386,10 @@ watch(() => route.path, () => {
               </div>
               <div :id="'turnstile-container-reply-' + root.id" class="vp-turnstile"></div>
               <div class="vp-inline-btns">
+                <label class="vp-remember-label vp-remember-sm">
+                  <input type="checkbox" v-model="replyForm.rememberInfo" />
+                  <span>{{ i18n.rememberMe }}</span>
+                </label>
                 <button @click="submitReply" :disabled="submitting" class="vp-btn vp-btn-primary vp-btn-sm">
                   <span v-if="submitting" class="vp-spinner"></span>
                   {{ submitting ? i18n.sending : i18n.confirmReply }}
@@ -374,6 +418,10 @@ watch(() => route.path, () => {
                   </div>
                   <div :id="'turnstile-container-reply-' + reply.id" class="vp-turnstile"></div>
                   <div class="vp-inline-btns">
+                    <label class="vp-remember-label vp-remember-sm">
+                      <input type="checkbox" v-model="replyForm.rememberInfo" />
+                      <span>{{ i18n.rememberMe }}</span>
+                    </label>
                     <button @click="submitReply" :disabled="submitting" class="vp-btn vp-btn-primary vp-btn-sm">
                       <span v-if="submitting" class="vp-spinner"></span>
                       {{ submitting ? i18n.sending : i18n.confirmReply }}
@@ -420,7 +468,7 @@ watch(() => route.path, () => {
 .vp-input:focus { outline: none; border-color: var(--vp-c-brand-1); box-shadow: 0 0 0 2px rgba(var(--vp-c-brand-1-rgb, 0), 0.12); }
 .vp-textarea { resize: vertical; min-height: 80px; }
 .vp-turnstile { margin-bottom: 0.5rem; width: 100%; }
-.vp-action-bar { display: flex; justify-content: flex-end; }
+.vp-action-bar { display: flex; justify-content: space-between; align-items: center; }
 .vp-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
   padding: 0.4rem 1rem; border: 1px solid transparent; border-radius: 6px; font-size: 0.875rem;
@@ -472,7 +520,7 @@ watch(() => route.path, () => {
     width: calc(100% + 2rem);
   }
 }
-.vp-inline-btns { display: flex; justify-content: flex-end; gap: 0.25rem; margin-top: 0.25rem; }
+.vp-inline-btns { display: flex; justify-content: flex-end; align-items: center; gap: 0.25rem; margin-top: 0.25rem; }
 .vp-sub-tree { margin-top: 0.25rem; padding-left: 2rem; border-left: none; }
 .vp-reply-item { padding: 0.5rem 0; }
 .vp-reply-item .vp-content { font-size: 0.875rem; }
@@ -482,6 +530,33 @@ watch(() => route.path, () => {
   font-size: 0.75rem; cursor: pointer; transition: all 0.2s;
 }
 .vp-load-more:hover { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }
+
+/* 记住我复选框样式 */
+.vp-remember-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-right: auto; /* 强制将复选框推到容器的最左侧 */
+  font-size: 0.875rem;
+  color: var(--vp-c-text-3); /* 文字颜色始终保持不变 */
+  cursor: pointer;
+  user-select: none;
+}
+
+.vp-remember-sm {
+  font-size: 0.75rem;
+}
+
+/* 复选框默认与选中样式 */
+.vp-remember-label input[type="checkbox"] {
+  width: 0.875rem;
+  height: 0.875rem;
+  cursor: pointer;
+  accent-color: var(--vp-c-green-1); 
+}
+
+
+
 .vp-slide-enter-active, .vp-slide-leave-active, .vp-slide-big-enter-active, .vp-slide-big-leave-active { transition: all 0.25s ease; overflow: hidden; }
 .vp-slide-enter-from, .vp-slide-leave-to, .vp-slide-big-enter-from, .vp-slide-big-leave-to { opacity: 0; max-height: 0; margin-top: 0; transform: translateY(-5px); }
 .vp-slide-enter-to, .vp-slide-leave-from { opacity: 1; max-height: 600px; }
