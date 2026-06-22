@@ -6,7 +6,6 @@ isNoComment: true
 isNoBackBtn: true
 ---
 
-<!-- 之所以将代码写在 md 里面，而非单独封装为 Vue 组件，因为 aside 不会动态刷新，参考 https://github.com/vuejs/vitepress/issues/2686 -->
 <template v-for="[year, postGroup] in postGroups" :key="year">
   <h2 :id="year" class="group-title">
     <a
@@ -46,7 +45,6 @@ isNoBackBtn: true
 
 <script lang="ts" setup>
 import { ref, computed } from "vue";
-// 非 Vue 组件需要手动引入
 import {
 	MessagePlugin,
 	PaginationProps,
@@ -129,7 +127,7 @@ const sortedCategoryGroups = computed(() => {
     text-overflow: ellipsis;
     white-space: nowrap;
     font-weight: 400;
-    font-family: "AI";
+    font-family: "ChillRoundF";
     font-size: 1.04rem;
     text-decoration: none !important;
     color: var(--vp-c-text-1);
@@ -158,7 +156,7 @@ const sortedCategoryGroups = computed(() => {
 
   .post-date {
     flex-shrink: 0;
-    font-family: "AI";
+    font-family: "ChillRoundF";
     font-size: 0.92rem;
     letter-spacing: 0.01em;
     color: var(--vp-c-text-2);
@@ -176,7 +174,6 @@ const sortedCategoryGroups = computed(() => {
   width: 100%;
 }
 
-/* 响应式调整 - 手机端 */
 @media (max-width: 640px) {
   .group-title {
     margin-top: 1.8rem;
@@ -184,31 +181,27 @@ const sortedCategoryGroups = computed(() => {
   }
 
   .post-container {
-    /* 关键修改 1：改为底部对齐。
-       这样无论标题占几行，虚线和日期都会贴着最后一行的底部 */
     align-items: flex-end;
     padding: 0.4rem 0;
   }
 
   .post-container .post-link {
-    /* 关键修改 2：允许收缩，并解除省略号限制，允许换行 */
-    flex-shrink: 1; /* 允许收缩以给日期留出空间 */
-    max-width: 100%; /* 解除宽度限制 */
+    flex-shrink: 1;
+    max-width: 100%;
     overflow: visible;
     text-overflow: clip;
-    white-space: normal; /* 允许换行 */
-    word-break: break-word; /* 允许长英文单词断行，防止溢出 */
+    white-space: normal; 
+    word-break: break-word; 
     font-size: 1rem;
   }
 
   .post-container .dots {
-    /* 关键修改 3：微调下边距，使 1px 的虚线对齐最后一行文字的基线 */
     margin-bottom: 0.25em; 
   }
 
   .post-container .post-date {
     font-size: 0.85rem;
-    margin-bottom: 0.1em; /* 同样微调日期对齐 */
+    margin-bottom: 0.1em;
   }
 }
 </style>

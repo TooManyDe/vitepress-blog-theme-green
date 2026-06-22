@@ -123,7 +123,7 @@ const sortedCategoryGroups = computed(() => {
     text-overflow: ellipsis;
     white-space: nowrap;
     font-weight: 400;
-    font-family: "AI";
+    font-family: "ChillRoundF";
     font-size: 1.04rem;
     text-decoration: none !important;
     color: var(--vp-c-text-1);
@@ -152,7 +152,7 @@ const sortedCategoryGroups = computed(() => {
 
   .post-date {
     flex-shrink: 0;
-    font-family: "AI";
+    font-family: "ChillRoundF";
     font-size: 0.92rem;
     letter-spacing: 0.01em;
     color: var(--vp-c-text-2);

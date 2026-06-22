@@ -11,7 +11,6 @@ const enableTransitions = () =>
   'startViewTransition' in document &&
   window.matchMedia('(prefers-reduced-motion: no-preference)').matches
 
-// TDesign 暗色切换 - 同步 theme-mode 属性
 watch(
   isDark,
   () => {

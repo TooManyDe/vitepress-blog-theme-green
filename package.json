@@ -1,7 +1,7 @@
 {
-  "name": "Yusuol.com",
+  "name": "Green",
   "version": "1.0.0",
-  "description": "科技让生活更美好？",
+  "description": "A VITEPRESS THEME",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -22,7 +22,7 @@
     "vitepress": "2.0.0-alpha.2"
   },
   "dependencies": {
-    "@wxperia/liquid-glass-vue": "^1.0.9",
+    "@giscus/vue": "^3.1.1",
     "tdesign-icons-vue-next": "^0.2.2",
     "tdesign-vue-next": "^1.11.1",
     "vue": "^3.5.13"

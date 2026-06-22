@@ -31,7 +31,7 @@ export default createContentLoader('posts/**/*.md', {
 })
 
 function excerptFn(file: { data: { [key: string]: any }; content: string; excerpt?: string }, options?: any) {
-  file.excerpt = file.content.split('<!--Yusuol-->')[1];
+  file.excerpt = file.content.split('<!--!-->')[1];
 }
 
 function formatDate(raw: string): Post['date'] {

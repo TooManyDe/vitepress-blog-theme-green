@@ -5,7 +5,6 @@ import { createContentLoader, type SiteConfig } from "vitepress";
 
 const hostname = "https://ddbx.org";
 
-// 生成中文 RSS 文件
 export async function createRssFileZH(config: SiteConfig) {
   const feed = new Feed({
     title: '的的不休',
@@ -13,7 +12,7 @@ export async function createRssFileZH(config: SiteConfig) {
     id: hostname,
     link: hostname,
     language: "zh-Hans",
-    image: "https://cdn.ddbx.org/12.png",
+    image: "https://cdn.ddbx.org/02.png",
     favicon: `https://cdn.ddbx.org/13.ico`,
     copyright: "Copyright© 2021-present 的的不休",
   });
@@ -23,18 +22,15 @@ export async function createRssFileZH(config: SiteConfig) {
     render: true,
   }).load();
 
-  // 按日期降序排序
   posts.sort((a, b) => Number(+new Date(b.frontmatter.date) - +new Date(a.frontmatter.date)));
 
   for (const { url, excerpt, html, frontmatter } of posts) {
-    // 仅保留最近 5 篇文章
     if (feed.items.length >= 5) {
       break;
     }
 
-    // ✅ 确保 date 是 Date 类型，避免 toUTCString 报错
     const date = new Date(frontmatter.date);
-    if (isNaN(date.getTime())) continue; // 可选：跳过无效日期
+    if (isNaN(date.getTime())) continue; 
 
     feed.addItem({
       title: frontmatter.title,
@@ -48,15 +44,13 @@ export async function createRssFileZH(config: SiteConfig) {
           link: "https://ddbx.org/",
         },
       ],
-      date, // ✅ 使用 Date 类型
+      date, 
     });
   }
 
-  // 输出 RSS 文件
   writeFileSync(path.join(config.outDir, "feed.xml"), feed.rss2(), "utf-8");
 }
 
-// 生成英文 RSS 文件
 export async function createRssFileEN(config: SiteConfig) {
   const feed = new Feed({
     title: "的的不休",
@@ -64,9 +58,9 @@ export async function createRssFileEN(config: SiteConfig) {
     id: hostname,
     link: hostname,
     language: "en-US",
-    image: "https://cdn.ddbx.org/12.png",
+    image: "https://cdn.ddbx.org/02.png",
     favicon: `https://cdn.ddbx.org/13.ico`,
-    copyright: "Copyright© 2021-present DDBX",
+    copyright: "Copyright© 2021-present 的的不休",
   });
 
   const posts = await createContentLoader("en/posts/**/*.md", {
@@ -81,7 +75,6 @@ export async function createRssFileEN(config: SiteConfig) {
       break;
     }
 
-    // ✅ 强制转换为 Date 类型，避免 toUTCString 错误
     const date = new Date(frontmatter.date);
     if (isNaN(date.getTime())) continue;
 
