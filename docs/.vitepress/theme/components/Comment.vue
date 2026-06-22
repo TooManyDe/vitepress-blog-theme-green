@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, reactive, watch, computed, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, reactive, watch, computed, nextTick } from 'vue'
 import { useRoute, useData } from 'vitepress'
 
 const API_BASE = 'https://api.ddbx.org'
@@ -29,7 +29,11 @@ let mainTurnstileWidgetId = null
 const replyTurnstileToken = ref('')
 let replyTurnstileWidgetId = null
 
+let themeObserver = null
+
 const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/
+
+const getTurnstileTheme = () => document.documentElement.classList.contains('dark') ? 'dark' : 'light'
 
 const sha256 = async (message) => {
   const msgBuffer = new TextEncoder().encode(message)
@@ -42,24 +46,24 @@ const i18n = computed(() => {
   const map = {
     zh: {
       title: '评论', triggerComment: '评论', triggerCommentHide: '收起',
-      nicknamePlaceholder: '名称 *', emailPlaceholder: '邮箱 *',
-      contentPlaceholder: '评论内容(最多1000字) *', send: '发送', sending: '发送中...',
+      nicknamePlaceholder: '你的名称 *（必填）', emailPlaceholder: '你的邮箱 *（必填，不公开）',
+      contentPlaceholder: '输入你的评论内容 (最多1000字) *', send: '发送', sending: '发送中...',
       reply: '回复', loadMoreReplies: '展开更多回复', confirmReply: '回复', cancelReply: '取消',
       fieldRequired: '字段必填', emailRequired: '请填写邮箱', emailInvalid: '邮箱格式不正确',
       submitFailed: '提交失败：', replyFailed: '回复失败：', networkError: '网络错误，请稍后重试',
-      turnstileRequired: '请先完成人机验证', replyNicknamePlaceholder: '名称 *',
-      replyEmailPlaceholder: '邮箱 *', replyContentPlaceholder: '回复内容 *',
-      submitSuccessPending: '已提交，审核通过后将公开显示。'
+      turnstileRequired: '请先完成人机验证', replyNicknamePlaceholder: '你的名称 *',
+      replyEmailPlaceholder: '你的邮箱 *（不公开）', replyContentPlaceholder: '输入回复内容',
+      submitSuccessPending: '评论已提交，等待管理员审核后将公开显示。'
     },
     en: {
       title: 'Comments', triggerComment: 'Comments', triggerCommentHide: 'Collapse',
-      nicknamePlaceholder: 'Your Name *', emailPlaceholder: 'Your Email *',
-      contentPlaceholder: 'Your Thoughts (Max 1000) *', send: 'Send', sending: 'Sending...',
+      nicknamePlaceholder: 'Your Name *', emailPlaceholder: 'Your Email * (private)',
+      contentPlaceholder: 'Write your thoughts (Max 1000 characters) *', send: 'Send', sending: 'Sending...',
       reply: 'Reply', loadMoreReplies: 'Load more replies', confirmReply: 'Reply', cancelReply: 'Cancel',
       fieldRequired: 'All fields are required', emailRequired: 'Email is required', emailInvalid: 'Invalid email format',
       submitFailed: 'Submit failed: ', replyFailed: 'Reply failed: ', networkError: 'Network error, please try again later',
       turnstileRequired: 'Please complete the CAPTCHA', replyNicknamePlaceholder: 'Your Name *',
-      replyEmailPlaceholder: 'Your Email *', replyContentPlaceholder: 'Your Reply *',
+      replyEmailPlaceholder: 'Your Email * (private)', replyContentPlaceholder: 'Write your reply...',
       submitSuccessPending: 'Comment submitted. It will be public after admin approval.'
     }
   }
@@ -122,9 +126,11 @@ const renderMainTurnstile = async () => {
   await nextTick()
   if (!window.turnstile || !document.getElementById('turnstile-container-main')) return
   if (mainTurnstileWidgetId !== null) { try { window.turnstile.remove(mainTurnstileWidgetId) } catch(e) {} }
+  mainTurnstileToken.value = ''
   mainTurnstileWidgetId = window.turnstile.render('#turnstile-container-main', {
     sitekey: TURNSTILE_SITE_KEY,
     size: 'flexible',
+    theme: getTurnstileTheme(),
     callback: (token) => { mainTurnstileToken.value = token },
     'expired-callback': () => { mainTurnstileToken.value = '' },
     'error-callback': () => { mainTurnstileToken.value = '' }
@@ -138,9 +144,11 @@ const renderReplyTurnstile = async () => {
   const el = document.getElementById(containerId)
   if (!el) return
   if (replyTurnstileWidgetId !== null) { try { window.turnstile.remove(replyTurnstileWidgetId) } catch(e) {} }
+  replyTurnstileToken.value = ''
   replyTurnstileWidgetId = window.turnstile.render(`#${containerId}`, {
     sitekey: TURNSTILE_SITE_KEY,
     size: 'flexible',
+    theme: getTurnstileTheme(),
     callback: (token) => { replyTurnstileToken.value = token },
     'expired-callback': () => { replyTurnstileToken.value = '' },
     'error-callback': () => { replyTurnstileToken.value = '' }
@@ -269,6 +277,16 @@ onMounted(() => {
     }
     document.head.appendChild(script)
   }
+
+  themeObserver = new MutationObserver(() => {
+    if (showForm.value) renderMainTurnstile()
+    if (activeReply.value) renderReplyTurnstile()
+  })
+  themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+})
+
+onUnmounted(() => {
+  if (themeObserver) themeObserver.disconnect()
 })
 
 watch(() => route.path, () => {
@@ -399,7 +417,10 @@ watch(() => route.path, () => {
 .vp-input::placeholder { color: var(--vp-c-text-3); }
 .vp-input:focus { outline: none; border-color: var(--vp-c-brand-1); box-shadow: 0 0 0 2px rgba(var(--vp-c-brand-1-rgb, 0), 0.12); }
 .vp-textarea { resize: vertical; min-height: 80px; }
-.vp-turnstile { margin-bottom: 0.75rem; min-height: 65px; width: 100%; }
+.vp-turnstile {
+  margin-bottom: 0.75rem; min-height: 65px; width: 100%;
+  border: 1px solid var(--vp-c-divider); border-radius: 6px; overflow: hidden;
+}
 .vp-action-bar { display: flex; justify-content: flex-end; }
 .vp-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
