@@ -12,7 +12,7 @@ export async function createRssFileZH(config: SiteConfig) {
     id: hostname,
     link: hostname,
     language: "zh-Hans",
-    image: "https://cdn.ddbx.org/02.png",
+    image: "https://vitepress-blog-theme-green.pages.dev/bg.jpg",
     favicon: `https://cdn.ddbx.org/13.ico`,
     copyright: "Copyright© 2021-present 的的不休",
   });
@@ -58,7 +58,7 @@ export async function createRssFileEN(config: SiteConfig) {
     id: hostname,
     link: hostname,
     language: "en-US",
-    image: "https://cdn.ddbx.org/02.png",
+    image: "https://vitepress-blog-theme-green.pages.dev/bg.jpg",
     favicon: `https://cdn.ddbx.org/13.ico`,
     copyright: "Copyright© 2021-present 的的不休",
   });

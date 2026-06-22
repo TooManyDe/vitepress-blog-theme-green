@@ -52,37 +52,19 @@ const friendLinks = ref([
     name: '的的不休',
     desc: '每一段旅行都有终点',
     url: 'https://ddbx.org',
-    avatar: 'https://cdn.ddbx.org/02.png'
+    avatar: 'https://vitepress-blog-theme-green.pages.dev/bg.jpg'
   },
   {
     name: '的的不休',
     desc: '每一段旅行都有终点',
     url: 'https://ddbx.org',
-    avatar: 'https://cdn.ddbx.org/02.png'
+    avatar: 'https://vitepress-blog-theme-green.pages.dev/bg.jpg'
   },
   {
     name: '的的不休',
     desc: '每一段旅行都有终点',
     url: 'https://ddbx.org',
-    avatar: 'https://cdn.ddbx.org/02.png'
-  },
-  {
-    name: '的的不休',
-    desc: '每一段旅行都有终点',
-    url: 'https://ddbx.org',
-    avatar: 'https://cdn.ddbx.org/02.png'
-  },
-  {
-    name: '的的不休',
-    desc: '每一段旅行都有终点',
-    url: 'https://ddbx.org',
-    avatar: 'https://cdn.ddbx.org/02.png'
-  },
-  {
-    name: '的的不休',
-    desc: '每一段旅行都有终点',
-    url: 'https://ddbx.org',
-    avatar: 'https://cdn.ddbx.org/02.png'
+    avatar: 'https://vitepress-blog-theme-green.pages.dev/bg.jpg'
   }
 ])
 
@@ -91,13 +73,13 @@ const siteInfo = ref({
   name: '的的不休',
   desc: '每一段旅行都有终点',
   url: 'https://ddbx.org',
-  avatar: 'https://cdn.ddbx.org/02.png'
+  avatar: 'https://vitepress-blog-theme-green.pages.dev/bg.jpg'
 })
 
 // 处理图片加载失败
 const handleAvatarError = (e: Event) => {
   const target = e.target as HTMLImageElement
-  target.src = 'https://via.placeholder.com/56/cccccc/666666?text=Avatar'
+  target.src = 'https://vitepress-blog-theme-green.pages.dev/bg.jpg'
 }
 
 </script>
