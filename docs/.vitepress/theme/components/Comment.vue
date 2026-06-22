@@ -447,6 +447,10 @@ watch(() => route.path, () => {
 }
 @media (max-width: 640px) {
   .vp-inline-form { width: 100%; }
+  .vp-sub-tree .vp-inline-form {
+    margin-left: -2rem;
+    width: calc(100% + 2rem);
+  }
 }
 .vp-inline-btns { display: flex; justify-content: flex-end; gap: 0.25rem; margin-top: 0.25rem; }
 .vp-sub-tree { margin-top: 0.25rem; padding-left: 2rem; border-left: none; }
