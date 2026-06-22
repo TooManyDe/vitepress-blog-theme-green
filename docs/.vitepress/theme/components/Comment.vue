@@ -42,24 +42,24 @@ const i18n = computed(() => {
   const map = {
     zh: {
       title: '评论', triggerComment: '评论', triggerCommentHide: '收起',
-      nicknamePlaceholder: '你的名称 *（必填）', emailPlaceholder: '你的邮箱 *（必填，不公开）',
-      contentPlaceholder: '输入你的评论内容 (最多1000字) *', send: '发送', sending: '发送中...',
+      nicknamePlaceholder: '名称 *', emailPlaceholder: '邮箱 *',
+      contentPlaceholder: '评论内容 (最多1000字) *', send: '发送', sending: '发送中...',
       reply: '回复', loadMoreReplies: '展开更多回复', confirmReply: '回复', cancelReply: '取消',
       fieldRequired: '字段必填', emailRequired: '请填写邮箱', emailInvalid: '邮箱格式不正确',
       submitFailed: '提交失败：', replyFailed: '回复失败：', networkError: '网络错误，请稍后重试',
-      turnstileRequired: '请先完成人机验证', replyNicknamePlaceholder: '你的名称 *',
-      replyEmailPlaceholder: '你的邮箱 *（不公开）', replyContentPlaceholder: '输入回复内容',
-      submitSuccessPending: '评论已提交，等待管理员审核后将公开显示。'
+      turnstileRequired: '请先完成人机验证', replyNicknamePlaceholder: '名称 *',
+      replyEmailPlaceholder: '邮箱 *', replyContentPlaceholder: '输入回复内容 *',
+      submitSuccessPending: '评论已提交，审核通过后将公开显示。'
     },
     en: {
       title: 'Comments', triggerComment: 'Comments', triggerCommentHide: 'Collapse',
-      nicknamePlaceholder: 'Your Name *', emailPlaceholder: 'Your Email * (private)',
-      contentPlaceholder: 'Write your thoughts (Max 1000 characters) *', send: 'Send', sending: 'Sending...',
+      nicknamePlaceholder: 'Your Name *', emailPlaceholder: 'Your Email *',
+      contentPlaceholder: 'Your thoughts *', send: 'Send', sending: 'Sending...',
       reply: 'Reply', loadMoreReplies: 'Load more replies', confirmReply: 'Reply', cancelReply: 'Cancel',
       fieldRequired: 'All fields are required', emailRequired: 'Email is required', emailInvalid: 'Invalid email format',
       submitFailed: 'Submit failed: ', replyFailed: 'Reply failed: ', networkError: 'Network error, please try again later',
       turnstileRequired: 'Please complete the CAPTCHA', replyNicknamePlaceholder: 'Your Name *',
-      replyEmailPlaceholder: 'Your Email * (private)', replyContentPlaceholder: 'Write your reply...',
+      replyEmailPlaceholder: 'Your Email *', replyContentPlaceholder: 'Your Reply *',
       submitSuccessPending: 'Comment submitted. It will be public after admin approval.'
     }
   }
