@@ -383,10 +383,17 @@ watch(() => route.path, () => {
 }
 .comment-toggle:hover { opacity: 0.8; color: var(--vp-c-brand-2); }
 .comment-toggle.is-active { color: var(--vp-c-brand-2); }
-.vp-form-container { margin-top: 1.5rem; padding: 1.5rem; border: 1px solid var(--vp-c-divider); border-radius: 8px; }
+.vp-form-container { 
+  margin-top: 1.5rem; 
+  padding: 1.5rem; 
+  border: 1px solid var(--vp-c-divider); 
+  border-radius: 8px; 
+  max-width: 500px;  /* 添加固定最大宽度 */
+  margin-left: auto;  /* 添加居中 */
+  margin-right: auto; /* 添加居中 */
+}
 .vp-form-row { display: flex; gap: 0.75rem; margin-bottom: 0.5rem; }
 .vp-form-row .vp-input { margin-bottom: 0; flex: 1; }
-@media (max-width: 640px) { .vp-form-row { flex-direction: column; gap: 0.75rem; } }
 .vp-input {
   width: 100%; padding: 0.5rem 0.75rem; background: transparent;
   border: 1px solid var(--vp-c-divider); border-radius: 6px; color: var(--vp-c-text-1);
@@ -396,7 +403,7 @@ watch(() => route.path, () => {
 .vp-input:focus { outline: none; border-color: var(--vp-c-brand-1); box-shadow: 0 0 0 2px rgba(var(--vp-c-brand-1-rgb, 0), 0.12); }
 .vp-textarea { resize: vertical; min-height: 80px; }
 .vp-turnstile { 
-  width: 100%;  /* 添加此样式，确保验证框宽度与评论框一致 */
+  width: 100%;  /* 确保验证框与评论框同宽 */
   margin-bottom: 0.75rem; 
   min-height: 65px; 
 }
