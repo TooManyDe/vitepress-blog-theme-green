@@ -43,7 +43,7 @@ const i18n = computed(() => {
     zh: {
       title: '评论', triggerComment: '评论', triggerCommentHide: '收起',
       nicknamePlaceholder: '名称 *', emailPlaceholder: '邮箱 *',
-      contentPlaceholder: '评论内容 *', send: '发送', sending: '发送中...',
+      contentPlaceholder: '评论内容(最多1000字) *', send: '发送', sending: '发送中...',
       reply: '回复', loadMoreReplies: '展开更多回复', confirmReply: '回复', cancelReply: '取消',
       fieldRequired: '字段必填', emailRequired: '请填写邮箱', emailInvalid: '邮箱格式不正确',
       submitFailed: '提交失败：', replyFailed: '回复失败：', networkError: '网络错误，请稍后重试',
@@ -54,7 +54,7 @@ const i18n = computed(() => {
     en: {
       title: 'Comments', triggerComment: 'Comments', triggerCommentHide: 'Collapse',
       nicknamePlaceholder: 'Your Name *', emailPlaceholder: 'Your Email *',
-      contentPlaceholder: 'Your thoughts *', send: 'Send', sending: 'Sending...',
+      contentPlaceholder: 'Your Thoughts (Max 1000) *', send: 'Send', sending: 'Sending...',
       reply: 'Reply', loadMoreReplies: 'Load more replies', confirmReply: 'Reply', cancelReply: 'Cancel',
       fieldRequired: 'All fields are required', emailRequired: 'Email is required', emailInvalid: 'Invalid email format',
       submitFailed: 'Submit failed: ', replyFailed: 'Reply failed: ', networkError: 'Network error, please try again later',
