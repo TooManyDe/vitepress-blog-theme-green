@@ -120,41 +120,30 @@ const sortedCategoryGroups = computed(() => {
   justify-content: space-between;
   align-items: baseline;
   flex-wrap: wrap;
-  gap: 0.25rem 1.5rem;
-  padding: 10px 8px;
-  margin: 0 -8px;
-  border-radius: 8px;
-  transition: background-color 0.25s ease;
-
+  gap: 0.25rem 1rem;
+  margin: 12px 0;
+  transition: transform 0.25s ease;
   &:hover {
-    background-color: var(--vp-c-bg-soft);
+    transform: translateX(4px);
   }
 
   .post-link {
-    position: relative;
-    font-weight: 500;
+    font-weight: 400;
     font-family: "AI";
-    font-size: 1.02rem;
     text-decoration: none !important;
     color: var(--vp-c-text-1);
-    padding-bottom: 2px;
-    background-image: linear-gradient(var(--vp-c-brand-1), var(--vp-c-brand-1));
-    background-size: 0% 1px;
-    background-position: 0 100%;
-    background-repeat: no-repeat;
-    transition: background-size 0.3s ease, color 0.3s ease;
+    transition: color 0.25s ease;
   }
+
   &:hover .post-link {
     color: var(--vp-c-brand-1);
-    background-size: 100% 1px;
   }
 
   .post-date {
     flex-shrink: 0;
-    opacity: 0.55;
-    font-family: "Inter", monospace;
-    font-size: 0.85rem;
-    letter-spacing: 0.02em;
+    opacity: 0.6;
+    font-family: "Inter";
+    font-size: 0.9rem;
   }
 }
 
@@ -180,16 +169,8 @@ const sortedCategoryGroups = computed(() => {
     top: 22px;
   }
 
-  .post-container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.15rem;
-    padding: 10px 6px;
-    margin: 0 -6px;
-  }
-
   .post-container .post-date {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
 }
 </style>
