@@ -16,7 +16,7 @@ const normalizedPageKey = computed(() => {
 
 const commentsTree = ref([])
 const submitting = ref(false)
-const showForm = ref(false) // 控制 评论表单 显示
+const showForm = ref(false)
 const activeReply = ref(null)
 
 const form = reactive({ nickname: '', email: '', content: '' })
@@ -76,7 +76,6 @@ const formatDateTime = (timestamp) => {
 
 const toggleForm = () => {
   showForm.value = !showForm.value
-  // 如果收起表单，销毁 Turnstile 实例以释放资源
   if (!showForm.value && mainTurnstileWidgetId !== null) {
     try { window.turnstile.remove(mainTurnstileWidgetId) } catch(e) {}
     mainTurnstileWidgetId = null
@@ -91,8 +90,7 @@ const fetchComments = async () => {
     const res = await fetch(url)
     const { roots, replies } = await res.json()
     if (!roots || roots.length === 0) { commentsTree.value = []; return }
-    
-    // 修改排列逻辑：最早评论的在最上面（按创建时间升序排序）
+
     roots.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
     replies.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
 
@@ -113,7 +111,6 @@ const fetchMoreReplies = async (rootId) => {
     const res = await fetch(`${API_BASE}/api/comments/replies?root_id=${rootId}&cursor=${encodeURIComponent(cursor)}`)
     const { replies } = await res.json()
     if (replies.length === 0) { targetRoot.hasMoreReplies = false; return }
-    // 对新加载的回复也进行升序排序
     replies.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
     targetRoot.children = [...targetRoot.children, ...replies]
     if (replies.length < 10) targetRoot.hasMoreReplies = false
@@ -127,6 +124,7 @@ const renderMainTurnstile = async () => {
   if (mainTurnstileWidgetId !== null) { try { window.turnstile.remove(mainTurnstileWidgetId) } catch(e) {} }
   mainTurnstileWidgetId = window.turnstile.render('#turnstile-container-main', {
     sitekey: TURNSTILE_SITE_KEY,
+    size: 'flexible',
     callback: (token) => { mainTurnstileToken.value = token },
     'expired-callback': () => { mainTurnstileToken.value = '' },
     'error-callback': () => { mainTurnstileToken.value = '' }
@@ -142,6 +140,7 @@ const renderReplyTurnstile = async () => {
   if (replyTurnstileWidgetId !== null) { try { window.turnstile.remove(replyTurnstileWidgetId) } catch(e) {} }
   replyTurnstileWidgetId = window.turnstile.render(`#${containerId}`, {
     sitekey: TURNSTILE_SITE_KEY,
+    size: 'flexible',
     callback: (token) => { replyTurnstileToken.value = token },
     'expired-callback': () => { replyTurnstileToken.value = '' },
     'error-callback': () => { replyTurnstileToken.value = '' }
@@ -157,14 +156,14 @@ const submitComment = async () => {
   submitting.value = true
   const trimmedEmail = form.email.trim().toLowerCase()
   const emailHash = await sha256(trimmedEmail)
-  
+
   const payload = {
-    commentId: crypto.randomUUID(), 
+    commentId: crypto.randomUUID(),
     pageKey: normalizedPageKey.value,
-    token: mainTurnstileToken.value, 
-    nickname: form.nickname, 
+    token: mainTurnstileToken.value,
+    nickname: form.nickname,
     emailHash,
-    email: trimmedEmail, 
+    email: trimmedEmail,
     content: form.content
   }
 
@@ -182,7 +181,7 @@ const submitComment = async () => {
       form.content = ''
       if (mainTurnstileWidgetId !== null) window.turnstile.reset(mainTurnstileWidgetId)
       mainTurnstileToken.value = ''
-      
+
       alert(i18n.value.submitSuccessPending)
     } else {
       const errorText = await res.text()
@@ -217,15 +216,15 @@ const submitReply = async () => {
   const target = activeReply.value
   const trimmedEmail = replyForm.email.trim().toLowerCase()
   const emailHash = await sha256(trimmedEmail)
-  
+
   const payload = {
-    commentId: crypto.randomUUID(), 
-    pageKey: normalizedPageKey.value, 
+    commentId: crypto.randomUUID(),
+    pageKey: normalizedPageKey.value,
     rootId: target.rootId,
-    replyToId: target.replyToId, 
-    replyToName: target.replyToName, 
+    replyToId: target.replyToId,
+    replyToName: target.replyToName,
     token: replyTurnstileToken.value,
-    nickname: replyForm.nickname, 
+    nickname: replyForm.nickname,
     emailHash,
     email: trimmedEmail,
     content: replyForm.content
@@ -243,7 +242,7 @@ const submitReply = async () => {
       activeReply.value = null
       if (replyTurnstileWidgetId !== null) { try { window.turnstile.remove(replyTurnstileWidgetId) } catch(e) {}; replyTurnstileWidgetId = null }
       replyTurnstileToken.value = ''
-      
+
       alert(i18n.value.submitSuccessPending)
     } else {
       const errorText = await res.text()
@@ -297,8 +296,8 @@ watch(() => route.path, () => {
           <div class="vp-form-row">
             <input v-model="form.nickname" type="text" :placeholder="i18n.nicknamePlaceholder" class="vp-input vp-input-name" :disabled="submitting" />
             <input v-model="form.email" type="email" :placeholder="i18n.emailPlaceholder" class="vp-input" :disabled="submitting" autocomplete="email" />
+            <textarea v-model="form.content" :placeholder="i18n.contentPlaceholder" rows="4" class="vp-input vp-textarea" :disabled="submitting"></textarea>
           </div>
-          <textarea v-model="form.content" :placeholder="i18n.contentPlaceholder" rows="4" class="vp-input vp-textarea" :disabled="submitting"></textarea>
           <div id="turnstile-container-main" class="vp-turnstile"></div>
           <div class="vp-action-bar">
             <button @click="submitComment" :disabled="submitting" class="vp-btn vp-btn-primary">
@@ -323,8 +322,8 @@ watch(() => route.path, () => {
               <div class="vp-form-row">
                 <input v-model="replyForm.nickname" type="text" :placeholder="i18n.replyNicknamePlaceholder" class="vp-input vp-input-name" :disabled="submitting" />
                 <input v-model="replyForm.email" type="email" :placeholder="i18n.replyEmailPlaceholder" class="vp-input" :disabled="submitting" autocomplete="email" />
+                <textarea v-model="replyForm.content" :placeholder="i18n.replyContentPlaceholder" rows="3" class="vp-input vp-textarea" :disabled="submitting"></textarea>
               </div>
-              <textarea v-model="replyForm.content" :placeholder="i18n.replyContentPlaceholder" rows="3" class="vp-input vp-textarea" :disabled="submitting"></textarea>
               <div :id="'turnstile-container-reply-' + root.id" class="vp-turnstile"></div>
               <div class="vp-inline-btns">
                 <button @click="submitReply" :disabled="submitting" class="vp-btn vp-btn-primary vp-btn-sm">
@@ -351,8 +350,8 @@ watch(() => route.path, () => {
                   <div class="vp-form-row">
                     <input v-model="replyForm.nickname" type="text" :placeholder="i18n.replyNicknamePlaceholder" class="vp-input vp-input-name" :disabled="submitting" />
                     <input v-model="replyForm.email" type="email" :placeholder="i18n.replyEmailPlaceholder" class="vp-input" :disabled="submitting" autocomplete="email" />
+                    <textarea v-model="replyForm.content" :placeholder="i18n.replyContentPlaceholder" rows="3" class="vp-input vp-textarea" :disabled="submitting"></textarea>
                   </div>
-                  <textarea v-model="replyForm.content" :placeholder="i18n.replyContentPlaceholder" rows="3" class="vp-input vp-textarea" :disabled="submitting"></textarea>
                   <div :id="'turnstile-container-reply-' + reply.id" class="vp-turnstile"></div>
                   <div class="vp-inline-btns">
                     <button @click="submitReply" :disabled="submitting" class="vp-btn vp-btn-primary vp-btn-sm">
@@ -383,17 +382,9 @@ watch(() => route.path, () => {
 }
 .comment-toggle:hover { opacity: 0.8; color: var(--vp-c-brand-2); }
 .comment-toggle.is-active { color: var(--vp-c-brand-2); }
-.vp-form-container { 
-  margin-top: 1.5rem; 
-  padding: 1.5rem; 
-  border: 1px solid var(--vp-c-divider); 
-  border-radius: 8px; 
-  max-width: 500px;  /* 添加固定最大宽度 */
-  margin-left: auto;  /* 添加居中 */
-  margin-right: auto; /* 添加居中 */
-}
-.vp-form-row { display: flex; gap: 0.75rem; margin-bottom: 0.5rem; }
-.vp-form-row .vp-input { margin-bottom: 0; flex: 1; }
+.vp-form-container { margin-top: 1.5rem; padding: 1.5rem; border: 1px solid var(--vp-c-divider); border-radius: 8px; }
+.vp-form-row { display: flex; flex-direction: column; align-items: stretch; gap: 0; margin-bottom: 0; width: 100%; }
+.vp-form-row .vp-input { width: 100%; }
 .vp-input {
   width: 100%; padding: 0.5rem 0.75rem; background: transparent;
   border: 1px solid var(--vp-c-divider); border-radius: 6px; color: var(--vp-c-text-1);
@@ -402,11 +393,7 @@ watch(() => route.path, () => {
 .vp-input::placeholder { color: var(--vp-c-text-3); }
 .vp-input:focus { outline: none; border-color: var(--vp-c-brand-1); box-shadow: 0 0 0 2px rgba(var(--vp-c-brand-1-rgb, 0), 0.12); }
 .vp-textarea { resize: vertical; min-height: 80px; }
-.vp-turnstile { 
-  width: 100%;  /* 确保验证框与评论框同宽 */
-  margin-bottom: 0.75rem; 
-  min-height: 65px; 
-}
+.vp-turnstile { margin-bottom: 0.75rem; min-height: 65px; width: 100%; }
 .vp-action-bar { display: flex; justify-content: flex-end; }
 .vp-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
@@ -441,10 +428,10 @@ watch(() => route.path, () => {
   line-height: 1.6;
   color: var(--vp-c-text-1);
   margin: 0 0 0.25rem 0;
-  word-break: break-word;    /* 防止长单词溢出 */
-  white-space: pre-wrap;     /* 保留换行符，实现换行 */
-  word-wrap: break-word;     /* 防止长单词溢出，兼容性写法 */
-  overflow-wrap: break-word; /* 防止长单词溢出，CSS3标准属性 */
+  word-break: break-word;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 .vp-action-btn { font-size: 0.75rem; color: var(--vp-c-text-3); background: none; border: none; cursor: pointer; padding: 0; transition: color 0.2s; }
 .vp-action-btn:hover { color: var(--vp-c-brand-1); }
