@@ -14,13 +14,14 @@ isNoBackBtn: true
       :aria-label="`Permalink to &quot;${year}&quot;`"
       >​</a
     >
-    <span class="group-line"></span>
+    <span class="group-rule"></span>
     <span class="group-label">{{ parseInt(year).toString() }}</span>
+    <span class="group-rule"></span>
   </h2>
   <div class="post-container" v-for="post in postGroup" :key="post.url">
     <a :href="post.url" class="post-link">{{ post.title }}</a>
     <span class="dots" aria-hidden="true"></span>
-    <span class="post-date source-han-serif">
+    <span class="post-date">
       {{ post.date.monthDay }}
     </span>
   </div>
@@ -35,13 +36,14 @@ isNoBackBtn: true
       :href="`#${category}`"
       :aria-label="`Permalink to &quot;${category}&quot;`"
     >​</a>
-    <span class="group-line"></span>
+    <span class="group-rule"></span>
     <span class="group-label">{{ category }}</span>
+    <span class="group-rule"></span>
   </h2>
   <div class="post-container" v-for="post in postGroup" :key="post.url">
     <a :href="post.url" class="post-link">{{ post.title }}</a>
     <span class="dots" aria-hidden="true"></span>
-    <span class="post-date source-han-serif">
+    <span class="post-date">
       {{ post.date.string }}
     </span>
   </div>
@@ -99,47 +101,53 @@ const sortedCategoryGroups = computed(() => {
 <style lang="scss" scoped>
 .group-title {
   display: flex;
-  align-items: baseline;
-  margin-top: 2.4rem;
-  margin-bottom: 0.6rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9em;
+  margin-top: 3.2rem;
+  margin-bottom: 1.1rem;
   border-top: 0;
 
-  .group-line {
-    flex: 1 1 auto;
+  &:first-child {
+    margin-top: 1rem;
+  }
+
+  .group-rule {
+    flex: 1 1 56px;
+    max-width: 72px;
     height: 1px;
-    background-color: var(--vp-c-divider);
-    opacity: 0.5;
-    margin-right: 0.9em;
+    background-color: var(--vp-c-text-2);
+    opacity: 0.35;
   }
 
   .group-label {
     flex-shrink: 0;
     font-family: "ChillRoundF";
-    font-size: 0.92rem;
+    font-size: 0.82rem;
     font-weight: 600;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
     color: var(--vp-c-text-2);
-    opacity: 0.6;
-    white-space: nowrap;
+    opacity: 0.7;
   }
 }
 
 .post-container {
   display: flex;
   align-items: baseline;
-  flex-wrap: wrap;
-  padding: 0.34rem 0;
+  padding: 0.45rem 0;
   margin: 0;
+  line-height: 1.5;
 
   .post-link {
     flex-shrink: 0;
-    max-width: 78%;
+    max-width: 76%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     font-weight: 400;
     font-family: "AI";
-    font-size: 1.02rem;
+    font-size: 1.04rem;
     text-decoration: none !important;
     color: var(--vp-c-text-1);
     transition: color 0.25s ease;
@@ -151,18 +159,28 @@ const sortedCategoryGroups = computed(() => {
   .dots {
     flex: 1 1 auto;
     min-width: 0.8rem;
-    margin: 0 0.6em;
-    border-bottom: 1px dotted var(--vp-c-divider);
-    transform: translateY(-0.32em);
+    height: 1px;
+    align-self: center;
+    margin: 0 0.7em;
+    background-image: linear-gradient(
+      to right,
+      var(--vp-c-text-2) 0%,
+      var(--vp-c-text-2) 30%,
+      transparent 30%
+    );
+    background-size: 5px 1px;
+    background-repeat: repeat-x;
+    opacity: 0.4;
   }
 
   .post-date {
     flex-shrink: 0;
-    font-family: "Inter", monospace;
-    font-size: 0.85rem;
-    letter-spacing: 0.02em;
+    font-family: "AI";
+    font-size: 0.92rem;
+    font-variant-numeric: oldstyle-nums;
+    letter-spacing: 0.01em;
     color: var(--vp-c-text-2);
-    opacity: 0.55;
+    opacity: 0.65;
   }
 }
 
@@ -171,7 +189,7 @@ const sortedCategoryGroups = computed(() => {
   height: 1px !important;
   background-color: var(--vp-c-divider) !important;
   opacity: 0.5 !important;
-  margin: 1.4rem 0 !important;
+  margin: 2.2rem 0 !important;
   padding: 0 !important;
   width: 100%;
 }
@@ -179,23 +197,31 @@ const sortedCategoryGroups = computed(() => {
 /* 响应式调整 - 手机端 */
 @media (max-width: 640px) {
   .group-title {
-    margin-top: 2rem;
-  }
+    margin-top: 2.4rem;
+    gap: 0.6em;
 
-  .group-title .group-label {
-    font-size: 0.85rem;
+    .group-rule {
+      flex: 1 1 32px;
+      max-width: 40px;
+    }
+
+    .group-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+    }
   }
 
   .post-container {
-    padding: 0.3rem 0;
+    padding: 0.4rem 0;
   }
 
   .post-container .post-link {
-    max-width: 65%;
+    max-width: 62%;
+    font-size: 1rem;
   }
 
   .post-container .post-date {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
 }
 </style>
