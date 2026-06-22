@@ -142,13 +142,21 @@ const sortedCategoryGroups = computed(() => {
   }
 
   .dots {
-  flex: 1 1 auto;
-  min-width: 0.8rem;
-  margin: 0 0.7em;
-  border-bottom: 1px dotted var(--vp-c-text-2);
-  opacity: 0.4;
-  transform: translateY(-0.32em);
-}
+    flex: 1 1 auto;
+    min-width: 0.8rem;
+    height: 1px;
+    align-self: center;
+    margin: 0 0.7em;
+    background-image: linear-gradient(
+      to right,
+      var(--vp-c-text-2) 0%,
+      var(--vp-c-text-2) 30%,
+      transparent 30%
+    );
+    background-size: 5px 1px;
+    background-repeat: repeat-x;
+    opacity: 0.4;
+  }
 
   .post-date {
     flex-shrink: 0;
