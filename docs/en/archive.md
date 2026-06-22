@@ -26,8 +26,6 @@ isNoBackBtn: true
   </div> 
 </template>
 
-<hr class="section-divider" />
-
 <template v-for="[category, postGroup] in sortedCategoryGroups" :key="category">
   <h2 :id="category" class="group-title">
     <a
