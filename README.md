@@ -28,14 +28,11 @@ pnpm docs:dev
 
 ## Deploy to Cloudflare Pages
 
-### Framework preset :
-none
+Framework preset: none
 
-### Build command :
-pnpm docs:build
+Build command: pnpm docs:build
 
-### Build output directory :
-docs/.vitepress/dist
+Build output directory: docs/.vitepress/dist
 
 ## Thanks
 
