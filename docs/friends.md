@@ -93,7 +93,7 @@ const siteInfo = ref({
 <style lang="scss" scoped>
 .links-page {
   max-width: 800px;
-  margin: 0 auto 2rem auto;
+  margin: 0 auto 3rem auto;
 }
 
 /* 友链列表容器 - 使用Grid布局 */
