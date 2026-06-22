@@ -74,7 +74,7 @@ const friendLinks = ref([
 
   {
     name: '凡梦星尘空间站',
-    desc: '再平凡的人也有属于他的梦想',
+    desc: '再平凡的人也有属于他的梦想！',
     url: 'https://lisenhui.cn',
     avatar: 'https://lisenhui.github.io/imgs/avatar.png'
   }
