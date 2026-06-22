@@ -37,5 +37,13 @@ pnpm docs:build
 ### Build output directory :
 docs/.vitepress/dist
 
+## Thanks
+
+This theme is greatly inspired by [justin3go.com](https://github.com/Justin3go/justin3go.com).
+
+## License
+
+MIT
+
 
 
