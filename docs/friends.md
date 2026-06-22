@@ -70,8 +70,16 @@ const friendLinks = ref([
     desc: '茫茫人海，多么幸运才能遇见你！',
     url: 'https://www.qingfengnb.cn',
     avatar: 'https://img.qingfengnb.cn/LightPicture/2025/07/bec6eb9625656d60.jpg'
+  },
+
+{
+    name: '凡梦星尘空间站',
+    desc: '再平凡的人也有属于他的梦想',
+    url: 'https://www.qingfengnb.cn',
+    avatar: 'https://lisenhui.github.io/imgs/avatar.png
+  link: https://lisenhui.cn'
   }
-  // 继续添加更多友链...
+  
 ])
 
 // 本站信息
