@@ -176,7 +176,7 @@ const sortedCategoryGroups = computed(() => {
   width: 100%;
 }
 
-/* 响应式调整 - 手机端 */
+
 @media (max-width: 640px) {
   .group-title {
     margin-top: 1.8rem;
@@ -184,16 +184,31 @@ const sortedCategoryGroups = computed(() => {
   }
 
   .post-container {
+    flex-direction: column;
+    align-items: flex-start; /* 左对齐 */
     padding: 0.4rem 0;
   }
 
   .post-container .post-link {
-    max-width: 62%;
+    /* 移除省略号相关样式，允许换行 */
+    white-space: normal; /* 允许换行 */
+    overflow: visible; /* 内容可见，不隐藏 */
+    text-overflow: clip; /* 不使用省略号 */
+    max-width: 100%; /* 宽度占满容器，避免被压缩 */
     font-size: 1rem;
+    margin-bottom: 0.2rem; /* 与日期保持一点间距 */
+  }
+
+  .post-container .dots {
+    /* 在垂直布局下，点状分隔线可能不再需要，或可调整样式 */
+    display: none; /* 直接隐藏，或用 margin 代替 */
   }
 
   .post-container .post-date {
     font-size: 0.85rem;
+    /* 可以稍微调整对齐方式 */
+    align-self: flex-end; /* 日期靠右对齐，与标题左对齐形成视觉平衡 */
+    margin-top: 0.2rem;
   }
 }
 </style>
