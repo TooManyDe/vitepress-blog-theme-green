@@ -14,9 +14,7 @@ isNoBackBtn: true
       :aria-label="`Permalink to &quot;${year}&quot;`"
       >​</a
     >
-    <span class="group-rule"></span>
-    <span class="group-label">{{ parseInt(year).toString() }}</span>
-    <span class="group-rule"></span>
+    {{ parseInt(year).toString() }}
   </h2>
   <div class="post-container" v-for="post in postGroup" :key="post.url">
     <a :href="post.url" class="post-link">{{ post.title }}</a>
@@ -36,9 +34,7 @@ isNoBackBtn: true
       :href="`#${category}`"
       :aria-label="`Permalink to &quot;${category}&quot;`"
     >​</a>
-    <span class="group-rule"></span>
-    <span class="group-label">{{ category }}</span>
-    <span class="group-rule"></span>
+    {{ category }}
   </h2>
   <div class="post-container" v-for="post in postGroup" :key="post.url">
     <a :href="post.url" class="post-link">{{ post.title }}</a>
@@ -100,35 +96,18 @@ const sortedCategoryGroups = computed(() => {
 
 <style lang="scss" scoped>
 .group-title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.9em;
-  margin-top: 3.2rem;
-  margin-bottom: 1.1rem;
+  margin-top: 2.2rem;
+  margin-bottom: 0.6rem;
   border-top: 0;
+  font-family: "ChillRoundF";
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--vp-c-text-2);
+  opacity: 0.65;
 
   &:first-child {
-    margin-top: 1rem;
-  }
-
-  .group-rule {
-    flex: 1 1 56px;
-    max-width: 72px;
-    height: 1px;
-    background-color: var(--vp-c-text-2);
-    opacity: 0.35;
-  }
-
-  .group-label {
-    flex-shrink: 0;
-    font-family: "ChillRoundF";
-    font-size: 0.82rem;
-    font-weight: 600;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--vp-c-text-2);
-    opacity: 0.7;
+    margin-top: 0.6rem;
   }
 }
 
@@ -177,7 +156,6 @@ const sortedCategoryGroups = computed(() => {
     flex-shrink: 0;
     font-family: "AI";
     font-size: 0.92rem;
-    font-variant-numeric: oldstyle-nums;
     letter-spacing: 0.01em;
     color: var(--vp-c-text-2);
     opacity: 0.65;
@@ -189,7 +167,7 @@ const sortedCategoryGroups = computed(() => {
   height: 1px !important;
   background-color: var(--vp-c-divider) !important;
   opacity: 0.5 !important;
-  margin: 2.2rem 0 !important;
+  margin: 2rem 0 !important;
   padding: 0 !important;
   width: 100%;
 }
@@ -197,18 +175,8 @@ const sortedCategoryGroups = computed(() => {
 /* 响应式调整 - 手机端 */
 @media (max-width: 640px) {
   .group-title {
-    margin-top: 2.4rem;
-    gap: 0.6em;
-
-    .group-rule {
-      flex: 1 1 32px;
-      max-width: 40px;
-    }
-
-    .group-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.16em;
-    }
+    margin-top: 1.8rem;
+    font-size: 0.85rem;
   }
 
   .post-container {
