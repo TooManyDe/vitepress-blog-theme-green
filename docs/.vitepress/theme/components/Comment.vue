@@ -395,7 +395,11 @@ watch(() => route.path, () => {
 .vp-input::placeholder { color: var(--vp-c-text-3); }
 .vp-input:focus { outline: none; border-color: var(--vp-c-brand-1); box-shadow: 0 0 0 2px rgba(var(--vp-c-brand-1-rgb, 0), 0.12); }
 .vp-textarea { resize: vertical; min-height: 80px; }
-.vp-turnstile { margin-bottom: 0.75rem; min-height: 65px; }
+.vp-turnstile { 
+  width: 100%;  /* 添加此样式，确保验证框宽度与评论框一致 */
+  margin-bottom: 0.75rem; 
+  min-height: 65px; 
+}
 .vp-action-bar { display: flex; justify-content: flex-end; }
 .vp-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
