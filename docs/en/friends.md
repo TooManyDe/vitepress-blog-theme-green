@@ -77,8 +77,15 @@ const friendLinks = ref([
     desc: '再平凡的人也有属于他的梦想！',
     url: 'https://lisenhui.cn',
     avatar: 'https://lisenhui.github.io/imgs/avatar.png'
-  }
+  },
   
+  {
+    name: "iMaeGoo’s Blog",
+    desc: '虹墨空间站',
+    url: 'https://www.imaegoo.com',
+    avatar: 'https://cdn.jsdelivr.net/npm/imaegoo/avatar.jpg'
+  }
+
 ])
 
 // 本站信息
