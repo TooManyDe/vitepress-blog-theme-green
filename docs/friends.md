@@ -96,15 +96,16 @@ const siteInfo = ref({
   margin: 0 auto 2rem auto;
 }
 
-/* 友链列表容器 */
+/* 友链列表容器 - 使用Grid布局 */
 .links-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem; /* 友链之间通过 gap 隔开，不再使用分割线 */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 默认两列 */
+  gap: 1.5rem 2rem; /* 行间距和列间距 */
 }
 
 /* 分割线样式（用于友链和本站之间） */
 .link-divider {
+  grid-column: 1 / -1; /* 让分割线跨越所有列 */
   border: none !important;
   height: 1px !important;
   background-color: var(--vp-c-divider) !important;
@@ -188,8 +189,13 @@ const siteInfo = ref({
   text-overflow: ellipsis;
 }
 
-/* 响应式调整 */
+/* 响应式调整 - 手机端单栏 */
 @media (max-width: 640px) {
+  .links-list {
+    grid-template-columns: 1fr; /* 单列 */
+    gap: 1.5rem; /* 仅行间距 */
+  }
+  
   .link-item {
     gap: 0.75rem;
   }
