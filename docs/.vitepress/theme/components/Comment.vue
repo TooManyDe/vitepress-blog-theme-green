@@ -131,6 +131,7 @@ const renderMainTurnstile = async () => {
     sitekey: TURNSTILE_SITE_KEY,
     size: 'flexible',
     theme: getTurnstileTheme(),
+    appearance: 'interaction-only',
     callback: (token) => { mainTurnstileToken.value = token },
     'expired-callback': () => { mainTurnstileToken.value = '' },
     'error-callback': () => { mainTurnstileToken.value = '' }
@@ -149,6 +150,7 @@ const renderReplyTurnstile = async () => {
     sitekey: TURNSTILE_SITE_KEY,
     size: 'flexible',
     theme: getTurnstileTheme(),
+    appearance: 'interaction-only',
     callback: (token) => { replyTurnstileToken.value = token },
     'expired-callback': () => { replyTurnstileToken.value = '' },
     'error-callback': () => { replyTurnstileToken.value = '' }
@@ -417,10 +419,7 @@ watch(() => route.path, () => {
 .vp-input::placeholder { color: var(--vp-c-text-3); }
 .vp-input:focus { outline: none; border-color: var(--vp-c-brand-1); box-shadow: 0 0 0 2px rgba(var(--vp-c-brand-1-rgb, 0), 0.12); }
 .vp-textarea { resize: vertical; min-height: 80px; }
-.vp-turnstile {
-  margin-bottom: 0.75rem; min-height: 65px; width: 100%;
-  border: 1px solid var(--vp-c-divider); border-radius: 6px; overflow: hidden;
-}
+.vp-turnstile { margin-bottom: 0.5rem; width: 100%; }
 .vp-action-bar { display: flex; justify-content: flex-end; }
 .vp-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
