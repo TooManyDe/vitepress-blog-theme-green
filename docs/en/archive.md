@@ -210,6 +210,7 @@ const sortedCategoryGroups = computed(() => {
     font-size: 1rem;
   }
 
+
   .post-container .post-date {
     font-size: 0.85rem;
   }
