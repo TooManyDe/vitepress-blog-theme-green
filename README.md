@@ -40,7 +40,7 @@ This theme is greatly inspired by [justin3go.com](https://github.com/Justin3go/j
 
 ## License
 
-MIT
+[MIT](./LICENSE)
 
 
 
