@@ -451,7 +451,7 @@ watch(() => route.path, () => {
 .comment-toggle:hover { opacity: 0.8; color: var(--vp-c-brand-2); }
 .comment-toggle.is-active { color: var(--vp-c-brand-2); }
 .vp-form-container {
-  margin-top: 1.5rem; padding: 0rem; border: 1px solid var(--vp-c-divider); border-radius: 8px;
+  margin-top: 1.5rem; padding: 0.5rem; border: 1px solid var(--vp-c-divider); border-radius: 8px;
   width: 66.6667%; box-sizing: border-box;
 }
 @media (max-width: 640px) {
@@ -485,7 +485,7 @@ watch(() => route.path, () => {
   border-right-color: transparent; border-radius: 50%; animation: vp-spin 0.6s linear infinite;
 }
 @keyframes vp-spin { to { transform: rotate(360deg); } }
-.vp-list-container { margin-top: 2rem; }
+.vp-list-container { margin-top: 1rem; }
 .vp-comment-item { padding: 0.5rem 0; }
 .vp-meta { display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.25rem; }
 .vp-name {
