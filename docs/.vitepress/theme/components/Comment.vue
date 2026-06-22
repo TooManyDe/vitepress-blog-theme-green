@@ -451,7 +451,7 @@ watch(() => route.path, () => {
 .comment-toggle:hover { opacity: 0.8; color: var(--vp-c-brand-2); }
 .comment-toggle.is-active { color: var(--vp-c-brand-2); }
 .vp-form-container {
-  margin-top: 1.5rem; padding: 1.5rem; border: 1px solid var(--vp-c-divider); border-radius: 8px;
+  margin-top: 1.5rem; padding: 0rem; border: 1px solid var(--vp-c-divider); border-radius: 8px;
   width: 66.6667%; box-sizing: border-box;
 }
 @media (max-width: 640px) {
