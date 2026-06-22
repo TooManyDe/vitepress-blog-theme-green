@@ -47,7 +47,7 @@ const i18n = computed(() => {
     zh: {
       title: '评论', triggerComment: '评论', triggerCommentHide: '收起',
       nicknamePlaceholder: '名称 *（必填）', emailPlaceholder: '邮箱 *（必填，不公开）',
-      contentPlaceholder: '评论内容 *(必填，最多1000字)', send: '发送', sending: '发送中...',
+      contentPlaceholder: '评论内容 *（必填，最多1000字）', send: '发送', sending: '发送中...',
       reply: '回复', loadMoreReplies: '展开更多回复', confirmReply: '回复', cancelReply: '取消',
       fieldRequired: '字段必填', emailRequired: '请填写邮箱', emailInvalid: '邮箱格式不正确',
       submitFailed: '提交失败：', replyFailed: '回复失败：', networkError: '网络错误，请稍后重试',
