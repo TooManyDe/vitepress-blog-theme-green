@@ -76,6 +76,12 @@ const friendLinks = ref([
     avatar: 'https://lisenhui.github.io/imgs/avatar.png'
   },
   {
+    name: '灵的梦境',
+    desc: '愿美梦成真',
+    url: 'https://lemonadorable.github.io/',
+    avatar: 'https://lemonadorable.github.io/favicon/favicon.gif'
+  },
+  {
     name: "iMaeGoo’s Blog",
     desc: '虹墨空间站',
     url: 'https://www.imaegoo.com',
@@ -119,7 +125,7 @@ const handleAvatarError = (e: Event) => {
   height: 1px !important;
   background-color: var(--vp-c-divider) !important;
   opacity: 0.5 !important;
-  margin: 1rem 0 !important; 
+  margin: 0 !important; 
   padding: 0 !important;
   width: 100%;
 }

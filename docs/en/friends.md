@@ -8,12 +8,13 @@ isNoBackBtn: true
 ---
 
 <div class="links-page">
-  <!-- 友链列表 -->
+  <!-- 统一的网格容器，包含友链、分割线、本站信息 -->
   <div class="links-list">
-    <div v-for="link in friendLinks" :key="link.url" class="link-container">
+    <!-- 1. 友链列表 -->
+    <div v-for="link in friendLinks" :key="`${link.name}-${link.url}`" class="link-container">
       <div class="link-item">
         <a :href="link.url" target="_blank" rel="noopener noreferrer" class="link-avatar">
-          <img :src="link.avatar" :alt="link.name" />
+          <img :src="link.avatar" :alt="link.name" @error="handleAvatarError" />
         </a>
         <div class="link-content">
           <h3 class="link-title">
@@ -25,23 +26,20 @@ isNoBackBtn: true
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- 友链与本站之间的分割线 -->
-  <hr class="link-divider" />
-
-  <!-- 本站信息 -->
-  <div class="link-container">
-    <div class="link-item">
-      <a :href="siteInfo.url" target="_blank" rel="noopener noreferrer" class="link-avatar">
-        <img :src="siteInfo.avatar" :alt="siteInfo.name" />
-      </a>
-      <div class="link-content">
-        <h3 class="link-title">
-          <a :href="siteInfo.url" target="_blank" rel="noopener noreferrer">{{ siteInfo.name }}</a>
-        </h3>
-        <div class="link-desc source-han-serif">
-          {{ siteInfo.desc }}
+    <hr class="link-divider" />
+    <!-- 3. 本站信息（也作为Grid的一项） -->
+    <div class="link-container">
+      <div class="link-item">
+        <a :href="siteInfo.url" target="_blank" rel="noopener noreferrer" class="link-avatar">
+          <img :src="siteInfo.avatar" :alt="siteInfo.name" @error="handleAvatarError" />
+        </a>
+        <div class="link-content">
+          <h3 class="link-title">
+            <a :href="siteInfo.url" target="_blank" rel="noopener noreferrer">{{ siteInfo.name }}</a>
+          </h3>
+          <div class="link-desc source-han-serif">
+            {{ siteInfo.desc }}
+          </div>
         </div>
       </div>
     </div>
@@ -71,21 +69,24 @@ const friendLinks = ref([
     url: 'https://www.qingfengnb.cn',
     avatar: 'https://img.qingfengnb.cn/LightPicture/2025/07/bec6eb9625656d60.jpg'
   },
-
   {
     name: '凡梦星尘空间站',
     desc: '再平凡的人也有属于他的梦想！',
     url: 'https://lisenhui.cn',
     avatar: 'https://lisenhui.github.io/imgs/avatar.png'
   },
-  
+  {
+    name: '灵的梦境',
+    desc: '愿美梦成真',
+    url: 'https://lemonadorable.github.io/',
+    avatar: 'https://lemonadorable.github.io/favicon/favicon.gif'
+  },
   {
     name: "iMaeGoo’s Blog",
     desc: '虹墨空间站',
     url: 'https://www.imaegoo.com',
     avatar: 'https://cdn.jsdelivr.net/npm/imaegoo/avatar.jpg'
   }
-
 ])
 
 // 本站信息
@@ -95,6 +96,13 @@ const siteInfo = ref({
   url: 'https://ddbx.org',
   avatar: 'https://cdn.ddbx.org/12.png'
 })
+
+// 处理图片加载失败
+const handleAvatarError = (e: Event) => {
+  const target = e.target as HTMLImageElement
+  target.src = 'https://via.placeholder.com/56/cccccc/666666?text=Avatar'
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -103,21 +111,21 @@ const siteInfo = ref({
   margin: 0 auto 3rem auto;
 }
 
-/* 友链列表容器 - 使用Grid布局 */
+/* 统一的网格容器 - 包含友链、分割线、本站信息 */
 .links-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 默认两列 */
   gap: 1.5rem 2rem; /* 行间距和列间距 */
 }
 
-/* 分割线样式（用于友链和本站之间） */
+/* 分割线样式 - 现在在Grid内，grid-column: 1 / -1 生效 */
 .link-divider {
   grid-column: 1 / -1; /* 让分割线跨越所有列 */
   border: none !important;
   height: 1px !important;
   background-color: var(--vp-c-divider) !important;
   opacity: 0.5 !important;
-  margin: 1rem 0 !important; 
+  margin: 0 !important; 
   padding: 0 !important;
   width: 100%;
 }
