@@ -1,13 +1,11 @@
----
-layout: doc
+<layout: doc
 editLink: false
 lastUpdated: false
 isNoComment: true
 isNoBackBtn: true
 ---
 
-<!-- 之所以将代码写在 md 里面，而非单独封装为 Vue 组件，因为 aside 不会动态刷新，参考 https://github.com/vuejs/vitepress/issues/2686 -->
-<template v-for="[year, postGroup] in postGroups" :key="year">
+<template v-for="[year, postGroup] in sortedPostGroups" :key="year">
   <h2 :id="year" class="post-title">
     <a
       class="header-anchor"
@@ -45,20 +43,13 @@ isNoBackBtn: true
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from "vue";
-// 非 Vue 组件需要手动引入
-import {
-	MessagePlugin,
-	PaginationProps,
-	Pagination as TPagination,
-} from "tdesign-vue-next";
-import { TimeIcon } from "tdesign-icons-vue-next";
-
+import { computed } from "vue";
 import { data as posts } from "../.vitepress/theme/posts-en.data.mts";
-import { isMobile } from "../.vitepress/theme/utils/mobile.ts";
 
-const postGroups = computed(() => {
+// 按年份分组，并确保组内按时间倒序，年份从大到小排列
+const sortedPostGroups = computed(() => {
   const groups = new Map<string, typeof posts>();
+
   posts.forEach((post) => {
     const year = post.date.year;
     if (!groups.has(year)) {
@@ -66,10 +57,18 @@ const postGroups = computed(() => {
     }
     groups.get(year)?.push(post);
   });
-  return groups;
+
+  const entries = Array.from(groups.entries()).map(([year, group]) => {
+    group.sort((a, b) => b.date.time - a.date.time);
+    return [year, group] as [string, typeof posts];
+  });
+
+  entries.sort((a, b) => Number(b[0]) - Number(a[0]));
+
+  return entries;
 });
 
-// 按分类分组并排序
+// 按分类分组，分类按其最新文章时间倒序排列
 const sortedCategoryGroups = computed(() => {
   const map = new Map<string, typeof posts>();
 
@@ -81,42 +80,36 @@ const sortedCategoryGroups = computed(() => {
     map.get(category)?.push(post);
   });
 
-  // 对每个分类内部按时间倒序排序
   const sortedEntries = Array.from(map.entries()).map(([category, group]) => {
     group.sort((a, b) => b.date.time - a.date.time);
-    return [category, group];
+    return [category, group] as [string, typeof posts];
   });
 
-  // 再根据每个分类中最新文章时间，整体排序
   sortedEntries.sort((a, b) => b[1][0].date.time - a[1][0].date.time);
 
-  return sortedEntries as [string, typeof posts][];
+  return sortedEntries;
 });
 </script>
 
 <style lang="scss" scoped>
-.mr-2 {
-	margin-right: 2px;
-}
-
 .post-title {
-	margin-bottom: 6px;
-	border-top: 0px;
-	position: relative;
-	top: 0;
-	left: 0;
+  margin-top: 2rem;
+  margin-bottom: 6px;
+  border-top: 0px;
+  position: relative;
+  top: 0;
+  left: 0;
 
-	.post-year {
-		position: absolute;
-		top: 25px;
-		left: -10px;
-
-		z-index: -1;
-		opacity: .16;
-  font-family: "Inter";
-		font-size: 40px;
-		font-weight: 600;
-	}
+  .post-year {
+    position: absolute;
+    top: -15px; /* 根据视觉调整位置 */
+    left: -10px;
+    z-index: -1;
+    opacity: .16;
+    font-family: "Inter";
+    font-size: 40px;
+    font-weight: 600;
+  }
 }
 
 .post-container {
@@ -125,21 +118,23 @@ const sortedCategoryGroups = computed(() => {
   margin: 12px 0;
 
   > a {
-		font-weight: 400;
+    font-weight: 400;
     text-decoration: none !important;
     font-family: "AI";
-	}
+  }
 
   .post-date {
     opacity: .6;
     font-family: "Inter";
+    flex-shrink: 0;
+    margin-left: 1rem;
   }
 }
 
 .hollow-text {
   /* 设置文本颜色为透明 */
   color: var(--vp-c-bg);
-	-webkit-text-stroke: 1px var(--vp-c-text-1);
+  -webkit-text-stroke: 1px var(--vp-c-text-1);
 }
 
 .section-divider {
@@ -147,9 +142,8 @@ const sortedCategoryGroups = computed(() => {
   height: 1px !important;
   background-color: var(--vp-c-divider) !important;
   opacity: 0.5 !important;
-  margin: 1rem 0 !important;
+  margin: 2rem 0 !important;
   padding: 0 !important;
   width: 100%;
 }
 </style>
-
