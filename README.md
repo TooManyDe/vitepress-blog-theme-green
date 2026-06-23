@@ -5,8 +5,6 @@ vitepress-blog-theme-green
 
 https://vitepress-blog-theme-green.pages.dev
 
-https://ddbx.org
-
 ![](https://cdn.ddbx.org/14.png)
 
 ## Installation & Build
