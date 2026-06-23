@@ -41,7 +41,7 @@ This theme is greatly inspired by [justin3go.com](https://github.com/Justin3go/j
 
 ## License
 
-[MIT](./LICENSE)
+源码[MIT](./LICENSE) 许可证，用户生成内容[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0) 许可证
 
 
 
