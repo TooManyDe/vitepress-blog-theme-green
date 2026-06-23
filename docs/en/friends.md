@@ -73,13 +73,13 @@ const siteInfo = ref({
   name: '的的不休',
   desc: '每一段旅行都有终点',
   url: 'https://ddbx.org',
-  avatar: 'https://vitepress-blog-theme-green.pages.dev/22.png'
+  avatar: 'https://vitepress-blog-theme-green.pages.dev/19.png'
 })
 
 // 处理图片加载失败
 const handleAvatarError = (e: Event) => {
   const target = e.target as HTMLImageElement
-  target.src = 'https://vitepress-blog-theme-green.pages.dev/bg.jpg'
+  target.src = 'https://vitepress-blog-theme-green.pages.dev/19.png'
 }
 
 </script>
