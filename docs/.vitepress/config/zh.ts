@@ -87,7 +87,7 @@ export default defineConfig({
   head: [
     ['meta', { name: 'author', content: '的的不休' }],
     ['meta', { name: 'keywords', content: '的的不休, 博客, 分享' }],
-    ['link', { rel: 'icon', href: '/favicon.ico' }],
+    ['link', { rel: 'icon', type: 'image/png', href: '/20.png' }],
   ],
   
   cleanUrls: true,
