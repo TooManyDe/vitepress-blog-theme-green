@@ -91,7 +91,7 @@ export default defineConfig({
   head: [
     ['meta', { name: 'author', content: 'ddbx' }],
     ['meta', { name: 'keywords', content: 'ddbx, blog, sharing' }],
-    ['link', { rel: 'icon', href: '/favicon.ico' }],
+    ['link', { rel: 'icon', type: 'image/png', href: '/20.png' }],
     ['link', { rel: 'alternate', type: 'application/rss+xml', title: 'ddbx RSS', href: '/feed-en.xml' }],
   ],
   
